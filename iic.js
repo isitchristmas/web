@@ -89,7 +89,7 @@ function yes(countryCode) {
     "BZ": "YES", // Belize
     "KY": "YES", // Cayman Islands
     "NI": "SÍ", // Nicaragua
-    "PY": "HÊE", // Paraguay
+    "PY": "HÊE" // Paraguay
   }
 
   return codes[countryCode] || "YES";
