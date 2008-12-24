@@ -1,0 +1,9 @@
+<?
+  // copy this to db.php and change the credentials to your own
+  
+  global $server, $username, $password, $database;
+  $server = "localhost";
+  $username = "iic";
+  $password = "iic";
+  $database = "isitchristmas";
+?>
