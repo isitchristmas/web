@@ -1,6 +1,6 @@
 <?php
 
-require 'hostip/hostip.php';
+require 'hostip.php';
 
 
 // Accepts: A time
@@ -26,8 +26,7 @@ function isItChristmas($time = null) {
     
     $location = ipRoughLocate($ip);
     
-    // if we don't know the country, let's assume eastern time
-    // I'm going to get rid of this in favor of JS-based time detection (which knows the local timezone)
+    // if we don't know the country, let's assume eastern time (mediocre)
     if ($location["countryName"] == "(Unknown Country?)")
       $local_time = easternTime($time);
     else
@@ -73,7 +72,7 @@ function yes($location) {
     
   $code = $location["countryCode"];
   
-  // This is IsItChristmas' sole IP
+  // This array is IsItChristmas' sole IP
   $codes = array(
     "US" => "YES", // United States
     "FR" => "OUI", // France
