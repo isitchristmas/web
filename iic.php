@@ -14,7 +14,7 @@ function isItChristmas($time = null) {
   $ip = getIp(); 
   
   // debug: 
-  // $ip = "193.51.208.14"; // French IP (should say "OUI")
+  // $ip = "193.51.208.14"; // French IP
   // $christmas = "12/24";
   
   $location = null;
@@ -39,6 +39,29 @@ function isItChristmas($time = null) {
   $isit = (strftime("%m/%d", $local_time) == $christmas);
   
   return $isit ? yes($location) : "NO";
+}
+
+// used to produce a country code for the JS to work with
+function getCountryCode() {
+  
+  $ip = getIp(); 
+  // debug: 
+  // $ip = "193.51.208.14"; // French IP
+  // $ip = "71.164.115.181"; // US IP
+  
+  $location = null;
+  if ($ip) {
+    // db credentials, see db.php.example
+    require 'db.php';
+    DBconnect($server, $username, $password, $database);
+    
+    $location = ipRoughLocate($ip);
+  }
+  
+  if (!$location || !$location["countryCode"] || $location["countryName"] == "(Unknown Country?)")
+    return "US";
+  else
+    return $location["countryCode"];
 }
 
 
