@@ -18,13 +18,13 @@ $answer = isItChristmas();
 
 <body style="text-align: center; padding-top: 200px;">
 
-  <a href="/rss.xml" 
+  <a href="http://github.com/isit/christmas" 
      style="font-weight: bold; 
             font-size: 120pt; 
             font-family: Arial, sans-serif; 
             text-decoration: none; 
             color: black;" 
-     title="<?= $answer ?>">
+     title="CODE">
     <?= $answer ?>
   </a>
 
