@@ -11,7 +11,7 @@ function isItChristmas(countryCode) {
   if (isChristmas)
     return yes(countryCode);
   else
-    return "NO";
+    return no(countryCode);
 }
 
 
@@ -93,4 +93,83 @@ function yes(countryCode) {
   }
 
   return codes[countryCode] || "YES";
+}
+
+function no(countryCode) {
+
+  var codes = {
+    "US": "NO", // United States
+    "FR": "NON", // France
+    "NL": "NEE", // Netherlands
+    "ZA": "NEE", // South Africa
+    "ES": "NO", // Spain
+    "UK": "NO", // United Kingdom
+    "CA": "NO/NON", // Canada (English/French)
+    "PL": "NIE", // Poland
+    "SE": "NEJ", // Sweden
+    "LT": "NO", // Lithuania
+    "DE": "NEIN", // Germany
+    "IE": "NÍ HA", // Ireland
+    "AU": "NO", // Australia
+    "JP": "IIE", // Japan
+    "NO": "NEI", // Norway
+    "IT": "NO", // Italy
+    "HU": "NEM", // Hungary
+    "DK": "NEJ", // Denmark
+    "FI": "EI", // Finland
+    "BE": "NEE", // Belgium
+    "CL": "NO", // Chile
+    "MX": "NO", // Mexico
+    "NZ": "NO", // New Zealand
+    "AT": "NEIN", // Austria
+    "RO": "NU", // Romania
+    "CH": "NEIN/NON", // Switzerland (German/French)
+    "PT": "NÃO", // Portugal
+    "BR": "NÃO", // Brazil
+    "AR": "NO", // Argentina
+    "EE": "EI", // Estonia
+    "HR": "NE", // Croatia
+    "CN": "BÙ SHÌ", // China (Mandarin)
+    "IN": "NAHIM", // India
+    "SG": "TIDAK", // Singapore
+    "PH": "HINDI", // Phillipines
+    "IL": "LO", // Israel
+    "KR": "ANIYO", // Korea
+    "CZ": "NE", // Czech Republic
+    "SK": "NIE", // Slovakia
+    "GR": "OHI", // Greece
+    "IS": "NEI", // Iceland
+    "VE": "NO", // Venezuela
+    "SI": "NE", // Slovenia
+    "TH": "MAI CHAI", // Thailand
+    "LV": "NÉ", // Latvia
+    "RU": "NYET", // Russia
+    "HK": "M̀H HAIH", // Hong Kong (Cantonese)
+    "TR": "HAYIR", // Turkey
+    "MY": "TIDAK", // Malaysia
+    "PR": "NO", // Puerto Rico
+    "CO": "NO", // Colombia
+    "EC": "NO", // Ecuador
+    "PE": "NO", // Peru
+    "CR": "NO", // Costa Rica
+    "UY": "NO", // Uruguay
+    "CY": "OHI", // Cyprus
+    "GT": "NO", // Guatemala
+    "SV": "NO", // El Salvador
+    "DO": "NO", // Dominican Republic
+    "BM": "NÃO", // Bermuda
+    "PA": "NO", // Panama
+    "BO": "NO", // Bolivia
+    "TT": "NO", // Trinidad & Tobago
+    "DM": "NON", // Dominica (Creole)
+    "HT": "NON", // Haiti (Creole)
+    "JM": "NO", // Jamaica
+    "BB": "NO", // Barbado
+    "BZ": "NO", // Belize
+    "KY": "NO", // Cayman Islands
+    "NI": "NO", // Nicaragua
+    "PY": "NO" // Paraguay
+  }
+
+  return codes[countryCode] || "NO";
 }
