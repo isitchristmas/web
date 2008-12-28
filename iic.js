@@ -55,7 +55,7 @@ function yes(countryCode) {
     "SG": "YA", // Singapore
     "PH": "ÓO", // Phillipines
     "IL": "KEN", // Israel
-    "KR": "NE", // Korea
+    "KR": "YE", // Korea
     "CZ": "ANO", // Czech Republic
     "SK": "ÁNO", // Slovakia
     "GR": "NE", // Greece
