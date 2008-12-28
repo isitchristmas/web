@@ -89,7 +89,8 @@ function yes(countryCode) {
     "BZ": "YES", // Belize
     "KY": "YES", // Cayman Islands
     "NI": "SÍ", // Nicaragua
-    "PY": "HÊE" // Paraguay
+    "PY": "HÊE", // Paraguay
+	"VN": "ĐÚNG" // Vietnam
   }
 
   return codes[countryCode] || "YES";
@@ -168,7 +169,8 @@ function no(countryCode) {
     "BZ": "NO", // Belize
     "KY": "NO", // Cayman Islands
     "NI": "NO", // Nicaragua
-    "PY": "NO" // Paraguay
+    "PY": "NO", // Paraguay
+	"VN": "SAI" // Vietnam
   }
 
   return codes[countryCode] || "NO";

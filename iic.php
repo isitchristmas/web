@@ -168,6 +168,7 @@ function yes($location) {
     "KY" => "YES", // Cayman Islands
     "NI" => "SÍ", // Nicaragua
     "PY" => "HÊE", // Paraguay
+	"VN" => "ĐÚNG" // Vietnam
   );
 
   if (!$codes[$code])
