@@ -63,8 +63,8 @@ function yes(countryCode) {
     "VE": "SÍ", // Venezuela
     "SI": "DA", // Slovenia
     "TH": "CHAI", // Thailand
-    "LV": "JA", // Latvia
-    "RU": "DA", // Russia
+    "LV": "JĀ", // Latvia
+    "RU": "ДА", // Russia
     "HK": "HAI", // Hong Kong (Cantonese)
     "TR": "EVET", // Turkey
     "MY": "YA", // Malaysia
@@ -143,8 +143,8 @@ function no(countryCode) {
     "VE": "NO", // Venezuela
     "SI": "NE", // Slovenia
     "TH": "MAI CHAI", // Thailand
-    "LV": "NÉ", // Latvia
-    "RU": "NYET", // Russia
+    "LV": "NĒ", // Latvia
+    "RU": "НЕТ", // Russia
     "HK": "M̀H HAIH", // Hong Kong (Cantonese)
     "TR": "HAYIR", // Turkey
     "MY": "TIDAK", // Malaysia

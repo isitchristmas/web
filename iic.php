@@ -141,8 +141,8 @@ function yes($location) {
     "VE" => "SÍ", // Venezuela
     "SI" => "DA", // Slovenia
     "TH" => "CHAI", // Thailand
-    "LV" => "JA", // Latvia
-    "RU" => "DA", // Russia
+    "LV" => "JĀ", // Latvia
+    "RU" => "ДА", // Russia
     "HK" => "HAI", // Hong Kong (Cantonese)
     "TR" => "EVET", // Turkey
     "MY" => "YA", // Malaysia
