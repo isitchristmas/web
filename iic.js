@@ -130,7 +130,7 @@ function no(countryCode) {
     "AR": "NO", // Argentina
     "EE": "EI", // Estonia
     "HR": "NE", // Croatia
-    "CN": "BÚ SHÌ", // China (Mandarin)
+    "CN": "BÙ SHÌ", // China (Mandarin)
     "IN": "NAHIM", // India
     "SG": "TIDAK", // Singapore
     "PH": "HINDI", // Phillipines
