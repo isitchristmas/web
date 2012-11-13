@@ -90,7 +90,7 @@ function yes(countryCode) {
     "KY": "YES", // Cayman Islands
     "NI": "SÍ", // Nicaragua
     "PY": "HÊE", // Paraguay
-	"VN": "ĐÚNG" // Vietnam
+  "VN": "ĐÚNG" // Vietnam
   }
 
   return codes[countryCode] || "YES";
@@ -170,7 +170,7 @@ function no(countryCode) {
     "KY": "NO", // Cayman Islands
     "NI": "NO", // Nicaragua
     "PY": "NO", // Paraguay
-	"VN": "SAI" // Vietnam
+    "VN": "SAI" // Vietnam
   }
 
   return codes[countryCode] || "NO";

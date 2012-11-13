@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Is it Christmas?</title>
+  <link rel="alternate" title="Is It Christmas?" href="rss.xml" type="application/rss+xml" />
+
+  <style type="text/css">
+    html, body {height: 100%;}
+    body {text-align: center}
+    img {position: absolute;}
+  </style>
+
+  <script type="text/javascript" src="iic.js"></script>
+</head>
+
+<body>
+  <a href="rss.xml" 
+    style="display: inline-block;
+          font-weight: bold; 
+          font-size: 120pt; 
+          font-family: Arial, sans-serif; 
+          text-decoration: none; 
+          color: black;" 
+    title="RSS"
+    id="answer">
+    <noscript>NO</noscript>
+  </a>
+  
+  <script type="text/javascript">
+    var me = {
+      country: "US", 
+      id: null
+    };
+
+    // no matter what: fill in the country
+    document.getElementById('answer').innerHTML = isItChristmas(me.country);
+  </script>
+
+
+  <!-- optional: interaction -->
+  <script type="text/javascript" src="socket.io.js"></script>
+  <script type="text/javascript">
+    // store IDs and country codes of others
+    var others = {};
+
+    var socket = io.connect('http://localhost:3000');
+
+    // server acknowledges connection, ready to rock
+    socket.on('merry christmas', function() {
+      me.id = socket.socket.sessionid;
+      document.body.style.cursor = "url(" + me.country + ".jpg), auto";
+
+      document.onmousemove = mouseMove;
+
+      console.log("Connected: " + me.id);
+    });
+
+    // others' motion
+    socket.on('motion', function(other) {
+      // register if needed
+      if (!others[other.id]) makeOther(other);
+
+      moveOther(other.id, other.x, other.y);
+    });
+
+    socket.on('leave', function(other) {
+      removeOther(other.id);
+    })
+
+
+
+    // sends my motion
+    var mouseMove = function(event) {
+      socket.emit('motion', {
+        x: event.pageX,
+        y: event.pageY,
+        id: me.id,
+        country: me.country
+      });
+    };
+
+    var makeOther = function(other) {
+      var elem = document.createElement('img');
+      elem.src = other.country + ".jpg";
+      document.body.appendChild(elem)
+      
+      others[other.id] = {
+        country: other.country,
+        elem: elem
+      };
+      console.log("[" + other.id + "] Registered from " + other.country);
+    };
+
+    var moveOther = function(id, x, y) {
+      others[id].elem.style.left = "" + x + "px";
+      others[id].elem.style.top = "" + y + "px";
+    };
+
+    var removeOther = function(id) {
+      var elem = others[id];
+    };
+
+    function ratelimit(fn, ms) {
+      var last = (new Date()).getTime();
+      return (function() {
+        var now = (new Date()).getTime();
+        if (now - last > ms) {
+          last = now;
+          fn.apply(null, arguments);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+</html>
