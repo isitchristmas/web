@@ -46,13 +46,15 @@
     var others = {};
 
     var socket = io.connect('http://localhost:3000');
+    // var socket = io.connect('http://isitchristmas.jit.su');
 
     // server acknowledges connection, ready to rock
     socket.on('merry christmas', function() {
       me.id = socket.socket.sessionid;
       document.body.style.cursor = "url(" + me.country + ".jpg), auto";
 
-      document.onmousemove = mouseMove;
+      document.onmousemove = ratelimit(mouseMove, 30);
+      window.onunload = leave;
 
       console.log("Connected: " + me.id);
     });
@@ -66,7 +68,7 @@
     });
 
     socket.on('leave', function(other) {
-      removeOther(other.id);
+      removeOther(other);
     })
 
 
@@ -79,6 +81,11 @@
         id: me.id,
         country: me.country
       });
+    };
+
+    // leaves
+    var leave = function() {
+      socket.emit('leave', me);
     };
 
     var makeOther = function(other) {
@@ -98,8 +105,10 @@
       others[id].elem.style.top = "" + y + "px";
     };
 
-    var removeOther = function(id) {
-      var elem = others[id];
+    var removeOther = function(other) {
+      var elem = others[other.id].elem;
+      elem.parentElement.removeChild(elem);
+      console.log("[" + other.id + "] Departed from " + other.country);
     };
 
     function ratelimit(fn, ms) {
