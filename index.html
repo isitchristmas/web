@@ -40,38 +40,37 @@
 
 
   <!-- optional: interaction -->
-  <script type="text/javascript" src="socket.io.js"></script>
+  <script type="text/javascript" src="socket.io.min.js"></script>
   <script type="text/javascript">
-    // store IDs and country codes of others
+
+    var socket;
     var others = {};
 
-    var socket = io.connect('http://localhost:3000');
-    // var socket = io.connect('http://isitchristmas.jit.su');
+    function connect(host) {
+      socket = io.connect(host);
+      
+      // server acknowledges connection, ready to rock
+      socket.on('merry christmas', function() {
+        me.id = socket.socket.sessionid;
+        document.body.style.cursor = "url(" + me.country + ".jpg), auto";
 
-    // server acknowledges connection, ready to rock
-    socket.on('merry christmas', function() {
-      me.id = socket.socket.sessionid;
-      document.body.style.cursor = "url(" + me.country + ".jpg), auto";
+        document.onmousemove = ratelimit(mouseMove, 30);
+        
+        console.log("Connected: " + me.id);
+      });
 
-      document.onmousemove = ratelimit(mouseMove, 30);
-      window.onunload = leave;
+      // others' motion
+      socket.on('motion', function(other) {
+        // register if needed
+        if (!others[other.id]) makeOther(other);
 
-      console.log("Connected: " + me.id);
-    });
+        moveOther(other.id, other.x, other.y);
+      });
 
-    // others' motion
-    socket.on('motion', function(other) {
-      // register if needed
-      if (!others[other.id]) makeOther(other);
-
-      moveOther(other.id, other.x, other.y);
-    });
-
-    socket.on('leave', function(other) {
-      removeOther(other);
-    })
-
-
+      socket.on('leave', function(id) {
+        removeOther(id);
+      });
+    }
 
     // sends my motion
     var mouseMove = function(event) {
@@ -81,11 +80,6 @@
         id: me.id,
         country: me.country
       });
-    };
-
-    // leaves
-    var leave = function() {
-      socket.emit('leave', me);
     };
 
     var makeOther = function(other) {
@@ -105,10 +99,13 @@
       others[id].elem.style.top = "" + y + "px";
     };
 
-    var removeOther = function(other) {
-      var elem = others[other.id].elem;
+    var removeOther = function(id) {
+      if (!others[id]) return;
+      var country = others[id].country;
+      var elem = others[id].elem;
       elem.parentElement.removeChild(elem);
-      console.log("[" + other.id + "] Departed from " + other.country);
+      delete others[id];
+      console.log("[" + id + "] Departed from " + country);
     };
 
     function ratelimit(fn, ms) {
@@ -121,6 +118,9 @@
         }
       });
     }
+
+    // connect('http://isitchristmas.jit.su');
+    // connect('http://localhost:3000');
 
   </script>
 
