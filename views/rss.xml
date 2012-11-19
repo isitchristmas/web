@@ -11,23 +11,23 @@
       // for ($i=0; $i<10; $i++)
       //   $days[] = strtotime("-$i days");
       
-      // // From 12/27 - 12/23, comment this out for performance
-      // require 'iic.php';
-      
-      // // This is to give each link/guid a unique anchor
-      // // The anchor is the # of days since October 17, 2007, when I started the site
-      // function id($day) {
-      //   return floor(($day - strtotime("10/17/07")) / (60 * 60 * 24));
-      // }
-    %>
+      var day = new Date();
+      var country = "US";
 
-    <item>
-      <title><?= $answer ?></title>
-      <description><?= $answer ?></description>
-      <link>http://isitchristmas.com#<?= id($day); ?></link>
-      <guid>http://isitchristmas.com#<?= id($day); ?></guid>
-      <pubDate>strftime("%a, %d %b %Y 00:00:00 -0700", $day);</pubDate>
-    </item>
+      for (var i=0; i<10; i++) { 
+    %>
+      <% var answer = Christmas.isIt(country, day); %>
+      <item>
+        <title><%= answer %></title>
+        <description><%= answer %></description>
+        <link>http://isitchristmas.com#<%= dateFormat(day, "isoDate") %></link>
+        <guid>http://isitchristmas.com#<%= dateFormat(day, "isoDate") %></guid>
+        <pubDate><%= dateFormat(day, "ddd, d mmm yyyy 00:00:00 -0700") %></pubDate>
+      </item>
+
+      <% day.add({days: -1}); %>
+
+    <% } %>
     
   </channel>
 </rss>

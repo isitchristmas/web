@@ -4,15 +4,23 @@ var index = function(req, res) {
 
 var rss = function(req, res) {
   res.set({'Content-Type': 'application/rss+xml'});
-  res.render('rss.xml');
+  res.render('rss.xml', {
+    Christmas: Christmas,
+    dateFormat: dateFormat
+  });
 };
+
+// helpers 
 
 
 /** server setup **/
 
 var express = require('express')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , dateFormat = require('dateformat')
+  , Christmas = require("./public/christmas");
+require('date-utils'); // date helpers
 
 var app = express();
 
@@ -32,6 +40,19 @@ app.configure('development', function(){
 app.get('/', index);
 app.get('/rss.xml', rss);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+var startServer = function() {
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express %s server listening on port %s", app.settings.env, app.get('port'));
+  });
+}
+
+app.configure('development', function() {
+  app.use(express.errorHandler());
+
+  require('reloader')({
+    watchModules: true,
+    onReload: startServer
+  });
 });
+
+app.configure('production', startServer);
