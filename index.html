@@ -52,9 +52,9 @@
       // server acknowledges connection, ready to rock
       socket.on('merry christmas', function() {
         me.id = socket.socket.sessionid;
-        document.body.style.cursor = "url(" + me.country + ".jpg), auto";
+        document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
 
-        document.onmousemove = ratelimit(mouseMove, 30);
+        document.onmousemove = ratelimit(mouseMove, 0);
         
         console.log("Connected: " + me.id);
       });
