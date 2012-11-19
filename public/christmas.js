@@ -177,6 +177,9 @@ var Christmas = {
   }
 };
 
+
+// use this client-side and server-side
+
 if (typeof(window) !== "undefined")
   window.Christmas = Christmas;
 

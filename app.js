@@ -10,10 +10,8 @@ var rss = function(req, res) {
   });
 };
 
-// helpers 
 
-
-/** server setup **/
+/** configuration **/
 
 var express = require('express')
   , http = require('http')
@@ -37,8 +35,12 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+
 app.get('/', index);
 app.get('/rss.xml', rss);
+
+
+/** start server */
 
 var startServer = function() {
   http.createServer(app).listen(app.get('port'), function(){
