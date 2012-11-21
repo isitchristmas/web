@@ -3,6 +3,8 @@ var index = function(req, res) {
     res.render('index', {
       answer: Christmas.isIt(country),
       country: country,
+      visible: req.param("visible"),
+
       config: config,
       env: app.get('env')
     });
@@ -17,6 +19,7 @@ var rss = function(req, res) {
       country: country,
       Christmas: Christmas,
       dateFormat: dateFormat,
+      
       config: config,
       env: app.get('env')
     });

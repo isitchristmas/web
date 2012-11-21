@@ -60,7 +60,7 @@
     var socket;
     var others = {};
 
-    var visible = false;
+    var visible = <%= visible ? "true" : "false" %>;
 
     function connect(host) {
       socket = io.connect(host);
