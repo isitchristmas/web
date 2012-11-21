@@ -72,6 +72,7 @@
 
       socket.on('connect', function() {
         me.id = socket.socket.sessionid;
+        console.log("Connected: " + me.id);
 
         if (disconnectId) {
           socket.emit('manual disconnect', disconnectId);
@@ -82,9 +83,8 @@
 
         if (visible)
           document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
+
         document.onmousemove = ratelimit(mouseMove, 30);
-        
-        console.log("Connected: " + me.id);
       });
 
       socket.on("disconnect", function() {
@@ -108,7 +108,6 @@
       });
 
       socket.on('motion', function(other) {
-        // give people many chances to connect, in case their arrive event got missed
         if (!others[other.id] || !others[other.id].elem)
           showOther(other);
 
@@ -140,6 +139,7 @@
     };
 
     var showOther = function(other) {
+      // give people many chances to connect, in case their arrive event got missed
       registerOther(other);
 
       var elem = document.createElement('img');
