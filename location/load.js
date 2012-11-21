@@ -26,6 +26,13 @@ var setupCollection = function(db) {
 // read in the given CSV, parse each row, store it
 var readCSV = function(collection) {
   var filename = args._[0];
+
+  if (!filename) {
+    console.log("Supply a CSV filename as a command lne argument.")
+    process.exit(1);
+  }
+
+
   console.log("Reading CSV from " + filename + ":");
   csv()
     .from.stream(fs.createReadStream(filename))
