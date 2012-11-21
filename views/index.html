@@ -60,7 +60,7 @@
     var socket;
     var others = {};
 
-    var visible = <%= visible ? "true" : "false" %>;
+    var visible = <%= req.param("visible") ? "true" : "false" %>;
 
     function connect(host) {
       socket = io.connect(host);
@@ -139,7 +139,7 @@
       });
     }
 
-    connect('http://sockets.isitchristmas.com:80');
+    connect("http://<%= config.streaming %>");
   </script>
 
 </body>
