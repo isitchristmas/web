@@ -14,11 +14,11 @@ module.exports = {
     db.open(function(err, data) {
       if (data) {
         if (config.username && config.password) {
-          data.authenticate(config.username, config.password, function(data2, err2) {
-            if (data2)
-              callback(data2);
+          data.authenticate(config.username, config.password, function(err2, status) {
+            if (status)
+              callback(data);
             else
-              console.log("Error authenticating: " + err);
+              console.log("Error authenticating: " + err2);
           });
         } else
           callback(data);
