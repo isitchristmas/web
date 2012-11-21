@@ -69,6 +69,8 @@
       socket.on('merry christmas', function() {
         me.id = socket.socket.sessionid;
 
+        socket.emit('join', me);
+
         if (visible)
           document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
 
