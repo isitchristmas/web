@@ -68,7 +68,7 @@
       socket.on('connect', function() {
         me.id = socket.socket.sessionid;
 
-        socket.emit('join', me);
+        socket.emit('arrive', me);
 
         if (visible)
           document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
@@ -78,12 +78,23 @@
         console.log("Connected: " + me.id);
       });
 
-      socket.on('join', function(other) {
+      socket.on('arrive', function(other) {
+        registerOther(other);
+
+        // let a new arrival know you are already here
+        socket.emit("here", {
+          to: other.id,
+          country: me.country,
+          id: me.id
+        });
+      });
+
+      socket.on('here', function(other) {
         registerOther(other);
       });
 
       socket.on('motion', function(other) {
-        // give people many chances to connect, in case their join event got missed
+        // give people many chances to connect, in case their arrive event got missed
         if (!others[other.id] || !others[other.id].elem)
           showOther(other);
 
