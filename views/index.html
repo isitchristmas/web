@@ -77,12 +77,14 @@
         console.log("Connected: " + me.id);
       });
 
-      // others' motion
-      socket.on('motion', function(other) {
-        if (!visible) return;
+      socket.on('join', function(other) {
+        registerOther(other);
+      });
 
-        // register if needed
-        if (!others[other.id]) makeOther(other);
+      socket.on('motion', function(other) {
+        // give people many chances to connect, in case their join event got missed
+        if (!others[other.id] || !others[other.id].elem)
+          showOther(other);
 
         moveOther(other.id, other.x, other.y);
       });
@@ -102,16 +104,25 @@
       });
     };
 
-    var makeOther = function(other) {
+    var registerOther = function(other) {
+      if (!others[other.id]) {
+        others[other.id] = {
+          country: other.country
+        };
+        console.log("[" + other.id + "] Registered from " + other.country);
+      }
+    };
+
+    var showOther = function(other) {
+      registerOther(other);
+
       var elem = document.createElement('img');
       elem.src = "countries/" + other.country + ".png";
-      document.body.appendChild(elem)
+
+      if (visible)
+        document.body.appendChild(elem)
       
-      others[other.id] = {
-        country: other.country,
-        elem: elem
-      };
-      console.log("[" + other.id + "] Registered from " + other.country);
+      others[other.id].elem = elem;
     };
 
     var moveOther = function(id, x, y) {
@@ -122,8 +133,11 @@
     var removeOther = function(id) {
       if (!others[id]) return;
       var country = others[id].country;
+      
       var elem = others[id].elem;
-      elem.parentElement.removeChild(elem);
+      if (elem && elem.parentElement)
+        elem.parentElement.removeChild(elem);
+
       delete others[id];
       console.log("[" + id + "] Departed from " + country);
     };
