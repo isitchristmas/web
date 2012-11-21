@@ -60,7 +60,12 @@
     var socket;
     var others = {};
 
+    // whether activity is visible to the user
     var visible = <%= req.param("visible") ? "true" : "false" %>;
+
+    // if the server fluctuated, send a manual disconnect with the old ID
+    // once the server comes back up
+    var disconnectId;
 
     function connect(host) {
       socket = io.connect(host);
@@ -68,14 +73,23 @@
       socket.on('connect', function() {
         me.id = socket.socket.sessionid;
 
+        if (disconnectId) {
+          socket.emit('manual disconnect', disconnectId);
+          disconnectId = null;
+        }
+
         socket.emit('arrive', me);
 
         if (visible)
           document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
-
         document.onmousemove = ratelimit(mouseMove, 30);
         
         console.log("Connected: " + me.id);
+      });
+
+      socket.on("disconnect", function() {
+        console.log("= Disconnected! :(");
+        disconnectId = me.id;
       });
 
       socket.on('arrive', function(other) {
