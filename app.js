@@ -21,14 +21,16 @@ var rss = function(req, res) {
 /** helpers **/
 
 var findCountry = function(req, callback) {
+  if (req.param("country"))
+    return callback(req.param("country"));
+
   var forwarded = req.header("X-Forwarded-For");
-  var ip = forwarded ? forwarded : req.socket.remoteAddress;
+  var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
   console.log("IP: " + ip);
 
   if (db == null) {
     console.log("Connecting to MongoDB for first time...");
     mongo.connect(config.mongodb, function(database) {
-      console.log("Caching MongoDB connection.");
       db = database; // cache database
       lookupCountry(ip, db, callback);
     });
