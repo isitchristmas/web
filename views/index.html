@@ -84,7 +84,7 @@
 
     var makeOther = function(other) {
       var elem = document.createElement('img');
-      elem.src = other.country + ".jpg";
+      elem.src = "countries/" + other.country + ".png";
       document.body.appendChild(elem)
       
       others[other.id] = {
@@ -119,7 +119,7 @@
       });
     }
 
-    // connect('http://isitchristmas.jit.su');
+    connect('http://sockets.isitchristmas.com');
     // connect('http://localhost:3000');
 
   </script>

@@ -1,14 +1,32 @@
 var index = function(req, res) {
-  res.render('index');
+  findCountry(req, function(country) {
+    res.render('index', {
+      country: country
+    });
+  });
 };
 
 var rss = function(req, res) {
   res.set({'Content-Type': 'application/rss+xml'});
-  res.render('rss.xml', {
-    Christmas: Christmas,
-    dateFormat: dateFormat
+
+  findCountry(req, function(country) {
+    res.render('rss.xml', {
+      country: country,
+      Christmas: Christmas,
+      dateFormat: dateFormat
+    });
   });
 };
+
+/** helpers **/
+
+var findCountry = function(req, callback) {
+  var forwarded = req.header("X-Forwarded-For");
+  var ip = forwarded ? forwarded : req.socket.remoteAddress;
+  console.log("IP: " + ip);
+  callback("US");
+};
+
 
 
 /** configuration **/
@@ -20,7 +38,16 @@ var express = require('express')
   , Christmas = require("./public/christmas");
 require('date-utils'); // date helpers
 
-var app = express();
+
+var app = express()
+  , config = require('./config.js')[app.get('env')];
+
+
+var mongodb = require('mongodb')
+  , db = new mongodb.Db(
+      config.mongodb.database, 
+      new Server(config.mongodb.host, config.mongodb.port, {})
+    );
 
 app.configure(function(){
   app.engine('.html', require('ejs').__express);

@@ -1,0 +1,24 @@
+// copy this file to config.js, and change the values below to real ones
+
+module.exports = {
+
+  development: {
+    mongodb: {
+      port: 27017,
+      host: "localhost",
+      database: "isitchristmas"
+    }
+  },
+
+  production: {
+    mongodb: {
+      port: 27017,
+      host: "",
+      database: "",
+
+      // will use authentication if username and password are non-blank
+      username: "",
+      password: ""
+    }
+  },
+}
