@@ -24,10 +24,49 @@ var findCountry = function(req, callback) {
   var forwarded = req.header("X-Forwarded-For");
   var ip = forwarded ? forwarded : req.socket.remoteAddress;
   console.log("IP: " + ip);
-  callback("US");
+
+  if (db == null) {
+    console.log("Connecting to MongoDB for first time...");
+    mongo.connect(config.mongodb, function(database) {
+      console.log("Caching MongoDB connection.");
+      db = database; // cache database
+      lookupCountry(ip, db, callback);
+    });
+  } else
+    lookupCountry(ip, db, callback);
 };
 
+var lookupCountry = function(ip, database, callback) {
+  database.collection("blocks", function(err, collection) {
+    if (err) {console.log("Error connecting to 'blocks'"); return "US";}
 
+    // debug: French IP
+    // ip = "193.51.208.14";
+
+    var intIp = ipToInteger(ip);
+    
+    collection.findOne({ip_start: {"$lte": intIp}, ip_end: {"$gte": intIp}}, function(err, item) {
+      if (err) {console.log("Error finding row"); return callback("US");}
+
+      if (item == null) {
+        console.log("Invalid IP address (" + ip + ":" + intIp + "), returning 'US'");
+        callback("US");
+      } else {
+        country = item.country;
+        console.log("Found country: " + country);
+        callback(country);
+      }
+    });
+  })
+};
+
+var ipToInteger = function(ip) {
+  var pieces = ip.split(".");
+  return (parseInt(pieces[0]) * 16777216) 
+    + (parseInt(pieces[1]) * 65536) 
+    + (parseInt(pieces[2]) * 256) 
+    + parseInt(pieces[3]);
+}
 
 /** configuration **/
 
@@ -40,14 +79,9 @@ require('date-utils'); // date helpers
 
 
 var app = express()
-  , config = require('./config.js')[app.get('env')];
-
-
-var mongodb = require('mongodb')
-  , db = new mongodb.Db(
-      config.mongodb.database, 
-      new Server(config.mongodb.host, config.mongodb.port, {})
-    );
+  , config = require('./config')[app.get('env')]
+  , mongo = require('./mongo')
+  , db = null; // connect on first request (why is this my best option?)
 
 app.configure(function(){
   app.engine('.html', require('ejs').__express);

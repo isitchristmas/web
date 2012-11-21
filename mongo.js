@@ -7,7 +7,7 @@ module.exports = {
         config.database, 
         new mongodb.Server(config.host, config.port, 
           {auto_reconnect: true}),
-        {safe: false}
+        {safe: true}
       );
 
     // open the database, auth if needed

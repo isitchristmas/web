@@ -7,13 +7,7 @@
     <description>Is it Christmas?</description>
     <atom:link href="http://isitchristmas.com/rss.xml" rel="self" type="application/rss+xml" />    
     <%
-      // $days = array();
-      // for ($i=0; $i<10; $i++)
-      //   $days[] = strtotime("-$i days");
-      
       var day = new Date();
-      var country = "US";
-
       for (var i=0; i<10; i++) { 
     %>
       <% var answer = Christmas.isIt(country, day); %>
