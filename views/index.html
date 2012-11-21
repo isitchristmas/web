@@ -64,9 +64,8 @@
 
     function connect(host) {
       socket = io.connect(host);
-      
-      // server acknowledges connection, ready to rock
-      socket.on('merry christmas', function() {
+
+      socket.on('connect', function() {
         me.id = socket.socket.sessionid;
 
         socket.emit('join', me);
