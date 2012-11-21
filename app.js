@@ -1,7 +1,10 @@
 var index = function(req, res) {
   findCountry(req, function(country) {
     res.render('index', {
-      country: country
+      answer: Christmas.isIt(country),
+      country: country,
+      config: config,
+      env: app.get('env')
     });
   });
 };
@@ -13,7 +16,9 @@ var rss = function(req, res) {
     res.render('rss.xml', {
       country: country,
       Christmas: Christmas,
-      dateFormat: dateFormat
+      dateFormat: dateFormat,
+      config: config,
+      env: app.get('env')
     });
   });
 };
@@ -55,7 +60,7 @@ var lookupCountry = function(ip, database, callback) {
         callback("US");
       } else {
         country = item.country;
-        console.log("Found country: " + country);
+        console.log("Found country for " + ip + ": " + country);
         callback(country);
       }
     });
