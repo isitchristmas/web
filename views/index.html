@@ -134,7 +134,7 @@
         others[other.id] = {
           country: other.country
         };
-        console.log("[" + other.id + "] Registered from " + other.country);
+        console.log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
       }
     };
 
@@ -179,7 +179,7 @@
       });
     }
 
-    connect("http://<%= config.streaming %>");
+    connect("http://<%= req.param("streaming") || config.streaming %>");
   </script>
 
 </body>
