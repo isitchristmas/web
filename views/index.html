@@ -15,7 +15,8 @@
 </head>
 
 <body>
-  <a href="rss.xml" 
+  <a href="#" 
+    onclick="return false"
     style="display: inline-block;
           margin-top: 200px;
           font-weight: bold; 
@@ -68,11 +69,13 @@
     var disconnectId;
 
     function connect(host) {
-      socket = io.connect(host);
+      socket = io.connect(host, {
+        transports: ['websocket', 'flashsocket']
+      });
 
       socket.on('connect', function() {
         me.id = socket.socket.sessionid;
-        console.log("Connected: " + me.id);
+        console.log("= Connected: " + me.id);
 
         if (disconnectId) {
           socket.emit('manual disconnect', disconnectId);
@@ -81,11 +84,18 @@
 
         socket.emit('arrive', me);
 
-        if (visible)
-          document.body.style.cursor = "url(countries/" + me.country + ".png), auto";
+        if (visible) {
+          var cursor = "url(countries/" + me.country + ".png), auto";
+          document.body.style.cursor = cursor;
+          document.getElementById('answer').style.cursor = cursor;
+        }
 
-        document.onmousemove = ratelimit(mouseMove, 30);
+        document.onmousemove = ratelimit(mouseMove, 40);
       });
+
+      socket.on("connecting", function(transport) {
+        console.log("= Connecting via " + transport);
+      })
 
       socket.on("disconnect", function() {
         console.log("= Disconnected! :(");
@@ -121,9 +131,11 @@
 
     // sends my motion
     var mouseMove = function(event) {
+      event = event || window.event;
+
       socket.emit('motion', {
-        x: event.pageX,
-        y: event.pageY,
+        x: event.clientX,
+        y: event.clientY,
         id: me.id,
         country: me.country
       });
