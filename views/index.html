@@ -70,7 +70,8 @@
 
     function connect(host) {
       socket = io.connect(host, {
-        transports: ['websocket', 'flashsocket']
+        transports: ['websocket', 'flashsocket'],
+        'flash policy port': 80
       });
 
       socket.on('connect', function() {
