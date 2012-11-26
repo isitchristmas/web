@@ -60,6 +60,7 @@
 
     var socket;
     var others = {};
+    var everSeen = 0;
 
     // whether activity is visible to the user
     var visible = <%= req.param("visible") ? "true" : "false" %>;
@@ -146,6 +147,8 @@
         others[other.id] = {
           country: other.country
         };
+        everSeen++;
+        
         console.log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
       }
     };
