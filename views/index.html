@@ -55,7 +55,7 @@
 
 
   <!-- optional: interaction -->
-  <script type="text/javascript" src="socket.io.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
   <script type="text/javascript">
 
     var socket;
@@ -69,65 +69,72 @@
     // once the server comes back up
     var disconnectId;
 
+
     function connect(host) {
-      socket = io.connect(host, {
-        transports: ['websocket', 'flashsocket']
-      });
+      socket = new SockJS(host);
 
-      socket.on('connect', function() {
-        me.id = socket.socket.sessionid;
-        console.log("= Connected: " + me.id);
+      socket.onopen = function() {
+        console.log("= Connected via " + socket.protocol);
+      };
 
-        if (disconnectId) {
-          socket.emit('manual disconnect', disconnectId);
-          disconnectId = null;
-        }
+      socket.onmessage = function(e) {
+        console.log('message', e.data);
+      };
 
-        socket.emit('arrive', me);
-
-        if (visible) {
-          var cursor = "url(countries/" + me.country + ".png), auto";
-          document.body.style.cursor = cursor;
-          document.getElementById('answer').style.cursor = cursor;
-        }
-
-        document.onmousemove = ratelimit(mouseMove, 40);
-      });
-
-      socket.on("connecting", function(transport) {
-        console.log("= Connecting via " + transport);
-      })
-
-      socket.on("disconnect", function() {
+      socket.onclose = function() {
         console.log("= Disconnected! :(");
         disconnectId = me.id;
-      });
+      };
 
-      socket.on('arrive', function(other) {
-        registerOther(other);
+      // socket.on('connect', function() {
+      //   me.id = socket.socket.sessionid;
+      //   console.log("= Connected: " + me.id);
 
-        // let a new arrival know you are already here
-        socket.emit("here", {
-          to: other.id,
-          country: me.country,
-          id: me.id
-        });
-      });
+      //   if (disconnectId) {
+      //     socket.emit('manual disconnect', disconnectId);
+      //     disconnectId = null;
+      //   }
 
-      socket.on('here', function(other) {
-        registerOther(other);
-      });
+      //   socket.emit('arrive', me);
 
-      socket.on('motion', function(other) {
-        if (!others[other.id] || !others[other.id].elem)
-          showOther(other);
+      //   if (visible) {
+      //     var cursor = "url(countries/" + me.country + ".png), auto";
+      //     document.body.style.cursor = cursor;
+      //     document.getElementById('answer').style.cursor = cursor;
+      //   }
 
-        moveOther(other.id, other.x, other.y);
-      });
+      //   document.onmousemove = ratelimit(mouseMove, 40);
+      // });
 
-      socket.on('leave', function(id) {
-        removeOther(id);
-      });
+      // socket.on("connecting", function(transport) {
+      //   console.log("= Connecting via " + transport);
+      // })
+
+      // socket.on('arrive', function(other) {
+      //   registerOther(other);
+
+      //   // let a new arrival know you are already here
+      //   socket.emit("here", {
+      //     to: other.id,
+      //     country: me.country,
+      //     id: me.id
+      //   });
+      // });
+
+      // socket.on('here', function(other) {
+      //   registerOther(other);
+      // });
+
+      // socket.on('motion', function(other) {
+      //   if (!others[other.id] || !others[other.id].elem)
+      //     showOther(other);
+
+      //   moveOther(other.id, other.x, other.y);
+      // });
+
+      // socket.on('leave', function(id) {
+      //   removeOther(id);
+      // });
     }
 
     // sends my motion
@@ -148,7 +155,7 @@
           country: other.country
         };
         everSeen++;
-        
+
         console.log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
       }
     };
