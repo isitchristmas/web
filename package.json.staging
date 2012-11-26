@@ -1,11 +1,11 @@
 {
-  "name": "iic_web",
+  "name": "web-staging",
   "version": "2.2.1",
   "private": true,
 
-  "subdomain": "iic_web",
+  "subdomain": "iic_web_staging",
   "domains": [
-    "isitchristmas.com"
+    "staging.isitchristmas.com"
   ],
   "engines": {"node": "0.8.x"},
 
