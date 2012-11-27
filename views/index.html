@@ -55,7 +55,8 @@
 
 
   <!-- optional: interaction -->
-  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+  <script src="/json2.js"></script>
+  <script src="/sockjs.min.js"></script>
   <script type="text/javascript">
 
     var socket;
@@ -69,79 +70,97 @@
     // once the server comes back up
     var disconnectId;
 
+    // event map
+    var events = {};
+    function on(event, func) {events[event] = func;}
 
     function connect(host) {
-      socket = new SockJS(host);
+      socket = new SockJS(host, null, {
+        protocols_whitelist: [
+          "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
+        ]
+      });
 
+      // core SockJS communication
       socket.onopen = function() {
         console.log("= Connected via " + socket.protocol);
       };
 
-      socket.onmessage = function(e) {
-        console.log('message', e.data);
+      socket.onmessage = function(message) {
+        var data = JSON.parse(message.data);
+        events[data._event](data);
       };
 
       socket.onclose = function() {
+        // TODO: retry connection logic
         console.log("= Disconnected! :(");
         disconnectId = me.id;
       };
+    }
 
-      // socket.on('connect', function() {
-      //   me.id = socket.socket.sessionid;
-      //   console.log("= Connected: " + me.id);
+    function emit(event, data) {
+      data = data || {};
+      data._event = event;
+      socket.send(JSON.stringify(data));
+    }
+      
 
-      //   if (disconnectId) {
-      //     socket.emit('manual disconnect', disconnectId);
-      //     disconnectId = null;
-      //   }
+    // event listeners 
 
-      //   socket.emit('arrive', me);
+    on('hello', function(data) {
+      me.id = data._user_id;
+      console.log("= Assigned ID: " + me.id);
 
-      //   if (visible) {
-      //     var cursor = "url(countries/" + me.country + ".png), auto";
-      //     document.body.style.cursor = cursor;
-      //     document.getElementById('answer').style.cursor = cursor;
-      //   }
+      // TODO: not relevant until we have multiple processes
+      // if (disconnectId) {
+      //   socket.emit('manual disconnect', disconnectId);
+      //   disconnectId = null;
+      // }
 
-      //   document.onmousemove = ratelimit(mouseMove, 40);
-      // });
+      emit('arrive', me);
 
-      // socket.on("connecting", function(transport) {
-      //   console.log("= Connecting via " + transport);
-      // })
+      if (visible) setCursor();
 
-      // socket.on('arrive', function(other) {
-      //   registerOther(other);
+      document.onmousemove = ratelimit(mouseMove, 20);
+    });
 
-      //   // let a new arrival know you are already here
-      //   socket.emit("here", {
-      //     to: other.id,
-      //     country: me.country,
-      //     id: me.id
-      //   });
-      // });
+    on('arrive', function(other) {
+      registerOther(other);
 
-      // socket.on('here', function(other) {
-      //   registerOther(other);
-      // });
+      // let a new arrival know you are already here
+      emit("here", {
+        to: other.id,
+        country: me.country,
+        id: me.id
+      });
+    });
 
-      // socket.on('motion', function(other) {
-      //   if (!others[other.id] || !others[other.id].elem)
-      //     showOther(other);
+    on('here', function(other) {
+      registerOther(other);
+    });
 
-      //   moveOther(other.id, other.x, other.y);
-      // });
+    on('motion', function(other) {
+      if (!others[other.id] || !others[other.id].elem)
+        showOther(other);
 
-      // socket.on('leave', function(id) {
-      //   removeOther(id);
-      // });
+      moveOther(other.id, other.x, other.y);
+    });
+
+    on('leave', function(data) {
+      removeOther(data.id);
+    });
+
+    var setCursor = function() {
+      var cursor = "url(countries/" + me.country + ".png), auto";
+      document.body.style.cursor = cursor;
+      document.getElementById('answer').style.cursor = cursor;
     }
 
     // sends my motion
     var mouseMove = function(event) {
       event = event || window.event;
 
-      socket.emit('motion', {
+      emit('motion', {
         x: event.clientX,
         y: event.clientY,
         id: me.id,
