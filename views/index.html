@@ -66,6 +66,12 @@
     // whether activity is visible to the user
     var visible = <%= req.param("visible") ? "true" : "false" %>;
 
+    // force it to use a particular transport
+    var transport = "<%= req.param("transport") || "" %>";
+    var default_transports = [
+      "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
+    ];
+
     // if the server fluctuated, send a manual disconnect with the old ID
     // once the server comes back up
     var disconnectId;
@@ -76,9 +82,7 @@
 
     function connect(host) {
       socket = new SockJS(host, null, {
-        protocols_whitelist: [
-          "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
-        ]
+        protocols_whitelist: transport ? [transport] : default_transports
       });
 
       // core SockJS communication
