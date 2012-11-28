@@ -34,8 +34,7 @@ var findCountry = function(req, callback) {
 
   var forwarded = req.header("X-Forwarded-For");
   var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
-  console.log("IP: " + ip);
-
+  
   if (db == null) {
     console.log("Connecting to MongoDB for first time...");
     mongo.connect(config.mongodb, function(database) {
