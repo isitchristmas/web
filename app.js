@@ -95,7 +95,7 @@ var app = express()
 app.configure(function(){
   app.engine('.html', require('ejs').__express);
   app.engine('.xml', require('ejs').__express);
-  app.set('port', process.env.PORT || 80);
+  app.set('port', config.port || process.env.PORT || 80);
   app.set('view engine', 'html');
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.static(path.join(__dirname, 'public')));

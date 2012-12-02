@@ -3,6 +3,10 @@
 module.exports = {
 
   development: {
+    port: 2000,
+
+    streaming: "localhost:3000",
+
     mongodb: {
       port: 27017,
       host: "localhost",
@@ -11,6 +15,10 @@ module.exports = {
   },
 
   production: {
+    port: 80,
+
+    streaming: "sockets.example.com",
+
     mongodb: {
       port: 27017,
       host: "",
