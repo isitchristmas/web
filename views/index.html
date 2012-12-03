@@ -63,6 +63,7 @@
     var socket;
     var others = {};
     var everSeen = 0;
+    var debug = false;
 
     // whether activity is visible to the user
     var visible = <%= req.param("visible") ? "true" : "false" %>;
@@ -90,7 +91,7 @@
 
       // core SockJS communication
       socket.onopen = function() {
-        console.log("= Connected via " + socket.protocol);
+        log("= Connected via " + socket.protocol);
         me.transport = socket.protocol;
       };
 
@@ -101,7 +102,7 @@
 
       socket.onclose = function() {
         onDeath();
-        console.log("= Disconnected! :(");
+        log("= Disconnected! :(");
       };
     }
 
@@ -116,7 +117,7 @@
 
     on('hello', function(data) {
       me.id = data._user_id;
-      console.log("= Assigned ID: " + me.id);
+      log("= Assigned ID: " + me.id);
 
       emit('arrive', me);
       setHeartbeat();
@@ -184,7 +185,7 @@
         };
         everSeen++;
 
-        console.log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
+        log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
       }
     };
 
@@ -215,19 +216,19 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      console.log("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
+      log("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
     };
 
     var setHeartbeat = function() {
       clearTimeout(heartbeat);
       heartbeat = setTimeout(function() {
-        // console.log("beating my heart");
+        log.debug("beating my heart");
         emit("heartbeat", me);
       }, heartbeatInterval);
 
       death = setTimeout(function() {
         onDeath();
-        console.log("= Died from lack of heartbeat :(")
+        log("= Died from lack of heartbeat :(")
       }, deathInterval);
     };
 
@@ -235,7 +236,7 @@
       if (suicide) return; // let death take me
 
       clearTimeout(death); // death averted
-      // console.log("heartbeat returned, death averted");
+      log.debug("heartbeat returned, death averted");
 
       setHeartbeat();
     });
@@ -250,6 +251,14 @@
         }
       });
     }
+
+    var log = function(message, severity) {
+      if (severity == "debug") {
+        if (debug) console.log("debug: " + message);
+      } else
+        console.log(message);
+    };
+    log.debug = function(message) {log(message, "debug")};
 
     connect("http://<%= req.param("streaming") || config.streaming %>/christmas");
   </script>
