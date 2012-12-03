@@ -32,7 +32,8 @@
   <script type="text/javascript">
     var me = {
       country: "<%= country %>", 
-      id: null
+      id: null,
+      transport: null
     };
 
     // no matter what: fill in the country
@@ -72,13 +73,15 @@
       "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
     ];
 
-    // if the server fluctuated, send a manual disconnect with the old ID
-    // once the server comes back up
-    var disconnectId;
-
     // event map
     var events = {};
     function on(event, func) {events[event] = func;}
+
+    var heartbeat, death;
+    var heartbeatInterval = 1000
+      , deathInterval = 5000;
+    var suicide = false; // why would you do this
+
 
     function connect(host) {
       socket = new SockJS(host, null, {
@@ -88,6 +91,7 @@
       // core SockJS communication
       socket.onopen = function() {
         console.log("= Connected via " + socket.protocol);
+        me.transport = socket.protocol;
       };
 
       socket.onmessage = function(message) {
@@ -96,9 +100,8 @@
       };
 
       socket.onclose = function() {
-        // TODO: retry connection logic
+        onDeath();
         console.log("= Disconnected! :(");
-        disconnectId = me.id;
       };
     }
 
@@ -115,18 +118,20 @@
       me.id = data._user_id;
       console.log("= Assigned ID: " + me.id);
 
-      // TODO: not relevant until we have multiple processes
-      // if (disconnectId) {
-      //   socket.emit('manual disconnect', disconnectId);
-      //   disconnectId = null;
-      // }
-
       emit('arrive', me);
+      setHeartbeat();
 
       if (visible) setCursor();
-
       document.onmousemove = ratelimit(mouseMove, 20);
     });
+
+    var onDeath = function() {
+      clearTimeout(heartbeat);
+      clearTimeout(death);
+      document.onmousemove = null;
+      me.id = null;
+      me.transport = null;
+    };
 
     on('arrive', function(other) {
       registerOther(other);
@@ -212,6 +217,28 @@
       delete others[id];
       console.log("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
     };
+
+    var setHeartbeat = function() {
+      clearTimeout(heartbeat);
+      heartbeat = setTimeout(function() {
+        // console.log("beating my heart");
+        emit("heartbeat", me);
+      }, heartbeatInterval);
+
+      death = setTimeout(function() {
+        onDeath();
+        console.log("= Died from lack of heartbeat :(")
+      }, deathInterval);
+    };
+
+    on("heartbeat", function(data) {
+      if (suicide) return; // let death take me
+
+      clearTimeout(death); // death averted
+      // console.log("heartbeat returned, death averted");
+
+      setHeartbeat();
+    });
 
     function ratelimit(fn, ms) {
       var last = (new Date()).getTime();
