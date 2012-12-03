@@ -140,8 +140,9 @@
       // let a new arrival know you are already here
       emit("here", {
         to: other.id,
+        id: me.id,
         country: me.country,
-        id: me.id
+        transport: me.transport
       });
     });
 
