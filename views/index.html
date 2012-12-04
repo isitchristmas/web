@@ -24,7 +24,7 @@
           font-family: Arial, sans-serif; 
           text-decoration: none; 
           color: black;" 
-    title="RSS"
+    title="<%= answer %>"
     id="answer">
     <noscript><%= answer %></noscript>
   </a>
@@ -153,10 +153,10 @@
         emit("heartbeat", me);
       }, heartbeatInterval);
 
-      death = setTimeout(function() {
-        log("= Died from lack of heartbeat :(")
-        socket.close();
-      }, deathInterval);
+      // death = setTimeout(function() {
+      //   log("= Died from lack of heartbeat :(")
+      //   socket.close();
+      // }, deathInterval);
     };
 
     on("heartbeat", function(data) {
