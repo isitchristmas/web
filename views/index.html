@@ -63,7 +63,14 @@
     var socket;
     var others = {};
     var everSeen = 0;
-    var debug = false;
+
+    var user = {
+      log: {
+        debug: false,
+        join: true,
+        info: true
+      }
+    }
 
     // whether activity is visible to the user
     var visible = <%= req.param("visible") ? "true" : "false" %>;
@@ -107,6 +114,11 @@
     }
 
     function emit(event, data) {
+      if (!me.id || !me.transport) {
+        log("= Weird state! Trying to emit events with no ID. :|")
+        return;
+      }
+
       data = data || {};
       data._event = event;
       socket.send(JSON.stringify(data));
@@ -133,6 +145,28 @@
       me.id = null;
       me.transport = null;
     };
+
+    var setHeartbeat = function() {
+      clearTimeout(heartbeat);
+      heartbeat = setTimeout(function() {
+        log.debug("beating my heart");
+        emit("heartbeat", me);
+      }, heartbeatInterval);
+
+      death = setTimeout(function() {
+        log("= Died from lack of heartbeat :(")
+        socket.close();
+      }, deathInterval);
+    };
+
+    on("heartbeat", function(data) {
+      if (suicide) return; // let death take me
+
+      clearTimeout(death); // death averted
+      log.debug("heartbeat returned, death averted");
+
+      setHeartbeat();
+    });
 
     on('arrive', function(other) {
       registerOther(other);
@@ -186,7 +220,7 @@
         };
         everSeen++;
 
-        log("[" + other.id + "] Registered from " + other.country + " (" + Christmas.countries[other.country] + ")");
+        log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
       }
     };
 
@@ -217,30 +251,8 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      log("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
+      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
     };
-
-    var setHeartbeat = function() {
-      clearTimeout(heartbeat);
-      heartbeat = setTimeout(function() {
-        log.debug("beating my heart");
-        emit("heartbeat", me);
-      }, heartbeatInterval);
-
-      death = setTimeout(function() {
-        onDeath();
-        log("= Died from lack of heartbeat :(")
-      }, deathInterval);
-    };
-
-    on("heartbeat", function(data) {
-      if (suicide) return; // let death take me
-
-      clearTimeout(death); // death averted
-      log.debug("heartbeat returned, death averted");
-
-      setHeartbeat();
-    });
 
     function ratelimit(fn, ms) {
       var last = (new Date()).getTime();
@@ -254,12 +266,13 @@
     }
 
     var log = function(message, severity) {
-      if (severity == "debug") {
-        if (debug) console.log("debug: " + message);
-      } else
+      if (!severity) severity = "info";
+      if (user.log[severity])
         console.log(message);
     };
     log.debug = function(message) {log(message, "debug")};
+    log.info = function(message) {log(message, "info")};
+    log.join = function(message) {log(message, "join")};
 
     connect("http://<%= req.param("streaming") || config.streaming %>/christmas");
   </script>
