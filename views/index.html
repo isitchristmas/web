@@ -274,6 +274,9 @@
     log.info = function(message) {log(message, "info")};
     log.join = function(message) {log(message, "join")};
 
+    if (!window.console) window.console = {};
+    if (!window.console.log) window.console.log = function() {};
+
     connect("http://<%= req.param("streaming") || config.streaming %>/christmas");
   </script>
 
