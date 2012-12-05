@@ -172,7 +172,7 @@ var Christmas = {
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
       "VN": "SAI", // Vietnam
-      "MM": "မဟုတ္ဘူ။ူ။" // Myanmar (Burmese)
+      "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
     }
 
     return codes[countryCode] || "NO";
