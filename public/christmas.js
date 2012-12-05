@@ -90,7 +90,8 @@ var Christmas = {
       "KY": "YES", // Cayman Islands
       "NI": "SÍ", // Nicaragua
       "PY": "HÊE", // Paraguay
-    "VN": "ĐÚNG" // Vietnam
+      "VN": "ĐÚNG", // Vietnam
+      "MM": "ဟုတ္တယ္။" // Myanmar (Burmese)
     }
 
     return codes[countryCode] || "YES";
@@ -170,7 +171,8 @@ var Christmas = {
       "KY": "NO", // Cayman Islands
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
-      "VN": "SAI" // Vietnam
+      "VN": "SAI", // Vietnam
+      "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
     }
 
     return codes[countryCode] || "NO";
