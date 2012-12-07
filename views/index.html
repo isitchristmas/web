@@ -130,6 +130,8 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.browser = BrowserDetect.browser.toLowerCase();
+      me.version = BrowserDetect.version;
+      me.os = BrowserDetect.OS.toLowerCase();
       me.connected = Date.now();
       log("= Assigned ID: " + me.id);
 
