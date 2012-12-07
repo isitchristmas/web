@@ -121,6 +121,8 @@ BrowserDetect.init();
 
 if (BrowserDetect.OS.indexOf("unknown") >= 0)
   BrowserDetect.OS = "unknown";
+if (BrowserDetect.OS.indexOf("iPhone") >= 0)
+  BrowserDetect.OS = "ios";
 
 if (BrowserDetect.version.toString().indexOf("unknown") >= 0)
   BrowserDetect.version = "unknown";
