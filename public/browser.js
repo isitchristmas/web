@@ -116,3 +116,14 @@ var BrowserDetect = {
 };
 
 BrowserDetect.init();
+
+// post-process
+
+if (BrowserDetect.OS.indexOf("unknown") >= 0)
+  BrowserDetect.OS = "unknown";
+
+if (BrowserDetect.version.toString().indexOf("unknown") >= 0)
+  BrowserDetect.version = "unknown";
+
+BrowserDetect.browser = BrowserDetect.browser.toLowerCase();
+BrowserDetect.OS = BrowserDetect.OS.toLowerCase();
