@@ -54,12 +54,12 @@
     </script>
   <% } %>
 
-
   <!-- optional: interaction -->
+  <script src="/browser.js"></script>
   <script src="/json2.js"></script>
   <script src="/sockjs.min.js"></script>
   <script type="text/javascript">
-
+    
     var socket;
     var others = {};
     var everSeen = 0;
@@ -129,6 +129,8 @@
 
     on('hello', function(data) {
       me.id = data._user_id;
+      me.browser = BrowserDetect.browser.toLowerCase();
+      me.connected = Date.now();
       log("= Assigned ID: " + me.id);
 
       emit('arrive', me);
@@ -144,6 +146,7 @@
       document.onmousemove = null;
       me.id = null;
       me.transport = null;
+      me.time = null;
     };
 
     var setHeartbeat = function() {

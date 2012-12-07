@@ -23,7 +23,7 @@ module.exports = {
         } else
           callback(data);
       } else
-        console.log("Error opening MongodB: " + err);
+        console.log("Error opening MongoDB: " + err);
     });
   }
 };
