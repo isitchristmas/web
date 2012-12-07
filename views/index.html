@@ -132,7 +132,7 @@
       me.browser = BrowserDetect.browser;
       me.version = BrowserDetect.version;
       me.os = BrowserDetect.OS;
-      me.connected = Date.now();
+      me.time = Date.now();
       log("= Assigned ID: " + me.id);
 
       emit('arrive', me);
