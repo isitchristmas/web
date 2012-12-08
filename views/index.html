@@ -282,7 +282,7 @@
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
 
-    connect("http://<%= req.param("streaming") || config.streaming %>/christmas");
+    connect("https://<%= req.param("streaming") || config.streaming %>/christmas");
   </script>
 
 </body>
