@@ -311,6 +311,9 @@
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
 
+    // prevent ESC in Firefox from closing websockets connection
+    window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
+
     connect("<%= req.param("streaming") || config.streaming %>/christmas");
   </script>
 
