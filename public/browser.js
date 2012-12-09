@@ -1,10 +1,10 @@
 var BrowserDetect = {
   init: function () {
-    this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+    this.browser = this.searchString(this.dataBrowser) || "unknown";
     this.version = this.searchVersion(navigator.userAgent)
       || this.searchVersion(navigator.appVersion)
-      || "an unknown version";
-    this.OS = this.searchString(this.dataOS) || "an unknown OS";
+      || "unknown";
+    this.OS = this.searchString(this.dataOS) || "unknown";
   },
   searchString: function (data) {
     for (var i=0;i<data.length;i++) {
@@ -117,15 +117,15 @@ var BrowserDetect = {
 
 BrowserDetect.init();
 
+
 // post-process
 
-if (BrowserDetect.OS.indexOf("unknown") >= 0)
-  BrowserDetect.OS = "unknown";
-if (BrowserDetect.OS.indexOf("iPhone") >= 0)
+var fields = ["OS", "version", "browser"];
+for (var i=0; i<fields.length; i++) {
+  var field = fields[i];
+  if (!BrowserDetect[field]) BrowserDetect[field] = "unknown";
+  BrowserDetect[field] = BrowserDetect[field].toString().toLowerCase();
+}
+
+if (BrowserDetect.OS.indexOf("iphone") >= 0)
   BrowserDetect.OS = "ios";
-
-if (BrowserDetect.version.toString().indexOf("unknown") >= 0)
-  BrowserDetect.version = "unknown";
-
-BrowserDetect.browser = BrowserDetect.browser.toLowerCase();
-BrowserDetect.OS = BrowserDetect.OS.toLowerCase();
