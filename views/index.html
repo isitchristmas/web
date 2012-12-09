@@ -69,6 +69,11 @@
         debug: false,
         join: true,
         info: true
+      },
+
+      // overwritten on hello
+      live: {
+        mouse_rate: 500
       }
     }
 
@@ -81,15 +86,19 @@
       "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
     ];
 
-    // event map
+    // events and commands
     var events = {};
+    var commands = {};
     function on(event, func) {events[event] = func;}
+    function command(cmd, func) {commands[cmd] = func;}
+    function noop() {};
 
     var heartbeat, death;
-    var heartbeatInterval = 3000
-      , deathInterval = 6000;
     var suicide = false; // why would you do this
-
+    
+    // todo: move to live
+    var heartbeatInterval = 3000,
+        deathInterval = 6000;
 
     function connect(host) {
       socket = new SockJS(host, null, {
@@ -104,7 +113,7 @@
 
       socket.onmessage = function(message) {
         var data = JSON.parse(message.data);
-        events[data._event](data);
+        (events[data._event] || noop)(data);
       };
 
       socket.onclose = function() {
@@ -129,17 +138,19 @@
 
     on('hello', function(data) {
       me.id = data._user_id;
+      me.server = data.server;
+      log("= Assigned ID: " + me.id);
+      
       me.browser = BrowserDetect.browser;
       me.version = BrowserDetect.version;
       me.os = BrowserDetect.OS;
       me.time = Date.now();
-      log("= Assigned ID: " + me.id);
-
       emit('arrive', me);
+
       setHeartbeat();
 
       if (visible) setCursor();
-      document.onmousemove = ratelimit(mouseMove, 20);
+      document.onmousemove = ratelimit(mouseMove);
     });
 
     var onDeath = function() {
@@ -200,6 +211,20 @@
       removeOther(data.id);
     });
 
+    on('config', function(data) {
+      log("= live config change: " + data.key + " -> " + data.value);
+      user.live[data.key] = data.value;
+    });
+
+    on('command', function(data) {
+      log("= command: " + data.command + " (" + data.arguments.join(",") + ")");
+      (commands[data.command] || noop).apply(null, data.arguments);
+    })
+
+    command('blast', function(message) {
+      console.log(message);
+    })
+
     var setCursor = function() {
       var cursor = "url(countries/" + me.country + ".png), auto";
       document.body.style.cursor = cursor;
@@ -259,11 +284,11 @@
       log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
     };
 
-    function ratelimit(fn, ms) {
+    function ratelimit(fn) {
       var last = (new Date()).getTime();
       return (function() {
         var now = (new Date()).getTime();
-        if (now - last > ms) {
+        if ((now - last) > user.live.mouse_rate) {
           last = now;
           fn.apply(null, arguments);
         }
