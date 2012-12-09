@@ -96,7 +96,6 @@
     var heartbeat, death;
     var suicide = false; // why would you do this
     
-    // todo: move to live
     var heartbeatInterval = 3000,
         deathInterval = 6000;
 
@@ -105,7 +104,6 @@
         protocols_whitelist: transport ? [transport] : default_transports
       });
 
-      // core SockJS communication
       socket.onopen = function() {
         log("= Connected via " + socket.protocol);
         me.transport = socket.protocol;
@@ -173,10 +171,10 @@
         emit("heartbeat", me);
       }, heartbeatInterval);
 
-      // death = setTimeout(function() {
-      //   log("= Died from lack of heartbeat :(")
-      //   socket.close();
-      // }, deathInterval);
+      death = setTimeout(function() {
+        log("= Died from lack of heartbeat :(")
+        socket.close();
+      }, deathInterval);
     };
 
     on("heartbeat", function(data) {
