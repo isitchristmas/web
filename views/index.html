@@ -140,6 +140,10 @@
       me.id = data._user_id;
       me.server = data.server;
       log("= Assigned ID: " + me.id);
+
+      // server-overridden client options
+      for (var key in data.live)
+        user.live[key] = data.live[key];
       
       me.browser = BrowserDetect.browser;
       me.version = BrowserDetect.version;
@@ -212,7 +216,7 @@
     });
 
     on('config', function(data) {
-      log("= live config change: " + data.key + " -> " + data.value);
+      log("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
       user.live[data.key] = data.value;
     });
 
