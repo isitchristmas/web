@@ -131,7 +131,7 @@ var Christmas = {
       "AR": "NO", // Argentina
       "EE": "EI", // Estonia
       "HR": "NE", // Croatia
-      "CN": "BÙ SHÌ", // China (Mandarin)
+      "CN": "BÚ SHÌ", // China (Mandarin)
       "IN": "NAHIM", // India
       "SG": "TIDAK", // Singapore
       "PH": "HINDI", // Phillipines
