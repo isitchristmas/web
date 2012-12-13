@@ -71,6 +71,12 @@
         info: true
       },
 
+      retry: {
+        initial: 500, // milliseconds
+        multiplier: 2, // multiply after every retry
+        current: 500 // will change
+      },
+
       // values can be overwritten on hello
       live: {
         mouse_rate: 20
@@ -78,7 +84,7 @@
     }
 
     // whether activity is visible to the user
-    var visible = <%= req.param("visible") ? "true" : "false" %>;
+    var visible = true; // <%= req.param("visible") ? "true" : "false" %>;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
