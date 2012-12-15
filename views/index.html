@@ -84,7 +84,7 @@
     }
 
     // whether activity is visible to the user
-    var visible = <%= req.param("visible") ? "true" : "false" %>;
+    var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
