@@ -12,6 +12,9 @@
   </style>
 
   <script type="text/javascript" src="christmas.js"></script>
+  <!--[if IE 9 ]>
+    <script type="text/javascript">window._ie9 = true;</script>
+  <![endif]-->
 </head>
 
 <body>
@@ -252,32 +255,29 @@
     };
 
     var registerOther = function(other) {
-      if (!others[other.id]) {
-        others[other.id] = {
-          country: other.country
-        };
-        everSeen++;
+      if (others[other.id])
+        return;
 
-        log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
-      }
+      others[other.id] = {
+        country: other.country
+      };
+      everSeen++;
+
+      log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
     };
 
     var showOther = function(other) {
-      // give people many chances to connect, in case their arrive event got missed
-      registerOther(other);
-
       var elem = document.createElement('img');
       elem.src = "countries/" + other.country + ".png";
-
-      if (visible)
-        document.body.appendChild(elem)
-      
+      document.body.appendChild(elem);
       others[other.id].elem = elem;
     };
 
     var moveOther = function(id, x, y) {
-      others[id].elem.style.left = "" + x + "px";
-      others[id].elem.style.top = "" + y + "px";
+      if (x && y) {
+        others[id].elem.style.left = "" + x + "px";
+        others[id].elem.style.top = "" + y + "px";
+      }
     };
 
     var removeOther = function(id) {
@@ -318,7 +318,10 @@
     // prevent ESC in Firefox from closing websockets connection
     window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
 
-    connect("<%= req.param("streaming") || config.streaming %>/christmas");
+    var url = "<%= req.param("streaming") || config.streaming %>/christmas";
+    if (window._ie9) url = url.replace("https", "http");
+    log.info("Connecting to " + url);
+    connect(url);
   </script>
 
 </body>

@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "private": true,
 
   "subdomain": "iic_web",
