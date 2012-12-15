@@ -34,9 +34,7 @@
   
   <script type="text/javascript">
     var me = {
-      country: "<%= country %>", 
-      id: null,
-      transport: null
+      country: "<%= country %>"
     };
 
     // no matter what: fill in the country
@@ -176,7 +174,7 @@
     var setHeartbeat = function() {
       clearTimeout(heartbeat);
       heartbeat = setTimeout(function() {
-        log.debug("beating my heart");
+        log.debug("heartbeat: beating");
         emit("heartbeat", me);
       }, heartbeatInterval);
 
@@ -190,7 +188,7 @@
       if (suicide) return; // let death take me
 
       clearTimeout(death); // death averted
-      log.debug("heartbeat returned, death averted");
+      log.debug("heartbeat: returned, death averted");
 
       setHeartbeat();
     });
@@ -267,9 +265,14 @@
     };
 
     var showOther = function(other) {
+      registerOther(other); // in case this comes before the 'arrive' event does
+
       var elem = document.createElement('img');
       elem.src = "countries/" + other.country + ".png";
-      document.body.appendChild(elem);
+
+      if (visible)
+        document.body.appendChild(elem);
+      
       others[other.id].elem = elem;
     };
 
