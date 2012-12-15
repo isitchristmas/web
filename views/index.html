@@ -320,7 +320,6 @@
 
     var url = "<%= req.param("streaming") || config.streaming %>/christmas";
     if (window._ie9) url = url.replace("https", "http");
-    log.info("Connecting to " + url);
     connect(url);
   </script>
 
