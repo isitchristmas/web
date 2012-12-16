@@ -73,6 +73,7 @@
       },
 
       retry: {
+        id: null, // the timeout id
         initial: 500, // milliseconds
         multiplier: 2, // multiply after every retry
         current: 500 // will change
@@ -157,11 +158,13 @@
       me.os = BrowserDetect.OS;
       me.time = Date.now();
 
+      // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
-
       setHeartbeat();
 
-      if (visible) setCursor();
+      if (visible) 
+        setCursor();
+
       if (!me.readonly)
         document.onmousemove = ratelimit(mouseMove);
     });
@@ -169,7 +172,9 @@
     var onDeath = function() {
       clearTimeout(heartbeat);
       clearTimeout(death);
+
       document.onmousemove = null;
+
       me.id = null;
       me.transport = null;
       me.time = null;
@@ -321,15 +326,20 @@
     log.info = function(message) {log(message, "info")};
     log.join = function(message) {log(message, "join")};
 
+    // IE fix: make console.log be okay
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
 
-    // prevent ESC in Firefox from closing websockets connection
+    // Firefox fix: prevent ESC from closing websockets connection
     window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
 
     var url = "<%= req.param("streaming") || config.streaming %>/christmas";
+
+    // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
+    
     connect(url);
+
   </script>
 
 </body>
