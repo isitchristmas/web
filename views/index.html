@@ -220,6 +220,9 @@
       clearTimeout(heartbeat);
       clearTimeout(death);
 
+      for (var id in others)
+        removeOther(id);
+
       document.onmousemove = null;
 
       me.id = null;
