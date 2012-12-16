@@ -22,17 +22,6 @@ var missingNames = [ 'Anguilla', 'Aruba', 'Bermuda', 'Faroe Islands', 'Guernsey'
   'Anonymous Proxy', 'Satellite Provider', 'American Samoa', 
   'Asia/Pacific Region', 'Antarctica', 'Europe' ]
 
-var misses = [];
-
-var main = function() {
-  // sizes = ["mini", ]
-
-  for (country in countries)
-    getCountry(country, "ultra");
-
-  console.log(misses.length + " misses:");
-  console.log(misses);
-}
 
 var getCountry = function(code, size) {
   var flagUrl = url(code, size);
@@ -322,4 +311,38 @@ var countries = {
   "EU": "Europe"
 }
 
-main();
+
+var misses = [];
+
+var sizes = function() {
+  var output = {};
+  for (country in countries) {
+    console.log("[" + country + "] Processing...")
+    output[country] = {name: countries[country]};
+
+    var path = "countries/" + country + ".png";
+    if (fs.existsSync(path)) {
+      var results = execSync("identify " + path);
+      var dims = results.match(/PNG (\d+x\d+)/)[1].split("x");
+      output[country].width = parseInt(dims[0]);
+      output[country].height = parseInt(dims[1]);
+    }
+  }
+
+  var json = JSON.stringify(output, null, 2);
+  fs.writeFileSync("countries.json", json, "utf8");
+  console.log("Wrote.")
+}
+
+var main = function() {
+  
+  for (country in countries)
+    getCountry(country, "ultra");
+
+  console.log(misses.length + " misses:");
+  console.log(misses);
+}
+
+//main();
+
+sizes();
