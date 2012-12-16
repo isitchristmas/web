@@ -236,10 +236,6 @@
       me.os = BrowserDetect.OS;
       me.time = Date.now();
 
-      // initialize cached mouse offset stuff based on country
-      me.xOff = xOff(me.country);
-      me.yOff = yOff(me.country);
-
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
@@ -255,7 +251,7 @@
           meFlag._new = false;
         }
 
-        moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+        moveFlag(meFlag, event.clientX, event.clientY);
         
         if (!me.readonly)
           mouseMoveLimited(event);
@@ -354,11 +350,7 @@
       if (!others[other.id] || !others[other.id].flag)
         showOther(other);
 
-      moveFlag(
-        others[other.id].flag, 
-        other.x, other.y, 
-        others[other.id].xOff, others[other.id].yOff
-      );
+      moveFlag(others[other.id].flag, other.x, other.y);
     });
 
     on('click', function(other) {
@@ -406,11 +398,7 @@
       if (others[other.id])
         return;
 
-      others[other.id] = {
-        country: other.country,
-        xOff: xOff(other.country),
-        yOff: yOff(other.country)
-      };
+      others[other.id] = {country: other.country};
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
     };
@@ -430,10 +418,10 @@
         document.body.appendChild(others[other.id].flag);
     };
 
-    var moveFlag = function(flag, x, y, xo, yo) {
+    var moveFlag = function(flag, x, y) {
       if (x && y) {
-        flag.style.left = "" + (x - xo) + "px";
-        flag.style.top = "" + (y - yo) + "px";
+        flag.style.left = "" + x + "px";
+        flag.style.top = "" + y + "px";
       }
     };
 
@@ -487,13 +475,18 @@
       
       // prevent click-drags from "grabbing" image
       div.onmousedown = function(event) {
-        (event || window.event).preventDefault();
+        event = event || window.event;
+        if (event.preventDefault) event.preventDefault();
+        else event.returnValue = false;
       };
 
       div.appendChild(flag);
       
       // without this, div adds height padding, weird
-      div.style.height = "20px"; 
+      div.style.height = "20px";
+
+      div.style.marginTop = "-" + yOff(country) + "px";
+      div.style.marginLeft = "-" + xOff(country) + "px";
 
       return div;
     };
