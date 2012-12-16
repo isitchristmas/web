@@ -69,7 +69,8 @@
       log: {
         debug: false,
         join: true,
-        info: true
+        info: true,
+        public: true
       },
 
       retry: {
@@ -229,17 +230,17 @@
     });
 
     on('config', function(data) {
-      log("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
+      log.info("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
       user.live[data.key] = data.value;
     });
 
     on('command', function(data) {
-      log("= command: " + data.command + " (" + data.arguments.join(",") + ")");
+      log.info("= command: " + data.command + " (" + data.arguments.join(",") + ")");
       (commands[data.command] || noop).apply(null, data.arguments);
     })
 
     command('blast', function(message) {
-      console.log(message);
+      log.public(message);
     })
 
     var setCursor = function() {
@@ -325,6 +326,7 @@
     log.debug = function(message) {log(message, "debug")};
     log.info = function(message) {log(message, "info")};
     log.join = function(message) {log(message, "join")};
+    log.public = function(message) {log(message, "public")};
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
