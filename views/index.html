@@ -60,18 +60,11 @@
     div.click {
       position: absolute;
       border: 1px solid #000;
-
+      height: 20px; width: 40px;
       -webkit-transition: 0.5s ease-out;
       -moz-transition: 0.5s ease-out;
       -o-transition: 0.5s ease-out;
       transition: 0.5s ease-out;
-    }
-    div.click.go {
-      -webkit-transform: scale(2,2);
-      -webkit-transform: scale(2,2);
-      -webkit-transform: scale(2,2);
-      transform: scale(2,2);
-      opacity: 0;
     }
   </style>
 
@@ -351,6 +344,9 @@
     });
 
     on('motion', function(other) {
+      // toss junk motion
+      if (!(other.x && other.y)) return;
+
       if (!others[other.id] || !others[other.id].flag)
         showOther(other);
 
@@ -451,7 +447,11 @@
 
       document.body.appendChild(elem);
       setTimeout(function() {
-        elem.className = "click go";
+        elem.style.width = "" + (width*2) + "px";
+        elem.style.height = "" + (height*2) + "px";
+        elem.style.borderColor = "#fff";
+        elem.style.left = "" + (x - width) + "px";
+        elem.style.top = "" + (y - height) + "px";
         setTimeout(function() {
           elem.parentElement.removeChild(elem);
         }, 500);
