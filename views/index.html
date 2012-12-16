@@ -350,7 +350,11 @@
       if (!others[other.id] || !others[other.id].flag)
         showOther(other);
 
-      moveFlag(others[other.id].flag, other.x, other.y, others[other.id].xOff, others[other.id].yOff);
+      moveFlag(
+        others[other.id].flag, 
+        other.x, other.y, 
+        others[other.id].xOff, others[other.id].yOff
+      );
     });
 
     on('click', function(other) {
