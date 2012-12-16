@@ -121,7 +121,6 @@
     
     var socket;
     var others = {};
-    var everSeen = 0;
 
     var user = {
       log: {
@@ -145,7 +144,7 @@
       live: {
         mouse_rate: 20
       }
-    }
+    };
 
     // kept separate because I like emitting the entire 'me' hash at times
     var meFlag = null;
@@ -155,24 +154,30 @@
 
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
+
+    // whether to force into readonly mode (see mice, but no sending of own action)
     var force_readonly = <%= req.param("readonly") || "false" %>;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
+
+    // allowed transports
     var default_transports = [
-      "websocket", "xhr-streaming", "xdr-streaming"
+      "websocket", // most everyone nowadays
+      "xhr-streaming", // older versions of non-IE, and when networks block websockets
+      "xdr-streaming" // IE9
     ];
 
-    // events and commands
+    // tiny events/commands system
     var events = {};
     var commands = {};
     function on(event, func) {events[event] = func;}
     function command(cmd, func) {commands[cmd] = func;}
     function noop() {};
 
-    var heartbeat, death;
+    // managing heartbeats
+    var heartbeat, death; 
     var suicide = false; // why would you do this
-    
     var heartbeatInterval = 3000,
         deathInterval = 6000;
 
@@ -231,10 +236,6 @@
       me.os = BrowserDetect.OS;
       me.time = Date.now();
 
-      // initialize cached mouse offset stuff based on country
-      me.xOff = xOff(me.country);
-      me.yOff = yOff(me.country);
-
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
@@ -250,7 +251,7 @@
           meFlag._new = false;
         }
 
-        moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+        moveFlag(meFlag, event.clientX, event.clientY);
         
         if (!me.readonly)
           mouseMoveLimited(event);
@@ -349,11 +350,7 @@
       if (!others[other.id] || !others[other.id].flag)
         showOther(other);
 
-      moveFlag(
-        others[other.id].flag, 
-        other.x, other.y, 
-        others[other.id].xOff, others[other.id].yOff
-      );
+      moveFlag(others[other.id].flag, other.x, other.y);
     });
 
     on('click', function(other) {
@@ -401,13 +398,7 @@
       if (others[other.id])
         return;
 
-      others[other.id] = {
-        country: other.country,
-        xOff: xOff(other.country),
-        yOff: yOff(other.country)
-      };
-      
-      everSeen++;
+      others[other.id] = {country: other.country};
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
     };
@@ -427,10 +418,10 @@
         document.body.appendChild(others[other.id].flag);
     };
 
-    var moveFlag = function(flag, x, y, xo, yo) {
+    var moveFlag = function(flag, x, y) {
       if (x && y) {
-        flag.style.left = "" + (x - xo) + "px";
-        flag.style.top = "" + (y - yo) + "px";
+        flag.style.left = "" + x + "px";
+        flag.style.top = "" + y + "px";
       }
     };
 
@@ -484,13 +475,18 @@
       
       // prevent click-drags from "grabbing" image
       div.onmousedown = function(event) {
-        (event || window.event).preventDefault();
+        event = event || window.event;
+        if (event.preventDefault) event.preventDefault();
+        else event.returnValue = false;
       };
 
       div.appendChild(flag);
       
       // without this, div adds height padding, weird
-      div.style.height = "20px"; 
+      div.style.height = "20px";
+
+      div.style.marginTop = "-" + yOff(country) + "px";
+      div.style.marginLeft = "-" + xOff(country) + "px";
 
       return div;
     };
