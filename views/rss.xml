@@ -10,7 +10,7 @@
       var day = new Date();
       for (var i=0; i<10; i++) { 
     %>
-      <% var answer = Christmas.isIt(country, day); %>
+      <% var answer = Christmas.answer(country, day); %>
       <item>
         <title><%= answer %></title>
         <description><%= answer %></description>

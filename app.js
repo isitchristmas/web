@@ -1,7 +1,15 @@
+require('time')(Date);
+
 var index = function(req, res) {
   findCountry(req, function(country) {
+
+    // this is only used as a fallback for clients who don't use JavaScript
+    // if I must pick a timezone for them, let's choose the opposite of the dateline
+    var utcTime = new Date();
+    utcTime.setTimezone("UTC");
+
     res.render('index', {
-      answer: Christmas.isIt(country),
+      answer: Christmas.answer(country, utcTime),
       country: country,
 
       req: req,

@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "2.6.8",
+  "version": "2.7.0",
   "private": true,
 
   "subdomain": "iic_web",
@@ -20,6 +20,7 @@
     "ejs": "*",
     "dateformat": "*",
     "date-utils": "*",
+    "time": "*",
 
     "mongodb": "*",
     "csv": "*",

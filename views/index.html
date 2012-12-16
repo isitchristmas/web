@@ -12,12 +12,17 @@
   </style>
 
   <script type="text/javascript" src="christmas.js"></script>
+
   <!--[if IE 9 ]>
     <script type="text/javascript">window._ie9 = true;</script>
   <![endif]-->
 </head>
 
 <body>
+  <!-- 
+    Initial 'title' and noscript values are server-side fallbacks,
+    calculated with UTC, for clients who do not have JS enabled.
+  -->
   <a href="#" 
     onclick="return false"
     style="display: inline-block;
@@ -32,14 +37,19 @@
     <noscript><%= answer %></noscript>
   </a>
   
+  <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
     var me = {
-      country: "<%= country %>"
+      country: "<%= country %>",
+      christmas: Christmas.isIt()
     };
 
-    // no matter what: fill in the country
-    document.getElementById('answer').innerHTML = Christmas.isIt(me.country);
+    var elem = document.getElementById('answer');
+    var answer = Christmas.answer(me.country);
+    elem.innerHTML = answer;
+    elem.setAttribute("title", answer);
   </script>
+
 
   <% if (env == "production") { %>
     <script type="text/javascript">
@@ -55,6 +65,7 @@
     </script>
   <% } %>
 
+  
   <!-- optional: interaction -->
   <script src="/browser.js"></script>
   <script src="/json2.js"></script>
@@ -343,9 +354,7 @@
     // minimalist logging system
 
     var log = function(message, severity) {
-      if (!severity) severity = "info";
-      if (user.log[severity])
-        console.log(message);
+      if (user.log[severity]) console.log(message);
     };
     log.debug = function(message) {log(message, "debug")};
     log.info = function(message) {log(message, "info")};

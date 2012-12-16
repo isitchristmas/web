@@ -1,21 +1,26 @@
+// high-performance modern Christmas detection technology
+
 var Christmas = {
   time: {
     month: 11,
     date: 25
   },
 
-  isIt: function(countryCode, date) {
+  isIt: function(date) {
     if (!date) date = new Date();
-    var isChristmas = (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date);
-    
-    if (isChristmas)
+    return (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date);
+  },
+
+  answer: function(countryCode, date) {
+    if (Christmas.isIt(date))
       return Christmas.yes(countryCode);
     else
       return Christmas.no(countryCode);
   },
 
 
-  // This array is IsItChristmas' sole IP
+  // missing your country?
+  // post a ticket here: https://github.com/isitchristmas/web/issues
   yes: function(countryCode) {
 
     var codes = {
@@ -97,6 +102,8 @@ var Christmas = {
     return codes[countryCode] || "YES";
   },
 
+  // missing your country?
+  // post a ticket here: https://github.com/isitchristmas/web/issues
   no: function(countryCode) {
 
     var codes = {
