@@ -437,7 +437,7 @@
 
     var doClick = function(country, x, y) {
       if (!visible) return;
-      
+
       var elem = document.createElement("div");
 
       var width = Christmas.countries[country].width || 40;
@@ -536,7 +536,8 @@
     if (!window.console.log) window.console.log = function() {};
 
     // Firefox fix: prevent ESC from closing websockets connection
-    window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
+    if (window.addEventListener)
+      window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
 
     // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
