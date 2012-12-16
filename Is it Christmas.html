@@ -21,7 +21,7 @@
       position: absolute;
       border: 1px solid #ccc;
       padding: 0; margin: 0;
-      cursor: none;
+      xcursor: none;
     }
 
     /* denote one's own flag */
@@ -74,7 +74,7 @@
   <![endif]-->
 <script type="text/javascript" src="./public/stats.js"></script><style type="text/css"></style></head>
 
-<body class=" hasGoogleVoiceExt" style="cursor: none;">
+<body>
   <!-- 
     Initial 'title' and noscript values are server-side fallbacks,
     calculated with UTC, for clients who do not have JS enabled.
@@ -84,7 +84,7 @@
   <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
     var me = {
-      country: "US",
+      country: "JP",
       christmas: Christmas.isIt()
     };
 
@@ -235,15 +235,15 @@
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
-      setCursor();
+      // setCursor();
 
       document.onmousemove = function(event) {
         event = event || window.event;
         
         // only show it on first movement
         if (meFlag._new && visible && event.clientX && event.clientY) {
-          document.body.appendChild(meFlag);
-          document.body.style.cursor = "none";
+          // document.body.appendChild(meFlag);
+          // document.body.style.cursor = "none";
           meFlag._new = false;
         }
 
