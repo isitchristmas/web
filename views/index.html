@@ -42,7 +42,10 @@
       text-decoration: none; 
       color: black;
     }
-    img {position: absolute;}
+    img {
+      position: absolute;
+      border: 1px solid #bbb;
+    }
   </style>
 
   <script type="text/javascript" src="christmas.js"></script>
@@ -130,6 +133,9 @@
       }
     }
 
+    // kept separate because I like emitting the entire 'me' hash at times
+    var meFlag = null;
+
     // sockjs server endpoint
     var url = "<%= req.param("streaming") || config.streaming %>/christmas";
 
@@ -211,12 +217,15 @@
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
+      setCursor();
 
-      if (visible) 
-        setCursor();
-
-      if (!me.readonly)
-        document.onmousemove = ratelimit(mouseMove);
+      if (!me.readonly) {
+        document.onmousemove = function(event) {
+          event = event || window.event;
+          moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+          mouseMoveLimited(event);
+        };
+      }
     });
 
     var onDeath = function() {
@@ -233,6 +242,8 @@
       me.id = null;
       me.transport = null;
       me.time = null;
+      if (meFlag)
+        meFlag.parentElement.removeChild(meFlag);
 
       setRetry();
     };
@@ -284,10 +295,10 @@
     });
 
     on('motion', function(other) {
-      if (!others[other.id] || !others[other.id].elem)
+      if (!others[other.id] || !others[other.id].flag)
         showOther(other);
 
-      moveOther(other.id, other.x, other.y);
+      moveFlag(others[other.id].flag, other.x, other.y, others[other.id].xOff, others[other.id].yOff);
     });
 
     on('leave', function(data) {
@@ -309,23 +320,24 @@
     })
 
     var setCursor = function() {
-      var cursorUrl = "url(countries/" + me.country + ".png)";
-      var cursor = cursorUrl + " " + me.xOff + " " + me.yOff + ", auto";
-      document.body.style.cursor = cursor;
-      document.getElementById('answer').style.cursor = cursor;
+      meFlag = flagFor(me.country);
+
+      if (visible) {
+        meFlag.style.zIndex = 9999; // on top of the world
+        document.body.appendChild(meFlag);
+        document.body.style.cursor = "none";
+      }
     }
 
-    // sends my motion
-    var mouseMove = function(event) {
-      event = event || window.event;
-
+    // rate-limited mouse callback
+    var mouseMoveLimited = ratelimit(function(event) {
       emit('motion', {
         x: event.clientX,
         y: event.clientY,
         id: me.id,
         c: me.country
       });
-    };
+    });
 
     var registerOther = function(other) {
       if (others[other.id])
@@ -339,29 +351,28 @@
       
       everSeen++;
 
-      log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
+      log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
     };
 
     // the creation of an element per-user is only sparked by that user's mouse motion.
     // so read-only (non-WS) clients will connect and be known, but not cause
     // elements to be generated.
     var showOther = function(other) {
-      other.country = other.c; // make up for shortened key name
-      registerOther(other); // in case this comes before the 'arrive' event does
+      // make up for shortened key name
+      other.country = other.country || other.c; 
 
-      var elem = document.createElement('img');
-      elem.src = "countries/" + other.country + ".png";
+      // in case this comes before the 'arrive' event does
+      registerOther(other); 
 
+      others[other.id].flag = flagFor(other.country);
       if (visible)
-        document.body.appendChild(elem);
-
-      others[other.id].elem = elem;
+        document.body.appendChild(others[other.id].flag);
     };
 
-    var moveOther = function(id, x, y) {
+    var moveFlag = function(flag, x, y, xo, yo) {
       if (x && y) {
-        others[id].elem.style.left = "" + (x - others[id].xOff) + "px";
-        others[id].elem.style.top = "" + (y - others[id].yOff) + "px";
+        flag.style.left = "" + (x - xo) + "px";
+        flag.style.top = "" + (y - yo) + "px";
       }
     };
 
@@ -369,12 +380,18 @@
       if (!others[id]) return;
       var country = others[id].country;
       
-      var elem = others[id].elem;
+      var elem = others[id].flag;
       if (elem && elem.parentElement)
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country] + ")");
+      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
+    };
+
+    var flagFor = function(country) {
+      var elem = document.createElement('img');
+      elem.src = "countries/" + country + ".png";
+      return elem;
     };
 
     function ratelimit(fn) {
