@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Load in MaxMind's IP address block to country code database.
 // Either the free or paid one will work.
 //
@@ -28,7 +30,7 @@ var readCSV = function(collection) {
   var filename = args._[0];
 
   if (!filename) {
-    console.log("Supply a CSV filename as a command lne argument.")
+    console.log("Supply a CSV filename as a command line argument.")
     process.exit(1);
   }
 
@@ -64,5 +66,10 @@ var env = process.env.NODE_ENV || "development"
   , csv = require('csv')
   , config = require('../config')[env]
   , mongo = require('../mongo');
+
+if (!args._[0]) {
+  console.log("Supply a CSV filename as a command line argument.")
+  process.exit(1);
+}
 
 mongo.connect(config.mongodb, setupCollection);
