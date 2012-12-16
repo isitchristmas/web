@@ -74,6 +74,10 @@
     var answer = Christmas.answer(me.country);
     elem.innerHTML = answer;
     elem.setAttribute("title", answer);
+
+    // initialize cached mouse offset stuff based on country
+    me.xOff = Math.floor((Christmas.countries[me.country].width || 40) / 2);
+    me.yOff = 10; // all icons are 20px high
   </script>
 
 
@@ -305,7 +309,8 @@
     })
 
     var setCursor = function() {
-      var cursor = "url(countries/" + me.country + ".png) 18 10, auto";
+      var cursorUrl = "url(countries/" + me.country + ".png)";
+      var cursor = cursorUrl + " " + me.xOff + " " + me.yOff + ", auto";
       document.body.style.cursor = cursor;
       document.getElementById('answer').style.cursor = cursor;
     }
@@ -327,8 +332,11 @@
         return;
 
       others[other.id] = {
-        country: other.country
+        country: other.country,
+        xOff: Math.floor((Christmas.countries[other.country].width || 40) / 2),
+        yOff: 10 // all icons are 20px high
       };
+      
       everSeen++;
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
@@ -352,8 +360,8 @@
 
     var moveOther = function(id, x, y) {
       if (x && y) {
-        others[id].elem.style.left = "" + x + "px";
-        others[id].elem.style.top = "" + y + "px";
+        others[id].elem.style.left = "" + (x - others[id].xOff) + "px";
+        others[id].elem.style.top = "" + (y - others[id].yOff) + "px";
       }
     };
 
