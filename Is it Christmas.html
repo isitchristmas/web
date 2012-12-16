@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://isitchristmas.com/?visible=1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>Is it Christmas?</title>
+  <link rel="alternate" title="Is It Christmas?" href="http://isitchristmas.com/rss.xml" type="application/rss+xml">
+
+  <style type="text/css">
+    html, body {height: 100%;}
+    body {text-align: center;}
+    a {
+      display: inline-block;
+      margin-top: 200px;
+      font-weight: bold;
+      font-size: 120pt; 
+      font-family: Arial, sans-serif; 
+      text-decoration: none; 
+      color: black;
+    }
+    div.flag {
+      position: absolute;
+      border: 1px solid #ccc;
+      padding: 0; margin: 0;
+      cursor: none;
+    }
+
+    /* denote one's own flag */
+    div.me {
+      border: 1px solid #444;
+    }
+
+    /* click effect, width and height set dynamically */
+    div.click {
+      position: absolute;
+      border: 1px solid #000;
+      height: 20px; width: 40px;
+      -webkit-transition: 0.5s ease-out;
+      -moz-transition: 0.5s ease-out;
+      -o-transition: 0.5s ease-out;
+      transition: 0.5s ease-out;
+    }
+  </style>
+	<style type="text/css" media="screen" awesome='true'>
+		.flag { border: none !important; }
+		.flag img { 
+			-webkit-background-clip: padding-box; /* fix WebKit background bleed on border-radius */
+			-webkit-border-radius: 2px;
+			   -moz-border-radius: 2px;
+			        border-radius: 2px;
+		 -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+		    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+		         box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+			
+		}
+		.flag:after {
+			font: 10px "Helvetica", "Helvetica Neue", "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+			letter-spacing: 1px;
+			margin-top: 0.192rem;
+			text-transform: uppercase;
+			color: rgba(0,0,0,0.5);
+			content: attr(data-name);
+			display:block;
+			opacity: 0;
+		}
+		.flag:hover:after {
+			opacity: 1;
+		}
+	</style>
+
+  <script type="text/javascript" async="" src="./public/ga.js"></script><script type="text/javascript" src="./public/christmas.js"></script>
+
+  <!--[if IE 9 ]>
+    <script type="text/javascript">window._ie9 = true;</script>
+  <![endif]-->
+<script type="text/javascript" src="./public/stats.js"></script><style type="text/css"></style></head>
+
+<body class=" hasGoogleVoiceExt" style="cursor: none;">
+  <!-- 
+    Initial 'title' and noscript values are server-side fallbacks,
+    calculated with UTC, for clients who do not have JS enabled.
+  -->
+  <a id="answer" href="http://isitchristmas.com/?visible=1#" onclick="return false" title="NO">NO</a>
+  
+  <!-- replace fallback data with locally calculated values -->
+  <script type="text/javascript">
+    var me = {
+      country: "US",
+      christmas: Christmas.isIt()
+    };
+
+    var elem = document.getElementById('answer');
+    var answer = Christmas.answer(me.country);
+    elem.innerHTML = answer;
+    elem.setAttribute("title", answer);
+  </script>
+
+
+  
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-252618-5']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+  
+  <!-- optional: interaction -->
+  <script src="./public/browser.js"></script>
+  <script src="./public/json2.js"></script>
+  <script src="./public/sockjs.min.js"></script>
+  <script type="text/javascript">
+    
+    var socket;
+    var others = {};
+    var everSeen = 0;
+
+    var user = {
+      log: {
+        join: true, // join/leave messages
+
+        info: true,   // default
+        debug: false, // you know
+
+        life: true,  // life and death events
+        public: true // messages for the public
+      },
+
+      retry: {
+        id: null, // the timeout id
+        initial: 500, // milliseconds
+        multiplier: 2, // multiply after every retry
+        current: 500 // will change
+      },
+
+      // values can be overwritten on hello
+      live: {
+        mouse_rate: 20
+      }
+    }
+
+    // kept separate because I like emitting the entire 'me' hash at times
+    var meFlag = null;
+
+    // sockjs server endpoint
+    var url = "https://iic_sockets.jit.su/christmas";
+
+    // whether activity is visible to the user
+    var visible = true;
+    var force_readonly = false;
+
+    // force it to use a particular transport
+    var transport = "";
+    var default_transports = [
+      "websocket", "xhr-streaming", "xdr-streaming"
+    ];
+
+    // events and commands
+    var events = {};
+    var commands = {};
+    function on(event, func) {events[event] = func;}
+    function command(cmd, func) {commands[cmd] = func;}
+    function noop() {};
+
+    var heartbeat, death;
+    var suicide = false; // why would you do this
+    
+    var heartbeatInterval = 3000,
+        deathInterval = 6000;
+
+    function connect(host) {
+      socket = new SockJS(host, null, {
+        protocols_whitelist: transport ? [transport] : default_transports
+      });
+
+      socket.onopen = function() {
+        log.life("= Connected via " + socket.protocol);
+        
+        me.transport = socket.protocol;
+
+        // XDR doesn't have good enough upstream speed for mouse motion
+        me.readonly = force_readonly || (me.transport == "xdr-streaming");
+
+        // reset retry timer, we're in
+        user.retry.current = user.retry.initial;
+      };
+
+      socket.onmessage = function(message) {
+        var data = JSON.parse(message.data);
+        (events[data._event] || noop)(data);
+      };
+
+      socket.onclose = function() {
+        onDeath();
+      };
+    }
+
+    function emit(event, data) {
+      if (!me.id || !me.transport) {
+        log.info("= Weird state! Trying to emit events with no ID. :|")
+        return;
+      }
+
+      data = data || {};
+      data._event = event;
+      socket.send(JSON.stringify(data));
+    }
+      
+
+    // event listeners 
+
+    on('hello', function(data) {
+      me.id = data._user_id;
+      me.server = data.server;
+      log.life("= Assigned ID: " + me.id + " [on: " + me.server + "]");
+
+      // server-overridden client options
+      for (var key in data.live)
+        user.live[key] = data.live[key];
+      
+      me.browser = BrowserDetect.browser;
+      me.version = BrowserDetect.version;
+      me.os = BrowserDetect.OS;
+      me.time = Date.now();
+
+      // initialize cached mouse offset stuff based on country
+      me.xOff = xOff(me.country);
+      me.yOff = yOff(me.country);
+
+      // all users announce their info to the server and start a heartbeat
+      emit('arrive', me);
+      setHeartbeat();
+      setCursor();
+
+      document.onmousemove = function(event) {
+        event = event || window.event;
+        
+        // only show it on first movement
+        if (meFlag._new && visible && event.clientX && event.clientY) {
+          document.body.appendChild(meFlag);
+          document.body.style.cursor = "none";
+          meFlag._new = false;
+        }
+
+        moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+        
+        if (!me.readonly)
+          mouseMoveLimited(event);
+      };
+
+      document.onmousedown = function(event) {
+        event = event || window.event;
+
+        // :(
+        if (me.readonly || window._ie9) return; 
+
+        doClick(me.country, event.clientX, event.clientY);
+
+        if (!me.readonly) {
+          emit('click', {
+            id: me.id, 
+            x: event.clientX, 
+            y: event.clientY,
+            country: me.country
+          });
+        }
+      }
+    });
+
+    var onDeath = function() {
+      log.life("= Disconnected! :(");
+
+      clearTimeout(heartbeat);
+      clearTimeout(death);
+
+      for (var id in others)
+        removeOther(id);
+
+      document.onmousemove = null;
+      document.onmousedown = null;
+
+      me.id = null;
+      me.transport = null;
+      me.time = null;
+      if (meFlag && meFlag.parentElement)
+        meFlag.parentElement.removeChild(meFlag);
+
+      setRetry();
+    };
+
+    var setRetry = function() {
+      console.log("= Retrying in " + user.retry.current + "ms...");
+      user.retry.id = setTimeout(function() {
+        connect(url);
+      }, user.retry.current);
+
+      user.retry.current = user.retry.current * user.retry.multiplier;
+    }
+
+    var setHeartbeat = function() {
+      clearTimeout(heartbeat);
+      heartbeat = setTimeout(function() {
+        log.debug("heartbeat: beating");
+        emit("heartbeat", me);
+      }, heartbeatInterval);
+
+      death = setTimeout(function() {
+        log.life("= Died from lack of heartbeat :(")
+        socket.close();
+      }, deathInterval);
+    };
+
+    on("heartbeat", function(data) {
+      if (suicide) return; // let death take me
+
+      clearTimeout(death); // death averted
+      log.debug("heartbeat: returned, death averted");
+
+      setHeartbeat();
+    });
+
+    on('arrive', function(other) {
+      registerOther(other);
+
+      // let a new arrival know you are already here
+      emit("here", {
+        to: other.id,
+        id: me.id,
+        country: me.country
+      });
+    });
+
+    on('here', function(other) {
+      registerOther(other);
+    });
+
+    on('motion', function(other) {
+      // toss junk motion
+      if (!(other.x && other.y)) return;
+
+      if (!others[other.id] || !others[other.id].flag)
+        showOther(other);
+
+      moveFlag(
+        others[other.id].flag, 
+        other.x, other.y, 
+        others[other.id].xOff, others[other.id].yOff
+      );
+    });
+
+    on('click', function(other) {
+      // :(
+      if (me.readonly || window._ie9) return;
+
+      doClick(other.country, other.x, other.y);
+    });
+
+    on('leave', function(data) {
+      removeOther(data.id);
+    });
+
+    on('config', function(data) {
+      log.info("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
+      user.live[data.key] = data.value;
+    });
+
+    on('command', function(data) {
+      log.info("= command: " + data.command + " (" + data.arguments.join(",") + ")");
+      (commands[data.command] || noop).apply(null, data.arguments);
+    })
+
+    command('blast', function(message) {
+      log.public("= Server message: " + message);
+    })
+
+    var setCursor = function() {
+      meFlag = flagFor(me.country);
+      meFlag._new = true;
+      meFlag.style.zIndex = 9999; // on top of the world
+    };
+
+    // rate-limited mouse callback
+    var mouseMoveLimited = ratelimit(function(event) {
+      emit('motion', {
+        x: event.clientX,
+        y: event.clientY,
+        id: me.id,
+        c: me.country
+      });
+    });
+
+    var registerOther = function(other) {
+      if (others[other.id])
+        return;
+
+      others[other.id] = {
+        country: other.country,
+        xOff: xOff(other.country),
+        yOff: yOff(other.country)
+      };
+      
+      everSeen++;
+
+      log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
+    };
+
+    // the creation of an element per-user is only sparked by that user's mouse motion.
+    // so read-only (non-WS) clients will connect and be known, but not cause
+    // elements to be generated.
+    var showOther = function(other) {
+      // make up for shortened key name
+      other.country = other.country || other.c; 
+
+      // in case this comes before the 'arrive' event does
+      registerOther(other); 
+
+      others[other.id].flag = flagFor(other.country);
+      if (visible)
+        document.body.appendChild(others[other.id].flag);
+    };
+
+    var moveFlag = function(flag, x, y, xo, yo) {
+      if (x && y) {
+        flag.style.left = "" + (x - xo) + "px";
+        flag.style.top = "" + (y - yo) + "px";
+      }
+    };
+
+    var doClick = function(country, x, y) {
+      if (!visible) return;
+
+      var elem = document.createElement("div");
+
+      var width = Christmas.countries[country].width || 40;
+      var height = 20;
+      var xOff = Math.floor(width / 2);
+      var yOff = Math.floor(height / 2);
+
+      elem.className = "click";
+      elem.style.width = "" + width + "px";
+      elem.style.height = "" + height + "px";
+      elem.style.left = "" + (x - xOff) + "px";
+      elem.style.top = "" + (y - yOff) + "px";
+
+      document.body.appendChild(elem);
+      setTimeout(function() {
+        elem.style.width = "" + (width*2) + "px";
+        elem.style.height = "" + (height*2) + "px";
+        elem.style.borderColor = "#fff";
+        elem.style.left = "" + (x - width) + "px";
+        elem.style.top = "" + (y - height) + "px";
+        setTimeout(function() {
+          elem.parentElement.removeChild(elem);
+        }, 500);
+      }, 10);
+    };
+
+    var removeOther = function(id) {
+      if (!others[id]) return;
+      var country = others[id].country;
+      
+      var elem = others[id].flag;
+      if (elem && elem.parentElement)
+        elem.parentElement.removeChild(elem);
+
+      delete others[id];
+      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
+    };
+
+    var flagFor = function(country) {
+      var div = document.createElement('div');
+      div.className = "flag";
+
+      var flag = document.createElement('img');
+      flag.src = "countries/" + country + ".png";
+      
+      // prevent click-drags from "grabbing" image
+      div.onmousedown = function(event) {
+        (event || window.event).preventDefault();
+      };
+
+      div.appendChild(flag);
+      
+      // without this, div adds height padding, weird
+      div.style.height = "20px"; 
+
+      return div;
+    };
+
+    var xOff = function(country) {
+      var width = Christmas.countries[country].width || 40;
+      return width / 2;
+    }
+
+    var yOff = function(country) {
+      return 10; // all flags are 20px high;
+    }
+
+    function ratelimit(fn) {
+      var last = (new Date()).getTime();
+      return (function() {
+        var now = (new Date()).getTime();
+        if ((now - last) > user.live.mouse_rate) {
+          last = now;
+          fn.apply(null, arguments);
+        }
+      });
+    }
+
+
+    // minimalist logging system
+
+    var log = function(message, severity) {
+      if (user.log[severity]) console.log(message);
+    };
+    log.debug = function(message) {log(message, "debug")};
+    log.info = function(message) {log(message, "info")};
+    log.join = function(message) {log(message, "join")};
+    log.public = function(message) {log(message, "public")};
+    log.life = function(message) {log(message, "life")};
+
+    
+    // browser-specific fixes
+
+    // IE fix: make console.log be okay
+    if (!window.console) window.console = {};
+    if (!window.console.log) window.console.log = function() {};
+
+    // Firefox fix: prevent ESC from closing websockets connection
+    if (window.addEventListener)
+      window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
+
+    // IE9 fix: XDR does not allow http->https communication, fall back to http
+    if (window._ie9) url = url.replace("https", "http");
+    
+
+    connect(url);
+
+  </script>
+
+<div class="flag" style="height: 20px; z-index: 9999; left: 402px; top: 172px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 1405px; top: 582px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 230px; top: -6px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 1274px; top: 481px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 546px; top: -7px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 390px; top: 303px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 144.5px; top: -6px;" data-name="Luxembourg">
+	<img src="./public/countries/LU.png">
+</div>
+<div class="flag" style="height: 20px; left: 677px; top: -1px;" data-name="United States">
+	<img src="./public/countries/US.png">
+</div>
+<div class="flag" style="height: 20px; left: 320.5px; top: 174px;" data-name="Brazil">
+	<img src="./public/countries/BR.png">
+</div>
+<div class="flag" style="height: 20px; left: 54px; top: 190px;" data-name="Canadia">
+	<img src="./public/countries/CA.png">
+</div>
+</body></html>
