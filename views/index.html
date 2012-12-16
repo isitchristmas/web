@@ -318,7 +318,7 @@
         x: event.clientX,
         y: event.clientY,
         id: me.id,
-        country: me.country
+        c: me.country
       });
     };
 
@@ -338,6 +338,7 @@
     // so read-only (non-WS) clients will connect and be known, but not cause
     // elements to be generated.
     var showOther = function(other) {
+      other.country = other.c; // make up for shortened key name
       registerOther(other); // in case this comes before the 'arrive' event does
 
       var elem = document.createElement('img');
