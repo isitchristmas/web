@@ -121,7 +121,6 @@
     
     var socket;
     var others = {};
-    var everSeen = 0;
 
     var user = {
       log: {
@@ -145,7 +144,7 @@
       live: {
         mouse_rate: 20
       }
-    }
+    };
 
     // kept separate because I like emitting the entire 'me' hash at times
     var meFlag = null;
@@ -155,24 +154,30 @@
 
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
+
+    // whether to force into readonly mode (see mice, but no sending of own action)
     var force_readonly = <%= req.param("readonly") || "false" %>;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
+
+    // allowed transports
     var default_transports = [
-      "websocket", "xhr-streaming", "xdr-streaming"
+      "websocket", // most everyone nowadays
+      "xhr-streaming", // older versions of non-IE, and when networks block websockets
+      "xdr-streaming" // IE9
     ];
 
-    // events and commands
+    // tiny events/commands system
     var events = {};
     var commands = {};
     function on(event, func) {events[event] = func;}
     function command(cmd, func) {commands[cmd] = func;}
     function noop() {};
 
-    var heartbeat, death;
+    // managing heartbeats
+    var heartbeat, death; 
     var suicide = false; // why would you do this
-    
     var heartbeatInterval = 3000,
         deathInterval = 6000;
 
@@ -406,8 +411,6 @@
         xOff: xOff(other.country),
         yOff: yOff(other.country)
       };
-      
-      everSeen++;
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
     };
