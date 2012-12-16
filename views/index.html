@@ -89,6 +89,9 @@
       }
     }
 
+    // sockjs server endpoint
+    var url = "<%= req.param("streaming") || config.streaming %>/christmas";
+
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
 
@@ -121,6 +124,9 @@
         
         me.transport = socket.protocol;
         me.readonly = (me.transport != "websocket");
+
+        // reset retry timer, we're in
+        user.retry.current = user.retry.initial;
       };
 
       socket.onmessage = function(message) {
@@ -130,7 +136,6 @@
 
       socket.onclose = function() {
         onDeath();
-        log.life("= Disconnected! :(");
       };
     }
 
@@ -174,6 +179,8 @@
     });
 
     var onDeath = function() {
+      log.life("= Disconnected! :(");
+
       clearTimeout(heartbeat);
       clearTimeout(death);
 
@@ -182,7 +189,18 @@
       me.id = null;
       me.transport = null;
       me.time = null;
+
+      setRetry();
     };
+
+    var setRetry = function() {
+      console.log("= Retrying in " + user.retry.current + "ms...");
+      user.retry.id = setTimeout(function() {
+        connect(url);
+      }, user.retry.current);
+
+      user.retry.current = user.retry.current * user.retry.multiplier;
+    }
 
     var setHeartbeat = function() {
       clearTimeout(heartbeat);
@@ -321,6 +339,9 @@
       });
     }
 
+
+    // minimalist logging system
+
     var log = function(message, severity) {
       if (!severity) severity = "info";
       if (user.log[severity])
@@ -332,6 +353,9 @@
     log.public = function(message) {log(message, "public")};
     log.life = function(message) {log(message, "life")};
 
+    
+    // browser-specific fixes
+
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
@@ -339,11 +363,10 @@
     // Firefox fix: prevent ESC from closing websockets connection
     window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
 
-    var url = "<%= req.param("streaming") || config.streaming %>/christmas";
-
     // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
     
+
     connect(url);
 
   </script>
