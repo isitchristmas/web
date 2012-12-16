@@ -32,7 +32,10 @@
 
   <style type="text/css">
     html, body {height: 100%;}
-    body {text-align: center;}
+    body {
+      text-align: center;
+
+    }
     a {
       display: inline-block;
       margin-top: 200px;
@@ -42,9 +45,33 @@
       text-decoration: none; 
       color: black;
     }
-    img {
+    div.flag {
       position: absolute;
       border: 1px solid #ccc;
+      padding: 0; margin: 0;
+    }
+
+    /* denote one's own flag */
+    div.me {
+      border: 1px solid #444;
+    }
+
+    /* click effect, width and height set dynamically */
+    div.click {
+      position: absolute;
+      border: 1px solid #000;
+
+      -webkit-transition: 0.5s ease-out;
+      -moz-transition: 0.5s ease-out;
+      -o-transition: 0.5s ease-out;
+      transition: 0.5s ease-out;
+    }
+    div.click.go {
+      -webkit-transform: scale(2,2);
+      -webkit-transform: scale(2,2);
+      -webkit-transform: scale(2,2);
+      transform: scale(2,2);
+      opacity: 0;
     }
   </style>
 
@@ -137,11 +164,12 @@
 
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
+    var force_readonly = <%= req.param("readonly") || "false" %>;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
     var default_transports = [
-      "websocket", "xdr-streaming", "xhr-streaming", "iframe-eventsource"
+      "websocket", "xhr-streaming", "xdr-streaming"
     ];
 
     // events and commands
@@ -166,7 +194,9 @@
         log.life("= Connected via " + socket.protocol);
         
         me.transport = socket.protocol;
-        me.readonly = (me.transport != "websocket");
+
+        // XDR doesn't have good enough upstream speed for mouse motion
+        me.readonly = force_readonly || (me.transport == "xdr-streaming");
 
         // reset retry timer, we're in
         user.retry.current = user.retry.initial;
@@ -219,12 +249,38 @@
       setHeartbeat();
       setCursor();
 
-      if (!me.readonly) {
-        document.onmousemove = function(event) {
-          event = event || window.event;
-          moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+      document.onmousemove = function(event) {
+        event = event || window.event;
+        
+        // only show it on first movement
+        if (meFlag._new && visible && event.clientX && event.clientY) {
+          document.body.appendChild(meFlag);
+          document.body.style.cursor = "none";
+          meFlag._new = false;
+        }
+
+        moveFlag(meFlag, event.clientX, event.clientY, me.xOff, me.yOff);
+        
+        if (!me.readonly)
           mouseMoveLimited(event);
-        };
+      };
+
+      document.onmousedown = function(event) {
+        event = event || window.event;
+
+        // :(
+        if (me.readonly || window._ie9) return; 
+
+        doClick(me.country, event.clientX, event.clientY);
+
+        if (!me.readonly) {
+          emit('click', {
+            id: me.id, 
+            x: event.clientX, 
+            y: event.clientY,
+            country: me.country
+          });
+        }
       }
     });
 
@@ -301,6 +357,13 @@
       moveFlag(others[other.id].flag, other.x, other.y, others[other.id].xOff, others[other.id].yOff);
     });
 
+    on('click', function(other) {
+      // :(
+      if (me.readonly || window._ie9) return;
+
+      doClick(other.country, other.x, other.y);
+    });
+
     on('leave', function(data) {
       removeOther(data.id);
     });
@@ -321,13 +384,9 @@
 
     var setCursor = function() {
       meFlag = flagFor(me.country);
-
-      if (visible) {
-        meFlag.style.zIndex = 9999; // on top of the world
-        document.body.appendChild(meFlag);
-        document.body.style.cursor = "none";
-      }
-    }
+      meFlag._new = true;
+      meFlag.style.zIndex = 9999; // on top of the world
+    };
 
     // rate-limited mouse callback
     var mouseMoveLimited = ratelimit(function(event) {
@@ -376,6 +435,29 @@
       }
     };
 
+    var doClick = function(country, x, y) {
+      var elem = document.createElement("div");
+
+      var width = Christmas.countries[country].width || 40;
+      var height = 20;
+      var xOff = Math.floor(width / 2);
+      var yOff = Math.floor(height / 2);
+
+      elem.className = "click";
+      elem.style.width = "" + width + "px";
+      elem.style.height = "" + height + "px";
+      elem.style.left = "" + (x - xOff) + "px";
+      elem.style.top = "" + (y - yOff) + "px";
+
+      document.body.appendChild(elem);
+      setTimeout(function() {
+        elem.className = "click go";
+        setTimeout(function() {
+          elem.parentElement.removeChild(elem);
+        }, 500);
+      }, 10);
+    };
+
     var removeOther = function(id) {
       if (!others[id]) return;
       var country = others[id].country;
@@ -389,13 +471,28 @@
     };
 
     var flagFor = function(country) {
-      var elem = document.createElement('img');
-      elem.src = "countries/" + country + ".png";
-      return elem;
+      var div = document.createElement('div');
+      div.className = "flag";
+
+      var flag = document.createElement('img');
+      flag.src = "countries/" + country + ".png";
+      
+      // prevent click-drags from "grabbing" image
+      div.onmousedown = function(event) {
+        (event || window.event).preventDefault();
+      };
+
+      div.appendChild(flag);
+      
+      // without this, div adds height padding, weird
+      div.style.height = "20px"; 
+
+      return div;
     };
 
     var xOff = function(country) {
-      return (Christmas.countries[country].width || 40) / 2;
+      var width = Christmas.countries[country].width || 40;
+      return width / 2;
     }
 
     var yOff = function(country) {
@@ -442,6 +539,5 @@
     connect(url);
 
   </script>
-
 </body>
 </html>
