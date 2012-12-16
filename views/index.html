@@ -113,7 +113,9 @@
 
       socket.onopen = function() {
         log("= Connected via " + socket.protocol);
+        
         me.transport = socket.protocol;
+        me.readonly = (me.transport != "websocket");
       };
 
       socket.onmessage = function(message) {
@@ -154,12 +156,14 @@
       me.version = BrowserDetect.version;
       me.os = BrowserDetect.OS;
       me.time = Date.now();
+
       emit('arrive', me);
 
       setHeartbeat();
 
       if (visible) setCursor();
-      document.onmousemove = ratelimit(mouseMove);
+      if (!me.readonly)
+        document.onmousemove = ratelimit(mouseMove);
     });
 
     var onDeath = function() {
@@ -200,8 +204,7 @@
       emit("here", {
         to: other.id,
         id: me.id,
-        country: me.country,
-        transport: me.transport
+        country: me.country
       });
     });
 
@@ -264,6 +267,9 @@
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country] + ")");
     };
 
+    // the creation of an element per-user is only sparked by that user's mouse motion.
+    // so read-only (non-WS) clients will connect and be known, but not cause
+    // elements to be generated.
     var showOther = function(other) {
       registerOther(other); // in case this comes before the 'arrive' event does
 
@@ -272,7 +278,7 @@
 
       if (visible)
         document.body.appendChild(elem);
-      
+
       others[other.id].elem = elem;
     };
 
