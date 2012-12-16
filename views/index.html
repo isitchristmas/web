@@ -156,7 +156,7 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
-      log.life("= Assigned ID: " + me.id);
+      log.life("= Assigned ID: " + me.id + " [on: " + me.server + "]");
 
       // server-overridden client options
       for (var key in data.live)
