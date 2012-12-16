@@ -32,7 +32,16 @@
 
   <style type="text/css">
     html, body {height: 100%;}
-    body {text-align: center}
+    body {text-align: center;}
+    a {
+      display: inline-block;
+      margin-top: 200px;
+      font-weight: bold;
+      font-size: 120pt; 
+      font-family: Arial, sans-serif; 
+      text-decoration: none; 
+      color: black;
+    }
     img {position: absolute;}
   </style>
 
@@ -48,17 +57,9 @@
     Initial 'title' and noscript values are server-side fallbacks,
     calculated with UTC, for clients who do not have JS enabled.
   -->
-  <a href="#" 
-    onclick="return false"
-    style="display: inline-block;
-          margin-top: 200px;
-          font-weight: bold; 
-          font-size: 120pt; 
-          font-family: Arial, sans-serif; 
-          text-decoration: none; 
-          color: black;" 
-    title="<%= answer %>"
-    id="answer">
+  <a id="answer"
+    href="#" onclick="return false"
+    title="<%= answer %>">
     <noscript><%= answer %></noscript>
   </a>
   
