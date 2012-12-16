@@ -436,6 +436,8 @@
     };
 
     var doClick = function(country, x, y) {
+      if (!visible) return;
+      
       var elem = document.createElement("div");
 
       var width = Christmas.countries[country].width || 40;
