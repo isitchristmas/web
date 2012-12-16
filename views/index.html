@@ -298,7 +298,7 @@
       me.id = null;
       me.transport = null;
       me.time = null;
-      if (meFlag)
+      if (meFlag && meFlag.parentElement)
         meFlag.parentElement.removeChild(meFlag);
 
       setRetry();
