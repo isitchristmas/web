@@ -67,10 +67,13 @@
 
     var user = {
       log: {
-        debug: false,
-        join: true,
-        info: true,
-        public: true
+        join: true, // join/leave messages
+
+        info: true,   // default
+        debug: false, // you know
+
+        life: true,  // life and death events
+        public: true // messages for the public
       },
 
       retry: {
@@ -114,7 +117,7 @@
       });
 
       socket.onopen = function() {
-        log("= Connected via " + socket.protocol);
+        log.life("= Connected via " + socket.protocol);
         
         me.transport = socket.protocol;
         me.readonly = (me.transport != "websocket");
@@ -127,13 +130,13 @@
 
       socket.onclose = function() {
         onDeath();
-        log("= Disconnected! :(");
+        log.life("= Disconnected! :(");
       };
     }
 
     function emit(event, data) {
       if (!me.id || !me.transport) {
-        log("= Weird state! Trying to emit events with no ID. :|")
+        log.info("= Weird state! Trying to emit events with no ID. :|")
         return;
       }
 
@@ -148,7 +151,7 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
-      log("= Assigned ID: " + me.id);
+      log.life("= Assigned ID: " + me.id);
 
       // server-overridden client options
       for (var key in data.live)
@@ -189,7 +192,7 @@
       }, heartbeatInterval);
 
       death = setTimeout(function() {
-        log("= Died from lack of heartbeat :(")
+        log.life("= Died from lack of heartbeat :(")
         socket.close();
       }, deathInterval);
     };
@@ -327,6 +330,7 @@
     log.info = function(message) {log(message, "info")};
     log.join = function(message) {log(message, "join")};
     log.public = function(message) {log(message, "public")};
+    log.life = function(message) {log(message, "life")};
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
