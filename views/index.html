@@ -49,20 +49,19 @@
       cursor: none;
     }
 
-    /* denote one's own flag */
-    div.me {
-      border: 1px solid #444;
-    }
-
     /* click effect, width and height set dynamically */
     div.click {
       position: absolute;
       border: 1px solid #000;
-      height: 20px; width: 40px;
+
+      -webkit-border-radius: 3px;
+         -moz-border-radius: 3px;
+              border-radius: 3px;
+
       -webkit-transition: 0.5s ease-out;
-      -moz-transition: 0.5s ease-out;
-      -o-transition: 0.5s ease-out;
-      transition: 0.5s ease-out;
+         -moz-transition: 0.5s ease-out;
+           -o-transition: 0.5s ease-out;
+              transition: 0.5s ease-out;
     }
   </style>
 
