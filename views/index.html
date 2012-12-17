@@ -18,8 +18,12 @@
   Services used:
     Nodejitsu, Github, OpenRedis, MongoLab, MaxMind, Logentries, Pingdom
 
+  Flags mostly "borrowed" from flagpedia.net (thanks Flagpedia!) and Wikipedia.
+
   Bug reports and stuff:
     github.com/isitchristmas/web/issues
+
+  Thanks to @micahbrich and @btj for all of their help.
 
 -->
 
@@ -93,8 +97,12 @@
   
   <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
+    var country = "<%= country %>";
+    if (!(Christmas.countries[country] && Christmas.countries[country].width))
+      country = "EO";
+
     var me = {
-      country: "<%= country %>",
+      country: country,
       christmas: Christmas.isIt()
     };
 
