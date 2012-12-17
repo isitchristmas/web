@@ -41,7 +41,9 @@
     }
   </style>
 	<style type="text/css" media="screen" awesome='true'>
-		.flag { border: none !important;}
+		.flag { 
+			border: none !important;
+		}
 		.flag img { 
 			border: 1px solid #e6e6e6;
 			padding: 1px;
@@ -52,7 +54,12 @@
 		 -webkit-box-shadow: 0 1px 0px rgba(0,0,0,0.24);
 		    -moz-box-shadow: 0 1px 0px rgba(0,0,0,0.24);
 		         box-shadow: 0 1px 0px rgba(0,0,0,0.24);
-			
+		}
+		.flag.christmas img {
+			-webkit-animation: 	 oscillate 5s infinite; /* Safari 4+ */
+			  -moz-animation:    oscillate 5s infinite; /* Fx 5+ */
+			  -o-animation:      oscillate 5s infinite; /* Opera 12+ */
+			  animation:         oscillate 5s infinite; /* IE 10+ */
 		}
 		.flag:after {
 			font: 10px "Arial", "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
@@ -67,6 +74,82 @@
 		.flag:hover:after {
 			opacity: 1;
 		}
+		
+		
+		@-webkit-keyframes oscillate {
+			from { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+			50% { 
+				-webkit-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+			}
+			to { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+		}
+
+		@-moz-keyframes oscillate {
+			from { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+			50% { 
+				-webkit-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+			}
+			to { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+		}
+		@-o-keyframes oscillate {
+			from { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+			50% { 
+				-webkit-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+			}
+			to { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+		}
+		@keyframes oscillate {
+			from { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+			50% { 
+				-webkit-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 64px rgba(254, 207, 62, 0.6000);
+			}
+			to { 
+				-webkit-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				   -moz-box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+				        box-shadow: 0 1px 3px rgba(254, 207, 62, 0.6000);
+			}
+		}
+		
+		
+		
+		
+		
 	</style>
 
   <script type="text/javascript" async="" src="./public/ga.js"></script><script type="text/javascript" src="./public/christmas.js"></script>
@@ -545,7 +628,7 @@
 
   </script>
 
-<div class="flag" style="height: 20px; z-index: 9999; left: 402px; top: 172px;" data-name="United States">
+<div class="flag christmas" style="height: 20px; z-index: 9999; left: 402px; top: 172px;" data-name="United States">
 	<img src="./public/countries/US.png">
 </div>
 <div class="flag" style="height: 20px; left: 1405px; top: 582px;" data-name="United States">
@@ -562,6 +645,9 @@
 </div>
 <div class="flag" style="height: 20px; left: 390px; top: 303px;" data-name="United States">
 	<img src="./public/countries/US.png">
+</div>
+<div class="flag christmas" style="height: 20px; left: 190px; top: 203px;" data-name="Japan">
+	<img src="./public/countries/JP.png">
 </div>
 <div class="flag" style="height: 20px; left: 144.5px; top: -6px;" data-name="Luxembourg">
 	<img src="./public/countries/LU.png">
