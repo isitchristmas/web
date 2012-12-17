@@ -14,6 +14,7 @@ var setupCollection = function(db) {
   // 4) pass it on!
 
   db.collection("blocks", function(error, collection) {
+    console.log("Emptying blocks...");
     collection.remove({}, {safe: true}, function(err, result) {
       console.log("Cleared " + result + " IP block rows.");
 
@@ -47,7 +48,7 @@ var readCSV = function(collection) {
 
       console.log("#" + index + " " + JSON.stringify(doc));
 
-      collection.insert(doc, {}, function(err, result) {
+      collection.insert(doc, {safe: true}, function(err, result) {
         if (err) console.log("Error inserting row: " + err);
       })
     })
