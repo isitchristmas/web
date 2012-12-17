@@ -207,7 +207,9 @@ var Christmas = {
       "height": 20
     },
     "AI": {
-      "name": "Anguilla"
+      "name": "Anguilla",
+      "width": 40,
+      "height": 20
     },
     "AL": {
       "name": "Albania",
@@ -278,7 +280,9 @@ var Christmas = {
       "height": 20
     },
     "BM": {
-      "name": "Bermuda"
+      "name": "Bermuda",
+      "width": 40,
+      "height": 20
     },
     "BN": {
       "name": "Brunei Darussalam",
@@ -436,7 +440,9 @@ var Christmas = {
       "height": 20
     },
     "FO": {
-      "name": "Faroe Islands"
+      "name": "Faroe Islands",
+      "width": 27,
+      "height": 20
     },
     "FR": {
       "name": "France",
@@ -464,7 +470,9 @@ var Christmas = {
       "height": 20
     },
     "GG": {
-      "name": "Guernsey"
+      "name": "Guernsey",
+      "width": 30,
+      "height": 20
     },
     "GH": {
       "name": "Ghana",
@@ -472,10 +480,14 @@ var Christmas = {
       "height": 20
     },
     "GI": {
-      "name": "Gibraltar"
+      "name": "Gibraltar",
+      "width": 40,
+      "height": 20
     },
     "GL": {
-      "name": "Greenland"
+      "name": "Greenland",
+      "width": 30,
+      "height": 20
     },
     "GM": {
       "name": "Gambia",
@@ -483,7 +495,9 @@ var Christmas = {
       "height": 20
     },
     "GP": {
-      "name": "Guadeloupe"
+      "name": "Guadeloupe",
+      "width": 30,
+      "height": 20
     },
     "GR": {
       "name": "Greece",
@@ -496,7 +510,9 @@ var Christmas = {
       "height": 20
     },
     "GU": {
-      "name": "Guam"
+      "name": "Guam",
+      "width": 37,
+      "height": 20
     },
     "GY": {
       "name": "Guyana",
@@ -504,7 +520,9 @@ var Christmas = {
       "height": 20
     },
     "HK": {
-      "name": "Hong Kong"
+      "name": "Hong Kong",
+      "width": 30,
+      "height": 20
     },
     "HN": {
       "name": "Honduras",
@@ -542,7 +560,9 @@ var Christmas = {
       "height": 20
     },
     "IM": {
-      "name": "Isle of Man"
+      "name": "Isle of Man",
+      "width": 40,
+      "height": 20
     },
     "IN": {
       "name": "India",
@@ -550,7 +570,9 @@ var Christmas = {
       "height": 20
     },
     "IO": {
-      "name": "British Indian Ocean Territory"
+      "name": "British Indian Ocean Territory",
+      "width": 40,
+      "height": 20
     },
     "IQ": {
       "name": "Iraq",
@@ -573,7 +595,9 @@ var Christmas = {
       "height": 20
     },
     "JE": {
-      "name": "Jersey"
+      "name": "Jersey",
+      "width": 33,
+      "height": 20
     },
     "JM": {
       "name": "Jamaica",
@@ -621,7 +645,9 @@ var Christmas = {
       "height": 20
     },
     "KY": {
-      "name": "Cayman Islands"
+      "name": "Cayman Islands",
+      "width": 40,
+      "height": 20
     },
     "KZ": {
       "name": "Kazakhstan",
@@ -719,13 +745,19 @@ var Christmas = {
       "height": 20
     },
     "MO": {
-      "name": "Macau"
+      "name": "Macau",
+      "width": 30,
+      "height": 20
     },
     "MP": {
-      "name": "Northern Mariana Islands"
+      "name": "Northern Mariana Islands",
+      "width": 40,
+      "height": 20
     },
     "MQ": {
-      "name": "Martinique"
+      "name": "Martinique",
+      "width": 30,
+      "height": 20
     },
     "MT": {
       "name": "Malta",
@@ -763,7 +795,9 @@ var Christmas = {
       "height": 20
     },
     "NC": {
-      "name": "New Caledonia"
+      "name": "New Caledonia",
+      "width": 40,
+      "height": 20
     },
     "NG": {
       "name": "Nigeria",
@@ -811,7 +845,9 @@ var Christmas = {
       "height": 20
     },
     "PF": {
-      "name": "French Polynesia"
+      "name": "French Polynesia",
+      "width": 30,
+      "height": 20
     },
     "PG": {
       "name": "Papua New Guinea",
@@ -834,13 +870,19 @@ var Christmas = {
       "height": 20
     },
     "PM": {
-      "name": "Saint Pierre and Miquelon"
+      "name": "Saint Pierre and Miquelon",
+      "width": 30,
+      "height": 20
     },
     "PR": {
-      "name": "Puerto Rico"
+      "name": "Puerto Rico",
+      "width": 30,
+      "height": 20
     },
     "PS": {
-      "name": "Palestinian Territory"
+      "name": "Palestinian Territory",
+      "width": 40,
+      "height": 20
     },
     "PT": {
       "name": "Portugal",
@@ -858,7 +900,9 @@ var Christmas = {
       "height": 20
     },
     "RE": {
-      "name": "Reunion"
+      "name": "Reunion",
+      "width": 37,
+      "height": 20
     },
     "RO": {
       "name": "Romania",
@@ -946,7 +990,9 @@ var Christmas = {
       "height": 20
     },
     "TC": {
-      "name": "Turks and Caicos Islands"
+      "name": "Turks and Caicos Islands",
+      "width": 40,
+      "height": 20
     },
     "TH": {
       "name": "Thailand",
@@ -1019,10 +1065,14 @@ var Christmas = {
       "height": 20
     },
     "VG": {
-      "name": "Virgin Islands, British"
+      "name": "Virgin Islands, British",
+      "width": 40,
+      "height": 20
     },
     "VI": {
-      "name": "Virgin Islands, U.S."
+      "name": "Virgin Islands, U.S.",
+      "width": 30,
+      "height": 20
     },
     "VN": {
       "name": "Vietnam",
@@ -1060,7 +1110,9 @@ var Christmas = {
       "height": 20
     },
     "AX": {
-      "name": "Aland Islands"
+      "name": "Aland Islands",
+      "width": 31,
+      "height": 20
     },
     "BI": {
       "name": "Burundi",
@@ -1073,10 +1125,14 @@ var Christmas = {
       "height": 20
     },
     "BL": {
-      "name": "Saint Barthelemy"
+      "name": "Saint Barthelemy",
+      "width": 30,
+      "height": 20
     },
     "BQ": {
-      "name": "Bonaire, Saint Eustatius and Saba"
+      "name": "Bonaire, Saint Eustatius and Saba",
+      "width": 30,
+      "height": 20
     },
     "BT": {
       "name": "Bhutan",
@@ -1097,7 +1153,9 @@ var Christmas = {
       "height": 20
     },
     "CK": {
-      "name": "Cook Islands"
+      "name": "Cook Islands",
+      "width": 40,
+      "height": 20
     },
     "CV": {
       "name": "Cape Verde",
@@ -1105,7 +1163,9 @@ var Christmas = {
       "height": 20
     },
     "CW": {
-      "name": "Curacao"
+      "name": "Curacao",
+      "width": 30,
+      "height": 20
     },
     "DJ": {
       "name": "Djibouti",
@@ -1118,7 +1178,9 @@ var Christmas = {
       "height": 20
     },
     "FK": {
-      "name": "Falkland Islands (Malvinas)"
+      "name": "Falkland Islands (Malvinas)",
+      "width": 40,
+      "height": 20
     },
     "FM": {
       "name": "Micronesia, Federated States of",
@@ -1126,7 +1188,9 @@ var Christmas = {
       "height": 20
     },
     "GF": {
-      "name": "French Guiana"
+      "name": "French Guiana",
+      "width": 30,
+      "height": 20
     },
     "GN": {
       "name": "Guinea",
@@ -1185,7 +1249,9 @@ var Christmas = {
       "height": 20
     },
     "MS": {
-      "name": "Montserrat"
+      "name": "Montserrat",
+      "width": 40,
+      "height": 20
     },
     "MZ": {
       "name": "Mozambique",
@@ -1198,7 +1264,9 @@ var Christmas = {
       "height": 20
     },
     "NF": {
-      "name": "Norfolk Island"
+      "name": "Norfolk Island",
+      "width": 40,
+      "height": 20
     },
     "NR": {
       "name": "Nauru",
@@ -1206,7 +1274,9 @@ var Christmas = {
       "height": 20
     },
     "NU": {
-      "name": "Niue"
+      "name": "Niue",
+      "width": 40,
+      "height": 20
     },
     "PW": {
       "name": "Palau",
@@ -1219,7 +1289,9 @@ var Christmas = {
       "height": 20
     },
     "SH": {
-      "name": "Saint Helena"
+      "name": "Saint Helena",
+      "width": 40,
+      "height": 20
     },
     "SL": {
       "name": "Sierra Leone",
@@ -1247,7 +1319,9 @@ var Christmas = {
       "height": 20
     },
     "TK": {
-      "name": "Tokelau"
+      "name": "Tokelau",
+      "width": 40,
+      "height": 20
     },
     "TL": {
       "name": "Timor-Leste",
@@ -1283,10 +1357,14 @@ var Christmas = {
       "height": 20
     },
     "WF": {
-      "name": "Wallis and Futuna"
+      "name": "Wallis and Futuna",
+      "width": 30,
+      "height": 20
     },
     "YT": {
-      "name": "Mayotte"
+      "name": "Mayotte",
+      "width": 30,
+      "height": 20
     },
     "A1": {
       "name": "Anonymous Proxy"
@@ -1295,7 +1373,9 @@ var Christmas = {
       "name": "Satellite Provider"
     },
     "AS": {
-      "name": "American Samoa"
+      "name": "American Samoa",
+      "width": 40,
+      "height": 20
     },
     "AP": {
       "name": "Asia/Pacific Region"
@@ -1305,6 +1385,11 @@ var Christmas = {
     },
     "EU": {
       "name": "Europe"
+    },
+    "EO": {
+      "name": "Esperanto",
+      "width": 30,
+      "height": 20
     }
   }
 };
