@@ -335,7 +335,7 @@
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
-      // setCursor();
+      setCursor();
 
       document.onmousemove = function(event) {
         event = event || window.event;
