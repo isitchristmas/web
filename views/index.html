@@ -250,8 +250,7 @@
       me.server = data.server;
       me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
-      log.public("= Your name: " + me.name);
-
+      
       welcomeUser();
 
       // server-overridden client options
@@ -304,6 +303,7 @@
     });
 
     var welcomeUser = function() {
+      log.public("= Your name: " + me.name);
       log.public("= Use say() to speak. For example: say(\"Merry Christmas!\") or say(\"聖誕節快樂\")");
     };
 
