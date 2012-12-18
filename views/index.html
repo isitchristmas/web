@@ -310,8 +310,8 @@
     });
 
     var welcomeUser = function() {
-      log.public("= Your name: " + me.name);
-      log.public("= Use say() to speak. For example: say(\"Merry Christmas!\") or say(\"聖誕節快樂\")");
+      log.public("= Use say() to speak, rename() to change names.")
+      log.public("= For example: say(\"Merry Christmas!\") or say(\"聖誕節快樂\").");
     };
 
     var onDeath = function() {
@@ -437,6 +437,15 @@
         message: message
       });
     }, 500); // rate limit chats to no faster than 500ms
+
+    var rename = function(name) {
+      if (!name) return;
+
+      // 20 char max;
+      me.name = name.slice(0,20);
+
+      log.public("= Your name: " + me.name);
+    };
 
     var setCursor = function() {
       meFlag = flagFor(me.country);
