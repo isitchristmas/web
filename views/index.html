@@ -313,7 +313,7 @@
     };
 
     var setRetry = function() {
-      console.log("= Retrying in " + user.retry.current + "ms...");
+      log.life("= Retrying in " + user.retry.current + "ms...");
       user.retry.id = setTimeout(function() {
         connect(url);
       }, user.retry.current);
