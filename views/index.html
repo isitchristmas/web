@@ -301,7 +301,7 @@
     });
 
     var welcomeUser = function() {
-      log.public("= Use say() to speak. For example: say(\"Merry Christmas!\")");
+      log.public("= Use say() to speak. For example: say(\"Merry Christmas!\") or say(\"聖誕節快樂\")");
     };
 
     var onDeath = function() {
@@ -417,14 +417,18 @@
       log.public("= Server message: " + message);
     })
 
-    var say = function(message) {
+    var say = ratelimit(function(message) {
+      if (!message) return;
+
       said = true;
       emit('chat', {
         name: me.name,
         country: me.country,
         message: message
       });
-    };
+
+      return message;
+    }, 500); // rate limit chats to no faster than 500ms
 
     var setCursor = function() {
       meFlag = flagFor(me.country);
@@ -433,7 +437,7 @@
     };
 
     // rate-limited mouse callback
-    var mouseMoveLimited = ratelimit(function(event) {
+    var mouseMoveLimited = ratelimitMouse(function(event) {
       emit('motion', {
         x: event.clientX,
         y: event.clientY,
@@ -548,7 +552,19 @@
       return 10; // all flags are 20px high;
     }
 
-    function ratelimit(fn) {
+    function ratelimit(fn, interval) {
+      var last = (new Date()).getTime();
+      return (function() {
+        var now = (new Date()).getTime();
+        if ((now - last) > interval) {
+          last = now;
+          return fn.apply(null, arguments);
+        }
+      });
+    }
+
+    // special version of ratelimit that looks to live-changeable value
+    function ratelimitMouse(fn) {
       var last = (new Date()).getTime();
       return (function() {
         var now = (new Date()).getTime();
