@@ -158,7 +158,9 @@
 
       // values can be overwritten on hello
       live: {
-        mouse_rate: 20
+        mouse_rate: 20,
+        heartbeat_interval: 3000,
+        death_interval: 6000
       }
     };
 
@@ -194,8 +196,6 @@
     // managing heartbeats
     var heartbeat, death; 
     var suicide = false; // why would you do this
-    var heartbeatInterval = 3000,
-        deathInterval = 6000;
 
     // welcome user once, then after every 10 chat messages received.
     // turn off when the user first uses say().
@@ -347,12 +347,12 @@
       heartbeat = setTimeout(function() {
         log.debug("heartbeat: beating");
         emit("heartbeat", me);
-      }, heartbeatInterval);
+      }, parseInt(user.live.heartbeat_interval));
 
       death = setTimeout(function() {
         log.life("= Died from lack of heartbeat :(")
         socket.close();
-      }, deathInterval);
+      }, parseInt(user.live.death_interval));
     };
 
     on("heartbeat", function(data) {
