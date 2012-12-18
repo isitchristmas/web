@@ -246,7 +246,8 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
-      me.name = data.name;
+      if (!me.name)
+        me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
       
       welcomeUser();
