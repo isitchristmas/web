@@ -278,7 +278,10 @@
           meFlag._new = false;
         }
 
-        moveFlag(meFlag, event.clientX, event.clientY);
+        moveFlag(meFlag, 
+          event.clientX + window.pageXOffset, 
+          event.clientY + window.pageYOffset
+        );
         
         if (!me.readonly)
           mouseMoveLimited(event);
@@ -290,13 +293,16 @@
         // :(
         if (me.readonly || window._ie9) return; 
 
-        doClick(me.country, event.clientX, event.clientY);
+        var x = event.clientX + window.pageXOffset;
+        var y = event.clientY + window.pageYOffset;
+
+        doClick(me.country, x, y);
 
         if (!me.readonly) {
           emit('click', {
             id: me.id, 
-            x: event.clientX, 
-            y: event.clientY,
+            x: x, 
+            y: y,
             country: me.country
           });
         }
@@ -441,8 +447,8 @@
     // rate-limited mouse callback
     var mouseMoveLimited = ratelimitMouse(function(event) {
       emit('motion', {
-        x: event.clientX,
-        y: event.clientY,
+        x: event.clientX + window.pageXOffset,
+        y: event.clientY + window.pageYOffset,
         id: me.id,
         c: me.country
       });
