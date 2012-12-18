@@ -196,13 +196,18 @@
     var heartbeatInterval = 3000,
         deathInterval = 6000;
 
+    // welcome user once, then after every 10 chat messages received.
+    // turn off when the user first uses say().
+    var said = false;
+    var chatsSince = 0;
+
     function connect(host) {
       socket = new SockJS(host, null, {
         protocols_whitelist: transport ? [transport] : default_transports
       });
 
       socket.onopen = function() {
-        log.life("= Connected via " + socket.protocol);
+        log.info("= Connected via " + socket.protocol);
         
         me.transport = socket.protocol;
 
@@ -240,7 +245,11 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
-      log.life("= Assigned ID: " + me.id + " [on: " + me.server + "]");
+      me.name = data.name;
+      log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
+      log.info("= Given name: " + me.name + " [congratulations]");
+
+      welcomeUser();
 
       // server-overridden client options
       for (var key in data.live)
@@ -288,8 +297,12 @@
             country: me.country
           });
         }
-      }
+      };
     });
+
+    var welcomeUser = function() {
+      log.public("= Use say() to speak. For example: say(\"Merry Christmas!\")");
+    };
 
     var onDeath = function() {
       log.life("= Disconnected! :(");
@@ -390,7 +403,14 @@
     })
 
     on('chat', function(data) {
-      log.public("[" + data.country + "] " + data.user_id.slice(0,6) + ": " + data.message);
+      if (!said) {
+        chatsSince += 1;
+        if (chatsSince >= 10) {
+          welcomeUser();
+          chatsSince = 0;
+        }
+      }
+      log.public("[" + data.country + "] " + data.name + ": " + data.message);
     });
 
     command('blast', function(message) {
@@ -398,8 +418,9 @@
     })
 
     var say = function(message) {
+      said = true;
       emit('chat', {
-        id: me.id,
+        name: me.name,
         country: me.country,
         message: message
       });
