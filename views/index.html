@@ -139,9 +139,9 @@
 
     var user = {
       log: {
-        join: true, // join/leave messages
+        join: false, // join/leave messages
 
-        info: true,   // default
+        info: false,   // default
         debug: false, // you know
 
         life: true,  // life and death events
@@ -389,9 +389,21 @@
       (commands[data.command] || noop).apply(null, data.arguments);
     })
 
+    on('chat', function(data) {
+      log.public("[" + data.country + "] " + data.user_id.slice(0,6) + ": " + data.message);
+    });
+
     command('blast', function(message) {
       log.public("= Server message: " + message);
     })
+
+    var say = function(message) {
+      emit('chat', {
+        id: me.id,
+        country: me.country,
+        message: message
+      });
+    };
 
     var setCursor = function() {
       meFlag = flagFor(me.country);
