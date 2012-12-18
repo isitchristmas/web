@@ -274,6 +274,7 @@
         if (meFlag._new && visible && event.clientX && event.clientY) {
           document.body.appendChild(meFlag);
           document.body.style.cursor = "none";
+          document.getElementById("answer").style.cursor = "none";
           meFlag._new = false;
         }
 
@@ -429,8 +430,6 @@
         country: me.country,
         message: message
       });
-
-      return message;
     }, 500); // rate limit chats to no faster than 500ms
 
     var setCursor = function() {
