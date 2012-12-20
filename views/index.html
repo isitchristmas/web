@@ -432,7 +432,8 @@
       emit('chat', {
         name: me.name,
         country: me.country,
-        message: message
+        message: message,
+        time: Date.now()
       });
     }, 500); // rate limit chats to no faster than 500ms
 
