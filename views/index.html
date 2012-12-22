@@ -40,7 +40,7 @@
     html, body {height: 100%;}
     body {text-align: center;}
 
-    a {
+    a#answer {
       display: inline-block;
       margin-top: 200px;
       font-weight: bold;
@@ -53,6 +53,7 @@
     .flag {
       position: absolute;
       cursor: none;
+      pointer-events: none;
     }
 
     .flag img {
@@ -259,7 +260,7 @@
         me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
       
-      //welcomeUser();
+      welcomeUser();
 
       // server-overridden client options
       for (var key in data.live)
