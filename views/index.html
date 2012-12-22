@@ -53,8 +53,9 @@
     .flag {
       position: absolute;
       cursor: none;
-      pointer-events: none;
     }
+
+    .flag.me {pointer-events: none;}
 
     .flag img {
       border: 1px solid #d6d6d6;
@@ -78,6 +79,20 @@
            -o-transition: 0.5s ease-out;
               transition: 0.5s ease-out;
     }
+
+    #legend {
+      position: fixed;
+      top: 0; right: 0;
+      width: 200px; 
+      padding-right: 15px; padding-top: 5px;
+      text-align: right;
+      font-size: 10pt;
+
+      -webkit-transition: 0.25s linear;
+         -moz-transition: 0.25s linear;
+           -o-transition: 0.25s linear;
+              transition: 0.25s linear;
+    }
   </style>
 
   <script type="text/javascript" src="christmas.js"></script>
@@ -97,6 +112,8 @@
     title="<%= answer %>">
     <noscript><%= answer %></noscript>
   </a>
+
+  <!-- <div id="legend"></div> -->
   
   <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
@@ -202,6 +219,9 @@
     // turn off when the user first uses say().
     var said = false;
     var chatsSince = 0;
+
+    var legend = document.getElementById("legend")
+      , legendTimeout;
 
     function connect(host) {
       socket = new SockJS(host, null, {
@@ -325,7 +345,7 @@
     });
 
     var welcomeUser = function() {
-      log.public("= say(\"message\") to speak, rename(\"Name\") to change names.")
+      log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
     };
 
     var onDeath = function() {
@@ -463,7 +483,7 @@
     };
 
     var setCursor = function() {
-      meFlag = flagFor(me.country);
+      meFlag = flagFor(me.country, "me");
       meFlag._new = true;
       meFlag.style.zIndex = 9999; // on top of the world
     };
@@ -487,7 +507,7 @@
       // in case this comes before the 'arrive' event does
       registerOther(other); 
 
-      others[other.id].flag = flagFor(other.country);
+      others[other.id].flag = flagFor(other.country, "other");
       if (visible)
         document.body.appendChild(others[other.id].flag);
     };
@@ -540,20 +560,30 @@
       log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
     };
 
-    var flagFor = function(country) {
+    // prevent click-drags from "grabbing" image
+    document.body.onmousedown = function(event) {
+      event = event || window.event;
+      if (event.preventDefault) event.preventDefault();
+      else event.returnValue = false;
+    };
+
+    var flagFor = function(country, klass) {
       var div = document.createElement('div');
-      div.className = "flag";
+      div.className = "flag " + klass;
 
       var flag = document.createElement('img');
       flag.src = "countries/" + country + ".png";
       
-      // prevent click-drags from "grabbing" image
-      div.onmousedown = function(event) {
-        event = event || window.event;
-        if (event.preventDefault) event.preventDefault();
-        else event.returnValue = false;
+      div.onmouseover = function() {
+        clearTimeout(legendTimeout);
+        legend.innerText = Christmas.countries[country].name;
+        legend.style.opacity = 1;
+        legendTimeout = setTimeout(function() {
+          legend.style.opacity = 0;
+        }, 2000)
       };
 
+      
       div.appendChild(flag);
       
       // without this, div adds height padding, weird
