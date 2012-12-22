@@ -20,7 +20,7 @@
     Node.js, Express, WebSockets, SockJS, Redis, MongoDB
 
   Services used:
-    Nodejitsu, Github, OpenRedis, MongoLab, MaxMind, Logentries, Pingdom
+    Nodejitsu, OpenRedis, MongoLab, MaxMind, Logentries
 
   Bug reports and stuff:
     github.com/isitchristmas/web/issues
@@ -250,7 +250,7 @@
         me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
       
-      welcomeUser();
+      //welcomeUser();
 
       // server-overridden client options
       for (var key in data.live)

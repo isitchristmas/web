@@ -118,7 +118,7 @@ var Christmas = {
       "SE": "NEJ", // Sweden
       "LT": "NO", // Lithuania
       "DE": "NEIN", // Germany
-      "IE": "NÍ HA", // Ireland
+      "IE": "NÍ hEA", // Ireland
       "AU": "NO", // Australia
       "JP": "IIE", // Japan
       "NO": "NEI", // Norway
