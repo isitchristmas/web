@@ -63,6 +63,11 @@
          -moz-border-radius: 2px;
            -o-border-radius: 2px;
               border-radius: 2px;
+
+      -webkit-transition: opacity 1s;
+         -moz-transition: opacity 1s;
+           -o-transition: opacity 1s;
+              transition: opacity 1s;
     }
 
     /* click effect, width and height set dynamically */
@@ -81,9 +86,11 @@
     }
 
     #legend {
+      display: none;
+      
       position: fixed;
       top: 0; right: 0;
-      width: 200px; 
+      width: 200px;
       padding-right: 15px; padding-top: 5px;
       text-align: right;
       font-size: 10pt;
@@ -113,7 +120,7 @@
     <noscript><%= answer %></noscript>
   </a>
 
-  <!-- <div id="legend"></div> -->
+  <div id="legend"></div>
   
   <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
@@ -122,14 +129,27 @@
       country = "EO";
 
     var me = {
-      country: country,
-      christmas: Christmas.isIt()
+      country: country
     };
 
-    var elem = document.getElementById('answer');
-    var answer = Christmas.answer(me.country);
-    elem.innerHTML = answer;
-    elem.setAttribute("title", answer);
+    var checkedAt; // store last check, to manage race conditions
+    function updateChristmas(isIt) {
+      me.christmas = isIt;
+
+      var answer;
+      if (isIt)
+        answer = Christmas.yes(country);
+      else
+        answer = Christmas.no(country);
+
+      var elem = document.getElementById('answer');
+      elem.innerHTML = answer;
+      elem.setAttribute("title", answer);
+
+      checkedAt = Date.now();
+    }
+
+    updateChristmas(Christmas.isIt());
   </script>
 
 
@@ -150,6 +170,7 @@
   
   <!-- optional: interaction -->
   <script src="/browser.js"></script>
+  <script src="/css.js"></script>
   <script src="/sockjs.min.js"></script>
   <script type="text/javascript">
     
@@ -222,6 +243,9 @@
 
     var legend = document.getElementById("legend")
       , legendTimeout;
+
+    var christmasTimer
+      , christmasEndTimer;
 
     function connect(host) {
       socket = new SockJS(host, null, {
@@ -573,10 +597,10 @@
 
       var flag = document.createElement('img');
       flag.src = "countries/" + country + ".png";
-      
+
       div.onmouseover = function() {
         clearTimeout(legendTimeout);
-        legend.innerText = Christmas.countries[country].name;
+        legend.innerHTML = Christmas.countries[country].name;
         legend.style.opacity = 1;
         legendTimeout = setTimeout(function() {
           legend.style.opacity = 0;
@@ -627,6 +651,59 @@
       });
     }
 
+    // live flip when it's Xmas, and when it's not again
+    var flagRule = addCSSRule("img");
+    var clickRule = addCSSRule("div.click");
+    function flagFade(centerTime) {
+      // fade out, then in
+      setTimeout(function() {
+        console.log("fading out...")
+        flagRule.style.opacity = 0;
+        clickRule.style.display = "none";
+        
+        setTimeout(function() {
+          console.log("fading in...")
+          flagRule.style.opacity = 1;
+          clickRule.style.display = "block";
+        }, 5000); // 2 seconds after center
+
+      }, (centerTime - Date.now()) - 3000); // 3 seconds before center (fade is 1s)
+    }
+
+    function setTimers() {
+      var nextXmas = Christmas.thisYear();
+      // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
+      // var nextXmas = new Date(Date.now()); // pretend we showed up a few milliseconds before
+      
+      nextXmas = nextXmas.getTime();
+
+      var afterXmas = nextXmas + (24 * 60 * 60 * 1000); // 1 day later
+      // var afterXmas = nextXmas + (10 * 1000); // 10 seconds later
+
+      // console.log("Christmas set for: " + new Date(nextXmas));
+      // console.log("Christmas ends: " + new Date(afterXmas));
+
+      if (checkedAt < nextXmas) {
+
+        flagFade(nextXmas);
+
+        christmasTimer = setTimeout(function() {
+          log.public("Christmas!");
+          updateChristmas(true);
+        }, (nextXmas - Date.now()));
+      }
+
+      if (checkedAt < afterXmas) {
+
+        flagFade(afterXmas);
+
+        christmasEndTimer = setTimeout(function() {
+          log.public("Not Christmas.");
+          updateChristmas(false);
+        }, (afterXmas - Date.now()));
+      }
+    }
+
 
     // minimalist logging system
 
@@ -652,8 +729,8 @@
 
     // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
-    
 
+    setTimers();
     connect(url);
 
   </script>

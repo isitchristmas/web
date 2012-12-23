@@ -11,6 +11,11 @@ var Christmas = {
     return (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date);
   },
 
+  thisYear: function() {
+    var year = new Date().getYear() + 1900;
+    return new Date(year, Christmas.time.month, Christmas.time.date);
+  },
+
   answer: function(countryCode, date) {
     if (Christmas.isIt(date))
       return Christmas.yes(countryCode);
