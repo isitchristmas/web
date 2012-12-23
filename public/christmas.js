@@ -61,7 +61,7 @@ var Christmas = {
       "EE": "JAA", // Estonia
       "HR": "DA", // Croatia
       "CN": "SHI", // China (Mandarin)
-      "IN": "HAJI", // India
+      "IN": "HAANJI", // India
       "SG": "YA", // Singapore
       "PH": "ÓO", // Phillipines
       "IL": "KEN", // Israel
@@ -144,7 +144,7 @@ var Christmas = {
       "EE": "EI", // Estonia
       "HR": "NE", // Croatia
       "CN": "BÚ SHÌ", // China (Mandarin)
-      "IN": "NAHIM", // India
+      "IN": "NAHIN", // India
       "SG": "TIDAK", // Singapore
       "PH": "HINDI", // Phillipines
       "IL": "LO", // Israel
