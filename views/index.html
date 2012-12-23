@@ -17,7 +17,7 @@
     Streaming - github.com/isitchristmas/sockets
 
   Tech stack:
-    Node.js, Express, WebSockets, SockJS, Redis, MongoDB
+    Node.js, WebSockets, SockJS, Redis, MongoDB
 
   Services used:
     Nodejitsu, OpenRedis, MongoLab, MaxMind, Logentries
@@ -207,7 +207,12 @@
     var meFlag = null;
 
     // sockjs server endpoint
-    var url = "<%= req.param("streaming") || config.streaming %>/christmas";
+    <% if (req.param("streaming")) { %>
+      var url = "<%= req.param("streaming") %>/christmas";
+    <% } else { %>
+      <% var random = Math.floor(Math.random() * config.streaming.length); %>
+      var url = "<%= config.streaming[random] %>/christmas";
+    <% } %>
 
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
@@ -319,6 +324,10 @@
       emit('arrive', me);
       setHeartbeat();
       setCursor();
+
+      // update me to indicate I've sent 'arrive' once
+      // server will know that future connects are reconnects
+      me.alreadyArrived = true;
 
       document.onmousemove = function(event) {
         event = event || window.event;
@@ -483,6 +492,16 @@
 
     command('blast', function(message) {
       log.public("= Server message: " + message);
+    })
+
+    command('reconnect', function() {
+      log.public("= Server asked us to reconnect, closing connection");
+      socket.close();
+    });
+
+    command('refresh', function() {
+      log.public("= Server asked us to refresh, whooaaaaa");
+      window.location = window.location;
     })
 
     var say = function(message) {
