@@ -197,7 +197,8 @@
       live: {
         mouse_rate: 20,
         heartbeat_interval: 3000,
-        death_interval: 6000
+        death_interval: 6000,
+        chat: "true"
       }
     };
 
@@ -307,7 +308,8 @@
         me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
       
-      welcomeUser();
+      if (user.live.chat == "true")
+        welcomeUser();
 
       // server-overridden client options
       for (var key in data.live)
@@ -504,6 +506,7 @@
 
     var say = function(message) {
       if (!message) return;
+      if (user.live.chat != "true") return;
 
       said = true;
       emit('chat', {
@@ -676,13 +679,11 @@
     function flagFade(centerTime) {
       // fade out, then in
       setTimeout(function() {
-        console.log("fading out...")
         flagRule.style.opacity = 0;
         legendRule.style.display = "none";
         clickRule.style.display = "none";
         
         setTimeout(function() {
-          console.log("fading in...")
           flagRule.style.opacity = 1;
           legendRule.style.display = "block";
           clickRule.style.display = "block";
