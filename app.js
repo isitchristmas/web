@@ -70,7 +70,7 @@ var lookupCountry = function(ip, database, callback) {
         callback("US");
       } else {
         country = item.country;
-        console.log("Found country for " + ip + ": " + country);
+        // console.log("Found country for " + ip + ": " + country);
         callback(country);
       }
     });
