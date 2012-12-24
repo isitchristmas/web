@@ -222,7 +222,7 @@ var Christmas = {
       "width": 30,
       "height": 20,
       "names": [
-        "Antigua  Barbuda"
+        "Antigua and Barbuda"
       ]
     },
     "AI": {
@@ -297,7 +297,7 @@ var Christmas = {
       "height": 20,
       "names": [
         "Bosna i Hercegovina",
-        "Bosnia  Herzegovina"
+        "Bosnia and Herzegovina"
       ]
     },
     "BB": {
@@ -436,7 +436,7 @@ var Christmas = {
       "width": 30,
       "height": 20,
       "names": [
-        "Congo,République démocratique",
+        "Congo, République démocratique",
         "Congo, Democratic Republic"
       ]
     },
@@ -457,8 +457,7 @@ var Christmas = {
       "width": 30,
       "height": 20,
       "names": [
-        "Côte d’Ivoire",
-        "Cote d’Ivoire"
+        "Côte d'Ivoire"
       ]
     },
     "CL": {
