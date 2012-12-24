@@ -672,16 +672,19 @@
     // live flip when it's Xmas, and when it's not again
     var flagRule = addCSSRule("img");
     var clickRule = addCSSRule("div.click");
+    var legendRule = addCSSRule("div#legend");
     function flagFade(centerTime) {
       // fade out, then in
       setTimeout(function() {
         console.log("fading out...")
         flagRule.style.opacity = 0;
+        legendRule.style.display = "none";
         clickRule.style.display = "none";
         
         setTimeout(function() {
           console.log("fading in...")
           flagRule.style.opacity = 1;
+          legendRule.style.display = "block";
           clickRule.style.display = "block";
         }, 5000); // 2 seconds after center
 
