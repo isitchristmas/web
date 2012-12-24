@@ -85,9 +85,7 @@
               transition: 0.5s ease-out;
     }
 
-    #legend {
-      display: none;
-      
+    #legend {      
       position: fixed;
       top: 0; right: 0;
       width: 200px;
@@ -620,11 +618,11 @@
 
       div.onmouseover = function() {
         clearTimeout(legendTimeout);
-        legend.innerHTML = Christmas.countries[country].name;
+        legend.innerHTML = Christmas.countries[country].names.join("<br/>");
         legend.style.opacity = 1;
         legendTimeout = setTimeout(function() {
           legend.style.opacity = 0;
-        }, 2000)
+        }, 30000)
       };
 
       
