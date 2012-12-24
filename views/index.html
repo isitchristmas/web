@@ -308,12 +308,12 @@
         me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
       
-      if (user.live.chat == "true")
-        welcomeUser();
-
       // server-overridden client options
       for (var key in data.live)
         user.live[key] = data.live[key];
+
+      if (user.live.chat == "true")
+        welcomeUser();
       
       me.browser = BrowserDetect.browser;
       me.version = BrowserDetect.version;
