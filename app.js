@@ -55,7 +55,7 @@ var findCountry = function(req, callback) {
 
 var lookupCountry = function(ip, database, callback) {
   database.collection("blocks", function(err, collection) {
-    if (err) {console.log("Error connecting to 'blocks'"); return "US";}
+    if (err) {console.log("Error connecting to 'blocks'"); return "EO";}
 
     // debug: French IP
     // ip = "193.51.208.14";
@@ -63,11 +63,11 @@ var lookupCountry = function(ip, database, callback) {
     var intIp = ipToInteger(ip);
     
     collection.findOne({ip_start: {"$lte": intIp}, ip_end: {"$gte": intIp}}, function(err, item) {
-      if (err) {console.log("Error finding row"); return callback("US");}
+      if (err) {console.log("Error finding row"); return callback("EO");}
 
       if (item == null) {
         // console.log("Invalid IP address (" + ip + ":" + intIp + "), returning 'US'");
-        callback("US");
+        callback("EO");
       } else {
         country = item.country;
         // console.log("Found country for " + ip + ": " + country);
