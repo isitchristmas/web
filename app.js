@@ -66,7 +66,7 @@ var lookupCountry = function(ip, database, callback) {
       if (err) {console.log("Error finding row"); return callback("US");}
 
       if (item == null) {
-        console.log("Invalid IP address (" + ip + ":" + intIp + "), returning 'US'");
+        // console.log("Invalid IP address (" + ip + ":" + intIp + "), returning 'US'");
         callback("US");
       } else {
         country = item.country;
