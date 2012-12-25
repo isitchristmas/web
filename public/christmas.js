@@ -42,7 +42,7 @@ var Christmas = {
       "DE": "JA", // Germany
       "IE": "IS EA", // Ireland
       "AU": "YES", // Australia
-      "JP": "HAI", // Japan
+      "JP": "はい", // Japan
       "NO": "JA", // Norway
       "IT": "SÌ", // Italy
       "HU": "IGEN", // Hungary
@@ -125,7 +125,7 @@ var Christmas = {
       "DE": "NEIN", // Germany
       "IE": "NÍ hEA", // Ireland
       "AU": "NO", // Australia
-      "JP": "IIE", // Japan
+      "JP": "いいえ", // Japan
       "NO": "NEI", // Norway
       "IT": "NO", // Italy
       "HU": "NEM", // Hungary
