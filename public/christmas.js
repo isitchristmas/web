@@ -6,9 +6,15 @@ var Christmas = {
     date: 25
   },
 
+  oct: {
+    month: 9,
+    date: 31
+  },
+
   isIt: function(date) {
     if (!date) date = new Date();
-    return (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date);
+      return (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date) +
+	  (date.getMonth() == Christmas.oct.month && date.getDate() == Christmas.oct.date)*2;
   },
 
   thisYear: function() {
@@ -23,6 +29,9 @@ var Christmas = {
       return Christmas.no(countryCode);
   },
 
+  oct: function() {
+    return "Oct 31 = Dec 25";
+  }
 
   // missing your country?
   // post a ticket here: https://github.com/isitchristmas/web/issues

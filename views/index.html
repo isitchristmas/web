@@ -135,7 +135,9 @@
       me.christmas = isIt;
 
       var answer;
-      if (isIt)
+      if (isIt == 2)
+        answer = Christmas.oct();
+      else if (isIt)
         answer = Christmas.yes(country);
       else
         answer = Christmas.no(country);
