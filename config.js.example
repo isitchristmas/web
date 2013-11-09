@@ -5,7 +5,9 @@ module.exports = {
   development: {
     port: 2000,
 
-    streaming: "localhost:3000",
+    streaming: [
+      "http://localhost:3000"
+    ],
 
     mongodb: {
       port: 27017,
@@ -17,7 +19,9 @@ module.exports = {
   production: {
     port: 80,
 
-    streaming: "sockets.example.com",
+    streaming: [
+      "http://sockets.example.com"
+    ],
 
     mongodb: {
       port: 27017,
