@@ -44,6 +44,11 @@ var QueryCommand = exports.QueryCommand = function(db, collectionName, queryOpti
   this.returnFieldSelector = returnFieldSelector;
   this.db = db;
 
+  // Force the slave ok flag to be set if we are not using primary read preference
+  if(this.db && this.db.slaveOk) {
+    this.queryOptions |= QueryCommand.OPTS_SLAVE;
+  }
+
   // Let us defined on a command basis if we want functions to be serialized or not
   if(options['serializeFunctions'] != null && options['serializeFunctions']) {
     this.serializeFunctions = true;
@@ -110,7 +115,12 @@ struct {
   [ BSON      returnFieldSelector; ]  // OPTIONAL : selector indicating the fields to return.  See below for details.
 }
 */
-QueryCommand.prototype.toBinary = function() {
+QueryCommand.prototype.toBinary = function(bsonSettings) {
+  // Validate that we are not passing 0x00 in the colletion name
+  if(!!~this.collectionName.indexOf("\x00")) {
+    throw new Error("namespace cannot contain a null character");
+  }
+
   // Total length of the command
   var totalLengthOfCommand = 0;
   // Calculate total length of the document
@@ -128,6 +138,15 @@ QueryCommand.prototype.toBinary = function() {
   } else if(Buffer.isBuffer(this.returnFieldSelector)) {
     totalLengthOfCommand += this.returnFieldSelector.length;
   }
+
+  // Enforce maximum bson size
+  if(!bsonSettings.disableDriverBSONSizeCheck 
+    && totalLengthOfCommand > bsonSettings.maxBsonSize) 
+    throw new Error("Document exceeds maximum allowed bson size of " + bsonSettings.maxBsonSize + " bytes");
+
+  if(bsonSettings.disableDriverBSONSizeCheck 
+    && totalLengthOfCommand > bsonSettings.maxMessageSizeBytes) 
+    throw new Error("Command exceeds maximum message size of " + bsonSettings.maxMessageSizeBytes + " bytes");
 
   // Let's build the single pass buffer command
   var _index = 0;
