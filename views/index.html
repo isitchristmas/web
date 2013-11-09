@@ -363,15 +363,12 @@
         var y = event.clientY + window.pageYOffset;
 
         doClick(me.country, x, y);
-
-        if (!me.readonly) {
-          emit('click', {
-            id: me.id,
-            x: x,
-            y: y,
-            country: me.country
-          });
-        }
+        emit('click', {
+          id: me.id,
+          x: x,
+          y: y,
+          country: me.country
+        });
       };
     });
 
