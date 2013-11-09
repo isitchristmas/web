@@ -1,25 +1,27 @@
 #!/usr/bin/env node
 
+var execSync = require('exec-sync'),
+    fs = require('fs');
 
 var missing = [ 'AI', 'AW', 'BM', 'FO', 'GG', 'GI', 'GL', 'GP',
- 'GU', 'HK', 'IM', 'IO', 'JE', 'KY', 'MO', 'MP', 'MQ', 'NC', 'PF', 
+ 'GU', 'HK', 'IM', 'IO', 'JE', 'KY', 'MO', 'MP', 'MQ', 'NC', 'PF',
  'PM', 'PR', 'PS', 'RE', 'TC', 'VG', 'VI', 'AX', 'BL', 'BQ', 'BV',
   'CK', 'CW', 'FK', 'GF', 'HM', 'MF', 'MS', 'NF', 'NU', 'SH', 'TK',
  'UM', 'WF', 'YT', 'A1', 'A2', 'AS', 'AP', 'AQ', 'EU' ];
 
-var missingNames = [ 'Anguilla', 'Aruba', 'Bermuda', 'Faroe Islands', 'Guernsey', 
-  'Gibraltar', 'Greenland', 'Guadeloupe', 'Guam', 'Hong Kong', 'Isle of Man', 
+var missingNames = [ 'Anguilla', 'Aruba', 'Bermuda', 'Faroe Islands', 'Guernsey',
+  'Gibraltar', 'Greenland', 'Guadeloupe', 'Guam', 'Hong Kong', 'Isle of Man',
   'British Indian Ocean Territory', 'Jersey', 'Cayman Islands', 'Macau',
   'Northern Mariana Islands', 'Martinique', 'New Caledonia', 'French Polynesia',
-  'Saint Pierre and Miquelon', 'Puerto Rico', 'Palestinian Territory', 
-  'Reunion', 'Turks and Caicos Islands', 'Virgin Islands, British', 
-  'Virgin Islands, U.S.', 'Aland Islands', 'Saint Barthelemy', 
-  'Bonaire, Saint Eustatius and Saba', 'Bouvet Island', 'Cook Islands', 
+  'Saint Pierre and Miquelon', 'Puerto Rico', 'Palestinian Territory',
+  'Reunion', 'Turks and Caicos Islands', 'Virgin Islands, British',
+  'Virgin Islands, U.S.', 'Aland Islands', 'Saint Barthelemy',
+  'Bonaire, Saint Eustatius and Saba', 'Bouvet Island', 'Cook Islands',
   'Curacao', 'Falkland Islands (Malvinas)', 'French Guiana',
-  'Heard Island and McDonald Islands', 'Saint Martin', 'Montserrat', 
+  'Heard Island and McDonald Islands', 'Saint Martin', 'Montserrat',
   'Norfolk Island', 'Niue', 'Saint Helena', 'Tokelau',
-  'United States Minor Outlying Islands', 'Wallis and Futuna', 'Mayotte', 
-  'Anonymous Proxy', 'Satellite Provider', 'American Samoa', 
+  'United States Minor Outlying Islands', 'Wallis and Futuna', 'Mayotte',
+  'Anonymous Proxy', 'Satellite Provider', 'American Samoa',
   'Asia/Pacific Region', 'Antarctica', 'Europe' ]
 
 
@@ -30,16 +32,13 @@ var getCountry = function(code, size) {
   mkdest(code);
 
   var command = "wget " + flagUrl + " -O " + flagDest;
-  
+
   var details = execSync(command, true);
   if (details.stderr && details.stderr.search("ERROR 404") > 0) {
     failed(code, size);
   } else
     console.log("[" + code + "][" + size + "] Downloaded");
 };
-
-execSync = require('exec-sync')
-  , fs = require('fs');
 
 
 var url = function(code, size) {
@@ -335,7 +334,7 @@ var sizes = function() {
 }
 
 var main = function() {
-  
+
   for (country in countries)
     getCountry(country, "ultra");
 
@@ -343,6 +342,7 @@ var main = function() {
   console.log(misses);
 }
 
-//main();
+// utility script - uncomment what you need, then run
 
-sizes();
+// main();
+// sizes();
