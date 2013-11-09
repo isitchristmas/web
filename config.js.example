@@ -5,6 +5,8 @@ module.exports = {
   development: {
     port: 2000,
 
+    visible: true,
+
     streaming: [
       "http://localhost:3000"
     ],
@@ -24,6 +26,8 @@ module.exports = {
 
   production: {
     port: 80,
+
+    visible: false,
 
     streaming: [
       "http://sockets.example.com"
