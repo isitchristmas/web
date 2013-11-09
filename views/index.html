@@ -303,8 +303,7 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
-      if (!me.name)
-        me.name = data.name;
+      if (data.name) me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
 
       // server-overridden client options
@@ -377,6 +376,7 @@
     });
 
     var welcomeUser = function() {
+      log.public("= Your name is " + me.name + ".");
       log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
     };
 
@@ -751,7 +751,7 @@
     // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
 
-    setTimers();
+    // setTimers();
     connect(url);
 
   </script>
