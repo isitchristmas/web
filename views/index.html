@@ -1,5 +1,5 @@
 <!--
-  
+
   Built by Eric Mill:
 
     konklone@gmail.com
@@ -11,7 +11,7 @@
   Flags mostly "borrowed" from flagpedia.net (thanks Flagpedia!) and Wikipedia.
 
   Thanks to @micahbrich and @btj for all of their help.
-  
+
   Made of two Node apps:
     Main site - github.com/isitchristmas/web
     Streaming - github.com/isitchristmas/sockets
@@ -44,9 +44,9 @@
       display: inline-block;
       margin-top: 200px;
       font-weight: bold;
-      font-size: 120pt; 
-      font-family: Arial, sans-serif; 
-      text-decoration: none; 
+      font-size: 120pt;
+      font-family: Arial, sans-serif;
+      text-decoration: none;
       color: black;
     }
 
@@ -85,7 +85,7 @@
               transition: 0.5s ease-out;
     }
 
-    #legend {      
+    #legend {
       position: fixed;
       top: 0; right: 0;
       width: 200px;
@@ -108,7 +108,7 @@
 </head>
 
 <body>
-  <!-- 
+  <!--
     Initial 'title' and noscript values are server-side fallbacks,
     calculated with UTC, for clients who do not have JS enabled.
   -->
@@ -119,7 +119,7 @@
   </a>
 
   <div id="legend"></div>
-  
+
   <!-- replace fallback data with locally calculated values -->
   <script type="text/javascript">
     var country = "<%= country %>";
@@ -165,13 +165,13 @@
     </script>
   <% } %>
 
-  
+
   <!-- optional: interaction -->
   <script src="/browser.js"></script>
   <script src="/css.js"></script>
   <script src="/sockjs.min.js"></script>
   <script type="text/javascript">
-    
+
     var socket;
     var others = {};
 
@@ -237,7 +237,7 @@
     function noop() {};
 
     // managing heartbeats
-    var heartbeat, death; 
+    var heartbeat, death;
     var suicide = false; // why would you do this
 
     // welcome user once, then after every 10 chat messages received.
@@ -258,7 +258,7 @@
 
       socket.onopen = function() {
         log.info("= Connected via " + socket.protocol);
-        
+
         me.transport = socket.protocol;
 
         // XDR doesn't have good enough upstream speed for mouse motion
@@ -297,9 +297,9 @@
       var message = JSON.stringify(data);
       (limiters[event] || rawSend)(message);
     }
-      
 
-    // event listeners 
+
+    // event listeners
 
     on('hello', function(data) {
       me.id = data._user_id;
@@ -307,14 +307,14 @@
       if (!me.name)
         me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
-      
+
       // server-overridden client options
       for (var key in data.live)
         user.live[key] = data.live[key];
 
       if (user.live.chat == "true")
         welcomeUser();
-      
+
       me.browser = BrowserDetect.browser;
       me.version = BrowserDetect.version;
       me.os = BrowserDetect.OS;
@@ -331,7 +331,7 @@
 
       document.onmousemove = function(event) {
         event = event || window.event;
-        
+
         // only show it on first movement
         if (meFlag._new && visible && event.clientX && event.clientY) {
           document.body.appendChild(meFlag);
@@ -340,11 +340,11 @@
           meFlag._new = false;
         }
 
-        moveFlag(meFlag, 
-          event.clientX + window.pageXOffset, 
+        moveFlag(meFlag,
+          event.clientX + window.pageXOffset,
           event.clientY + window.pageYOffset
         );
-        
+
         if (!me.readonly) {
           emit('motion', {
             x: event.clientX + window.pageXOffset,
@@ -359,7 +359,7 @@
         event = event || window.event;
 
         // :(
-        if (me.readonly || window._ie9) return; 
+        if (me.readonly || window._ie9) return;
 
         var x = event.clientX + window.pageXOffset;
         var y = event.clientY + window.pageYOffset;
@@ -368,8 +368,8 @@
 
         if (!me.readonly) {
           emit('click', {
-            id: me.id, 
-            x: x, 
+            id: me.id,
+            x: x,
             y: y,
             country: me.country
           });
@@ -547,10 +547,10 @@
     // elements to be generated.
     var showOther = function(other) {
       // make up for shortened key name
-      other.country = other.country || other.c; 
+      other.country = other.country || other.c;
 
       // in case this comes before the 'arrive' event does
-      registerOther(other); 
+      registerOther(other);
 
       others[other.id].flag = flagFor(other.country, "other");
       if (visible)
@@ -596,7 +596,7 @@
     var removeOther = function(id) {
       if (!others[id]) return;
       var country = others[id].country;
-      
+
       var elem = others[id].flag;
       if (elem && elem.parentElement)
         elem.parentElement.removeChild(elem);
@@ -628,9 +628,9 @@
         }, 30000)
       };
 
-      
+
       div.appendChild(flag);
-      
+
       // without this, div adds height padding, weird
       div.style.height = "20px";
 
@@ -682,7 +682,7 @@
         flagRule.style.opacity = 0;
         legendRule.style.display = "none";
         clickRule.style.display = "none";
-        
+
         setTimeout(function() {
           flagRule.style.opacity = 1;
           legendRule.style.display = "block";
@@ -696,7 +696,7 @@
       var nextXmas = Christmas.thisYear();
       // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
       // var nextXmas = new Date(Date.now()); // pretend we showed up a few milliseconds before
-      
+
       nextXmas = nextXmas.getTime();
 
       var afterXmas = nextXmas + (24 * 60 * 60 * 1000); // 1 day later
@@ -738,7 +738,7 @@
     log.public = function(message) {log(message, "public")};
     log.life = function(message) {log(message, "life")};
 
-    
+
     // browser-specific fixes
 
     // IE fix: make console.log be okay
