@@ -9,6 +9,12 @@ module.exports = {
       "http://localhost:3000"
     ],
 
+    log: {
+      join: true,
+      info: true,
+      debug: false
+    },
+
     mongodb: {
       port: 27017,
       host: "localhost",
@@ -22,6 +28,12 @@ module.exports = {
     streaming: [
       "http://sockets.example.com"
     ],
+
+    log: {
+      join: false,
+      info: false,
+      debug: false
+    },
 
     mongodb: {
       port: 27017,

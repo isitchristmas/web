@@ -177,10 +177,9 @@
 
     var user = {
       log: {
-        join: false, // join/leave messages
-
-        info: false,   // default
-        debug: false, // you know
+        join: <%= config.log.join %>, // join/leave messages
+        info: <%= config.log.info %>,   // default
+        debug: <%= config.log.debug %>, // you know
 
         life: true,  // life and death events
         public: true // messages for the public
