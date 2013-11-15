@@ -26,7 +26,8 @@ def links():
   run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
 
 def make_current():
-  run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
+  # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
+  run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
 
 def prune_releases():
   pass
@@ -43,13 +44,12 @@ def stop():
 def restart():
   run("forever restart app.js")
 
-
 def deploy():
   execute(checkout)
 
   execute(links)
   execute(make_current)
 
-  execute(stop)
-  execute(start)
-  # execute(restart)
+  # execute(stop)
+  # execute(start)
+  execute(restart)
