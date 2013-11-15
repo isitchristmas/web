@@ -38,7 +38,7 @@ def prune_releases():
 ## can be run on their own
 
 def start():
-  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js" % (current_path, environment, logs))
+  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a -w --watchDirectory=%s start app.js" % (current_path, environment, logs, current_path))
 
 def stop():
   run("forever stop app.js")
@@ -55,5 +55,5 @@ def deploy():
   execute(make_current)
 
   # execute(stop)
-  execute(start)
+  # execute(start)
   # execute(restart)
