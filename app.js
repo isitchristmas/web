@@ -27,7 +27,7 @@ var rss = function(req, res) {
       country: country,
       Christmas: Christmas,
       dateFormat: dateFormat,
-      
+
       config: config,
       env: app.get('env')
     });
@@ -42,7 +42,7 @@ var findCountry = function(req, callback) {
 
   var forwarded = req.header("X-Forwarded-For");
   var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
-  
+
   if (db == null) {
     console.log("Connecting to MongoDB for first time...");
     mongo.connect(config.mongodb, function(database) {
@@ -61,7 +61,7 @@ var lookupCountry = function(ip, database, callback) {
     // ip = "193.51.208.14";
 
     var intIp = ipToInteger(ip);
-    
+
     collection.findOne({ip_start: {"$lte": intIp}, ip_end: {"$gte": intIp}}, function(err, item) {
       if (err) {console.log("Error finding row"); return callback("EO");}
 
@@ -79,9 +79,9 @@ var lookupCountry = function(ip, database, callback) {
 
 var ipToInteger = function(ip) {
   var pieces = ip.split(".");
-  return (parseInt(pieces[0]) * 16777216) 
-    + (parseInt(pieces[1]) * 65536) 
-    + (parseInt(pieces[2]) * 256) 
+  return (parseInt(pieces[0]) * 16777216)
+    + (parseInt(pieces[1]) * 65536)
+    + (parseInt(pieces[2]) * 256)
     + parseInt(pieces[3]);
 }
 
@@ -91,7 +91,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , dateFormat = require('dateformat')
-  , Christmas = require("./public/christmas");
+  , Christmas = require("./public/js/christmas"); // re-use christmas.js
 require('date-utils'); // date helpers
 
 
