@@ -25,9 +25,6 @@ def checkout():
 def links():
   run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
 
-def dependencies():
-  run("cd %s && npm install" % version_path)
-
 def make_current():
   run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
 
@@ -38,7 +35,7 @@ def prune_releases():
 ## can be run on their own
 
 def start():
-  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a -w --watchDirectory=%s start app.js" % (current_path, environment, logs, current_path))
+  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js" % (current_path, environment, logs))
 
 def stop():
   run("forever stop app.js")
@@ -51,9 +48,8 @@ def deploy():
   execute(checkout)
 
   execute(links)
-  execute(dependencies)
   execute(make_current)
 
-  # execute(stop)
-  # execute(start)
+  execute(stop)
+  execute(start)
   # execute(restart)
