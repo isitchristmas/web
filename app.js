@@ -121,6 +121,9 @@ app.get('/rss.xml', rss);
 /** start server */
 
 var startServer = function() {
+
+  app.enable('trust proxy'); // allow it to use forwarded headers/IPs/etc
+
   http.createServer(app).listen(app.get('port'), function(){
     console.log("Express %s server listening on port %s", app.settings.env, app.get('port'));
   });
