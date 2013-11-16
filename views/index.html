@@ -16,7 +16,11 @@
 <head>
   <meta charset="utf-8" />
   <title>Is it Christmas?</title>
-  <link rel="alternate" title="Is It Christmas?" href="rss.xml" type="application/rss+xml" />
+
+  <link rel="alternate" title="Is It Christmas?" href="/rss.xml" type="application/rss+xml" />
+
+  <link rel="warrant canary" title="isitchristmas.com warrant canary" href="/canary.txt" type="text/plain" />
+
   <meta name="google-site-verification" content="096Tneffzg_uGPI7e2_1eSClR5bPUPklcDGfCbj-9Rw" />
 
   <style type="text/css">
@@ -353,7 +357,7 @@
     });
 
     var welcomeUser = function() {
-      log.public("= Your name is " + me.name + ".");
+      log.public("= Your name is " + me.name + ". Hello, " + me.name + ".");
       log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
     };
 

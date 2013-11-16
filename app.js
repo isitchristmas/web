@@ -34,6 +34,19 @@ var rss = function(req, res) {
   });
 };
 
+var canary = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  findCountry(req, function(country) {
+    res.render('canary.txt', {
+      Christmas: Christmas,
+      dateFormat: dateFormat,
+      country: country
+    });
+  });
+};
+
+
+
 /** helpers **/
 
 var findCountry = function(req, callback) {
@@ -103,6 +116,7 @@ var app = express()
 app.configure(function(){
   app.engine('.html', require('ejs').__express);
   app.engine('.xml', require('ejs').__express);
+  app.engine('.txt', require('ejs').__express);
   app.set('port', config.port || process.env.PORT || 80);
   app.set('view engine', 'html');
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
@@ -116,6 +130,7 @@ app.configure('development', function(){
 
 app.get('/', index);
 app.get('/rss.xml', rss);
+app.get('/canary.txt', canary);
 
 
 /** start server */
