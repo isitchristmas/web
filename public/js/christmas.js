@@ -192,6 +192,42 @@ var Christmas = {
     return codes[countryCode] || "NO";
   },
 
+/*
+
+Seeking translations for the following countries.
+File tickets at: https://github.com/isitchristmas/web/issues
+
+  Afghanistan, Aland Islands, Albania, Algeria, American Samoa, Andorra, Angola, Anguilla,
+  Antarctica, Antigua and Barbuda, Armenia, Aruba, Asia/Pacific Region,
+  Azerbaijan, Bahamas, Bahrain, Bangladesh, Belarus, Benin, Bhutan, Bonaire,
+  Saint Eustatius and Saba, Bosnia and Herzegovina, Botswana, Bouvet Island,
+  British Indian Ocean Territory, Brunei Darussalam, Burkina Faso, Burundi, Cambodia,
+  Cameroon, Cape Verde, Central African Republic, Chad, Comoros, Congo, Congo (DRC),
+  Cook Islands, Cote D'Ivoire (Ivory Coast), Cuba, Curacao, Djibouti, Egypt,
+  Equatorial Guinea, Eritrea, Esperanto, Ethiopia, Europe, Falkland Islands (Malvinas),
+  Faroe Islands, Fiji, French Guiana, French Polynesia, Gabon, Gambia, Georgia, Ghana,
+  Gibraltar, Greenland, Grenada, Guadeloupe, Guam, Guernsey, Guinea, Guinea-Bissau,
+  Guyana, Heard Island and McDonald Islands, Holy See (Vatican City State), Honduras,
+  Indonesia, Iran, Iraq, Isle of Man, Jersey, Jordan, Kazakhstan, Kenya, Kiribati,
+  South Korea, Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
+  Liberia, Libya, Liechtenstein, Luxembourg, Macau, Macedonia, Madagascar, Malawi,
+  Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte,
+  Micronesia, Moldova, Monaco, Mongolia, Montenegro,
+  Montserrat, Morocco, Mozambique, Namibia, Nauru, Nepal, New Caledonia, Niger,
+  Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Oman, Pakistan, Palau,
+  Palestinian Territory, Papua New Guinea, Qatar, Reunion, Rwanda, Saint Barthelemy,
+  Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin,
+  Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino,
+  Sao Tome and Principe, Saudi Arabia, Senegal, Serbia,
+  Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
+  Swaziland, Syrian Arab Republic, Taiwan, Tajikistan, Tanzania,
+  Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
+  Tuvalu, Uganda, Ukraine, United Arab Emirates, United Kingdom,
+  United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
+  Virgin Islands (U.S.), Wallis and Futuna, Yemen, Zambia, Zimbabwe
+
+*/
+
   countries: {
     "AD": {
       "name": "Andorra",
