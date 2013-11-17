@@ -67,6 +67,7 @@ var Christmas = {
       "IL": "KEN", // Israel
       "KR": "YE", // Korea
       "CZ": "ANO", // Czech Republic
+      "BG": "ДА", // Bulgaria
       "SK": "ÁNO", // Slovakia
       "GR": "NE", // Greece
       "IS": "JÁ", // Iceland
@@ -150,6 +151,7 @@ var Christmas = {
       "IL": "LO", // Israel
       "KR": "ANIYO", // Korea
       "CZ": "NE", // Czech Republic
+      "BG": "НЕ", // Bulgaria
       "SK": "NIE", // Slovakia
       "GR": "OHI", // Greece
       "IS": "NEI", // Iceland
