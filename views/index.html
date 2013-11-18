@@ -1,10 +1,11 @@
 <!--
 
   Built by Eric Mill:
-
     eric@konklone.com
     konklone.com
     twitter.com/konklone
+
+  With majestic assistance from Micah Rich (@micahbrich) and Brandon Jones (@btj).
 
   Bug reports and stuff:
     github.com/isitchristmas/web/issues
@@ -19,8 +20,6 @@
 
   <link rel="alternate" title="Is It Christmas?" href="/rss.xml" type="application/rss+xml" />
   <link rel="warrant canary" title="Is It Still Christmas?" href="/canary.txt" type="text/plain" />
-
-  <meta name="google-site-verification" content="096Tneffzg_uGPI7e2_1eSClR5bPUPklcDGfCbj-9Rw" />
 
   <style type="text/css">
     html, body {height: 100%;}
@@ -175,7 +174,7 @@
         current: 500 // will change
       },
 
-      // values can be overwritten on hello
+      // values will be overwritten on hello in production
       live: {
         mouse_rate: 20,
         heartbeat_interval: 3000,
@@ -184,7 +183,7 @@
       }
     };
 
-    // kept separate because I like emitting the entire 'me' hash at times
+    // TODO: move into me.flag once we no longer emit just 'me'
     var meFlag = null;
 
     // sockjs server endpoint
@@ -221,11 +220,6 @@
     // managing heartbeats
     var heartbeat, death;
     var suicide = false; // why would you do this
-
-    // welcome user once, then after every 10 chat messages received.
-    // turn off when the user first uses say().
-    var said = false;
-    var chatsSince = 0;
 
     var legend = document.getElementById("legend")
       , legendTimeout;
@@ -449,7 +443,7 @@
 
     var setCursor = function(country) {
       meFlag = flagFor(country, "me");
-      meFlag._new = true;
+      meFlag._new = true; // used to lazy-add element only if moved
       meFlag.style.zIndex = 9999; // on top of the world
     };
 
@@ -507,8 +501,8 @@
         emit('motion', {
           x: event.clientX + window.pageXOffset,
           y: event.clientY + window.pageYOffset,
-          id: me.id,
-          c: me.country
+          id: me.id, // TODO: unnecessary?
+          c: me.country // TODO: unnecessary?
         });
       }
     };
@@ -532,10 +526,10 @@
 
         clickFlag(me.country, x, y);
         emit('click', {
-          id: me.id,
+          id: me.id, // TODO: unnecessary?
           x: x,
           y: y,
-          country: me.country
+          country: me.country // TODO: unnecessary?
         });
       };
 
@@ -570,6 +564,11 @@
 
 
 /**** Chat mechanics ****/
+
+    // welcome user once, then after every 10 chat messages received.
+    // turn off when the user first uses say().
+    var said = false;
+    var chatsSince = 0;
 
     var welcomeUser = function() {
       log.public("= Your name is " + me.name + ". Hello, " + me.name + ".");
