@@ -543,13 +543,63 @@
       }
     };
 
+    var removeOther = function(id) {
+      if (!others[id]) return;
+      var country = others[id].country;
+
+      var elem = others[id].flag;
+      if (elem && elem.parentElement)
+        elem.parentElement.removeChild(elem);
+
+      delete others[id];
+      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
+    };
+
+
+/**** FLAG MECHANICS ***/
+
+
+    var flagFor = function(country, klass) {
+      var div = document.createElement('div');
+      div.className = "flag " + klass;
+
+      var flag = document.createElement('img');
+      flag.src = "countries/" + country + ".png";
+
+      // create a legend in the top-right when you mouse over other people's flags
+      div.onmouseover = function() {
+        clearTimeout(legendTimeout);
+        legend.innerHTML = Christmas.countries[country].names.join("<br/>");
+        legend.style.opacity = 1;
+        legendTimeout = setTimeout(function() {
+          legend.style.opacity = 0;
+        }, 30000)
+      };
+
+      div.appendChild(flag);
+
+      // without this, div adds height padding, weird
+      div.style.height = "20px";
+
+      div.style.marginTop = "-10px"; // half of constant height 20
+      div.style.marginLeft = "-" + (flagWidth(country) / 2) + "px";
+
+      return div;
+    };
+
+    // there is sadly no international standard on flag aspect ratio
+    var flagWidth = function(country) {
+      return (Christmas.countries[country].width || 40);
+    }
+
+
     var doClick = function(country, x, y) {
       if (!visible) return;
 
       var elem = document.createElement("div");
 
-      var width = Christmas.countries[country].width || 40;
-      var height = 20;
+      var width = flagWidth(country)
+      var height = 20; // constant flag height
       var xOff = Math.floor(width / 2);
       var yOff = Math.floor(height / 2);
 
@@ -572,62 +622,10 @@
       }, 10);
     };
 
-    var removeOther = function(id) {
-      if (!others[id]) return;
-      var country = others[id].country;
 
-      var elem = others[id].flag;
-      if (elem && elem.parentElement)
-        elem.parentElement.removeChild(elem);
+/**** rate limiting utilities **/
 
-      delete others[id];
-      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
-    };
-
-    // prevent click-drags from "grabbing" image
-    document.body.onmousedown = function(event) {
-      event = event || window.event;
-      if (event.preventDefault) event.preventDefault();
-      else event.returnValue = false;
-    };
-
-    var flagFor = function(country, klass) {
-      var div = document.createElement('div');
-      div.className = "flag " + klass;
-
-      var flag = document.createElement('img');
-      flag.src = "countries/" + country + ".png";
-
-      div.onmouseover = function() {
-        clearTimeout(legendTimeout);
-        legend.innerHTML = Christmas.countries[country].names.join("<br/>");
-        legend.style.opacity = 1;
-        legendTimeout = setTimeout(function() {
-          legend.style.opacity = 0;
-        }, 30000)
-      };
-
-
-      div.appendChild(flag);
-
-      // without this, div adds height padding, weird
-      div.style.height = "20px";
-
-      div.style.marginTop = "-" + yOff(country) + "px";
-      div.style.marginLeft = "-" + xOff(country) + "px";
-
-      return div;
-    };
-
-    var xOff = function(country) {
-      var width = Christmas.countries[country].width || 40;
-      return width / 2;
-    }
-
-    var yOff = function(country) {
-      return 10; // all flags are 20px high;
-    }
-
+    // basic rate-limiter for a static value
     function ratelimit(fn, interval) {
       var last = (new Date()).getTime();
       return (function() {
@@ -646,10 +644,13 @@
         var now = (new Date()).getTime();
         if ((now - last) > user.live.mouse_rate) {
           last = now;
-          fn.apply(null, arguments);
+          return fn.apply(null, arguments);
         }
       });
     }
+
+
+/** christmas midnight effect **/
 
     // live flip when it's Xmas, and when it's not again
     var flagRule = addCSSRule("img");
@@ -671,6 +672,8 @@
       }, (centerTime - Date.now()) - 3000); // 3 seconds before center (fade is 1s)
     }
 
+
+    // broken?
     function setTimers() {
       var nextXmas = Christmas.thisYear();
       // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
@@ -706,7 +709,7 @@
     }
 
 
-    // minimalist logging system
+/**** minimalist logging system **/
 
     var log = function(message, severity) {
       if (user.log[severity]) console.log(message);
@@ -718,7 +721,7 @@
     log.life = function(message) {log(message, "life")};
 
 
-    // browser-specific fixes
+/**** misc and browser-specific fixes **/
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
@@ -731,6 +734,17 @@
     // IE9 fix: XDR does not allow http->https communication, fall back to http
     if (window._ie9) url = url.replace("https", "http");
 
+    // prevent click-drags from "grabbing" image
+    document.body.onmousedown = function(event) {
+      event = event || window.event;
+      if (event.preventDefault) event.preventDefault();
+      else event.returnValue = false;
+    };
+
+
+/**** GO ****/
+
+    // TODO: what happened here??
     // setTimers();
     connect(url);
 
