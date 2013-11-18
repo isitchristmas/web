@@ -1,0 +1,34 @@
+/* TEAM */
+
+isitchristmas.com Core Team:
+
+  Eric Mill, @konklone, konklone.com
+  Brandon Jones, @btj, kingofprussia.com
+  Micah Rich, @micahbrich, theleagueofmoveabletype.com
+
+
+/* THANKS */
+
+Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
+
+  github.com/mherdeg
+  github.com/Quiark
+  github.com/xmajox
+  github.com/thisisparker
+  github.com/ivkos
+  github.com/Alotar
+  github.com/liiiink
+  github.com/ebroder
+  github.com/quanganhdo
+
+Compiled from github.com/isitchristmas/web
+
+
+/* SITE */
+
+Lots of things!
+
+  2007-2011: PHP/MySQL + Dreamhost/Webfaction
+  2012: PHP/MySQL + Webfaction, Node + Nodejitsu
+    https://konklone.com/post/isitchristmas-dot-com-2012
+  2013: Node + EC2, Node + Nodejitsu
