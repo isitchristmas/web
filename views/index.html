@@ -185,6 +185,7 @@
 
     // TODO: move into me.flag once we no longer emit just 'me'
     var meFlag = null;
+    me.alreadyArrived = false;
 
     // sockjs server endpoint
     <% if (req.param("streaming")) { %>
@@ -248,13 +249,11 @@
         user.retry.current = user.retry.initial;
       };
 
+      socket.onclose = onDeath;
+
       socket.onmessage = function(message) {
         var data = JSON.parse(message.data);
         (events[data._event] || noop)(data);
-      };
-
-      socket.onclose = function() {
-        onDeath();
       };
     }
 
@@ -267,7 +266,7 @@
 
     function emit(event, data) {
       if (!me.id || !me.transport) {
-        log.info("= Weird state! Trying to emit events with no ID. :|")
+        log.info("= Weird state! Trying to emit events when I have no ID. :|")
         return;
       }
 
@@ -284,6 +283,7 @@
     on('hello', function(data) {
       me.id = data._user_id;
       me.server = data.server;
+
       if (data.name) me.name = data.name;
       log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
 
@@ -294,28 +294,38 @@
       if (user.live.chat == "true")
         welcomeUser();
 
-      // all users announce their info to the server and start a heartbeat
-      emit('arrive', {
-        id: me.id,
-        server: me.server,
-        name: me.name,
-        country: me.country,
-        transport: me.transport,
-        browser: BrowserDetect.browser,
-        version: BrowserDetect.version,
-        os: BrowserDetect.OS
-      });
+      me.browser = BrowserDetect.browser;
+      me.os = BrowserDetect.OS;
+      me.version = BrowserDetect.version;
 
-      setHeartbeat();
-      setCursor(me.country);
+      // all users announce their info to the server and start a heartbeat
+      emit('arrive', myHeart());
 
       // update me to indicate I've sent 'arrive' once
       // server will know that future connects are reconnects
       me.alreadyArrived = true;
 
+      setHeartbeat();
+      setCursor(me.country);
+
       document.onmousemove = mouseMove;
       document.onmousedown = mouseClick;
     });
+
+    // core user details
+    var myHeart = function() {
+      return {
+        id: me.id,
+        alreadyArrived: me.alreadyArrived,
+        server: me.server,
+        name: me.name,
+        country: me.country,
+        transport: me.transport,
+        browser: me.browser,
+        version: me.version,
+        os: me.os
+      };
+    };
 
     var onDeath = function() {
       log.life("= Disconnected! :(");
@@ -351,7 +361,7 @@
       clearTimeout(heartbeat);
       heartbeat = setTimeout(function() {
         log.debug("heartbeat: beating");
-        emit("heartbeat", me);
+        emit("heartbeat", myHeart());
       }, parseInt(user.live.heartbeat_interval));
 
       death = setTimeout(function() {
