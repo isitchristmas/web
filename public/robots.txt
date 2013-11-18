@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /elves/
+Disallow: /toys/
+Disallow: /girls/
+Disallow: /boys/
+Disallow: /secrets/
+Disallow: /spies/
+Disallow: /truth/
+Disallow: /lies/
