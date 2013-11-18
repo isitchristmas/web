@@ -294,13 +294,18 @@
       if (user.live.chat == "true")
         welcomeUser();
 
-      me.browser = BrowserDetect.browser;
-      me.version = BrowserDetect.version;
-      me.os = BrowserDetect.OS;
-      me.time = Date.now();
-
       // all users announce their info to the server and start a heartbeat
-      emit('arrive', me);
+      emit('arrive', {
+        id: me.id,
+        server: me.server,
+        name: me.name,
+        country: me.country,
+        transport: me.transport,
+        browser: BrowserDetect.browser,
+        version: BrowserDetect.version,
+        os: BrowserDetect.OS
+      });
+
       setHeartbeat();
       setCursor(me.country);
 
