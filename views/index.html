@@ -494,11 +494,13 @@
       );
 
       if (!me.readonly) {
+
+        // is quick-rebroadcast, no server processing
         emit('motion', {
           x: event.clientX + window.pageXOffset,
           y: event.clientY + window.pageYOffset,
-          id: me.id, // needed for quick rebroadcast
-          c: me.country // needed for quick rebroadcast (possible quick registration)
+          id: me.id,
+          c: me.country
         });
       }
     };
@@ -531,11 +533,9 @@
       var y = event.clientY + window.pageYOffset;
 
       clickFlag(me.country, x, y);
-      emit('click', {
-        x: x,
-        y: y,
-        id: me.id // needed for quick rebroadcast
-      });
+
+      // is quick-rebroadcast, no server processing
+      emit('click', {x: x, y: y, id: me.id});
     };
 
     on('click', function(other) {
@@ -592,13 +592,8 @@
       if (user.live.chat != "true") return;
 
       said = true;
-      emit('chat', {
-        id: me.id, // TODO: make this unnecessary
-        name: me.name, // TODO: server-side
-        country: me.country, // TODO: server-side post-initialization
-        message: message,
-        time: Date.now()
-      });
+      emit('chat', {message: message});
+      // TODO server: name, id, time, country
     };
 
     // TODO: move this server-side
