@@ -233,6 +233,10 @@
     var christmasTimer
       , christmasEndTimer;
 
+
+
+/**** basic connection and event management ***/
+
     function connect(host) {
       socket = new SockJS(host, null, {
         protocols_whitelist: transport ? [transport] : default_transports
@@ -260,7 +264,6 @@
       };
     }
 
-
     var rawSend = function(message) {socket.send(message)};
     var limiters = {
       chat: ratelimit(rawSend, 500),
@@ -281,7 +284,8 @@
     }
 
 
-    // event listeners
+
+/*** user join/leave management ***/
 
     on('hello', function(data) {
       me.id = data._user_id;
@@ -304,61 +308,15 @@
       // all users announce their info to the server and start a heartbeat
       emit('arrive', me);
       setHeartbeat();
-      setCursor();
+      setCursor(me.country);
 
       // update me to indicate I've sent 'arrive' once
       // server will know that future connects are reconnects
       me.alreadyArrived = true;
 
-      document.onmousemove = function(event) {
-        event = event || window.event;
-
-        // only show it on first movement
-        if (meFlag._new && visible && event.clientX && event.clientY) {
-          document.body.appendChild(meFlag);
-          document.body.style.cursor = "none";
-          document.getElementById("answer").style.cursor = "none";
-          meFlag._new = false;
-        }
-
-        moveFlag(meFlag,
-          event.clientX + window.pageXOffset,
-          event.clientY + window.pageYOffset
-        );
-
-        if (!me.readonly) {
-          emit('motion', {
-            x: event.clientX + window.pageXOffset,
-            y: event.clientY + window.pageYOffset,
-            id: me.id,
-            c: me.country
-          });
-        }
-      };
-
-      document.onmousedown = function(event) {
-        event = event || window.event;
-
-        // :(
-        if (me.readonly || window._ie9) return;
-
-        var x = event.clientX + window.pageXOffset;
-        var y = event.clientY + window.pageYOffset;
-
-        doClick(me.country, x, y);
-        emit('click', {
-          id: me.id,
-          x: x,
-          y: y,
-          country: me.country
-        });
-      };
+      document.onmousemove = mouseMove;
+      document.onmousedown = mouseClick;
     });
-
-    var welcomeUser = function() {
-      log.public("= Your name is " + me.name + ". Hello, " + me.name + ".");
-      log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
-    };
 
     var onDeath = function() {
       log.life("= Disconnected! :(");
@@ -441,80 +399,17 @@
       // :(
       if (me.readonly || window._ie9) return;
 
-      doClick(other.country, other.x, other.y);
+      clickFlag(other.country, other.x, other.y);
     });
 
     on('leave', function(data) {
       removeOther(data.id);
     });
 
-    on('config', function(data) {
-      log.info("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
-      user.live[data.key] = data.value;
-    });
 
-    on('command', function(data) {
-      log.info("= command: " + data.command + " (" + data.arguments.join(",") + ")");
-      (commands[data.command] || noop).apply(null, data.arguments);
-    })
-
-    on('chat', function(data) {
-      if (!said) {
-        chatsSince += 1;
-        if (chatsSince >= 10) {
-          welcomeUser();
-          chatsSince = 0;
-        }
-      }
-      log.public("[" + data.country + "] " + data.name + ": " + data.message);
-    });
-
-    command('blast', function(message) {
-      log.public("= Server message: " + message);
-    })
-
-    command('reconnect', function() {
-      log.public("= Server asked us to reconnect, closing connection");
-      socket.close();
-    });
-
-    command('refresh', function() {
-      log.public("= Server asked us to refresh, whooaaaaa");
-      window.location = window.location;
-    })
-
-    var say = function(message) {
-      if (!message) return;
-      if (user.live.chat != "true") return;
-
-      said = true;
-      emit('chat', {
-        id: me.id,
-        name: me.name,
-        country: me.country,
-        message: message,
-        time: Date.now()
-      });
-    };
-
-    var rename = function(name) {
-      if (!name) return;
-
-      // 20 char max;
-      me.name = name.slice(0,20);
-
-      log.public("= Your name: " + me.name);
-    };
-
-    var setCursor = function() {
-      meFlag = flagFor(me.country, "me");
-      meFlag._new = true;
-      meFlag.style.zIndex = 9999; // on top of the world
-    };
 
     var registerOther = function(other) {
-      if (others[other.id])
-        return;
+      if (others[other.id]) return;
 
       others[other.id] = {country: other.country};
 
@@ -536,13 +431,6 @@
         document.body.appendChild(others[other.id].flag);
     };
 
-    var moveFlag = function(flag, x, y) {
-      if (x && y) {
-        flag.style.left = "" + x + "px";
-        flag.style.top = "" + y + "px";
-      }
-    };
-
     var removeOther = function(id) {
       if (!others[id]) return;
       var country = others[id].country;
@@ -556,15 +444,21 @@
     };
 
 
+
 /**** FLAG MECHANICS ***/
 
+    var setCursor = function(country) {
+      meFlag = flagFor(country, "me");
+      meFlag._new = true;
+      meFlag.style.zIndex = 9999; // on top of the world
+    };
 
     var flagFor = function(country, klass) {
       var div = document.createElement('div');
       div.className = "flag " + klass;
 
       var flag = document.createElement('img');
-      flag.src = "countries/" + country + ".png";
+      flag.src = "/countries/" + country + ".png";
 
       // create a legend in the top-right when you mouse over other people's flags
       div.onmouseover = function() {
@@ -593,7 +487,59 @@
     }
 
 
-    var doClick = function(country, x, y) {
+    var mouseMove = function(event) {
+      event = event || window.event;
+
+      // only show it on first movement
+      if (meFlag._new && visible && event.clientX && event.clientY) {
+        document.body.appendChild(meFlag);
+        document.body.style.cursor = "none";
+        document.getElementById("answer").style.cursor = "none";
+        meFlag._new = false;
+      }
+
+      moveFlag(meFlag,
+        event.clientX + window.pageXOffset,
+        event.clientY + window.pageYOffset
+      );
+
+      if (!me.readonly) {
+        emit('motion', {
+          x: event.clientX + window.pageXOffset,
+          y: event.clientY + window.pageYOffset,
+          id: me.id,
+          c: me.country
+        });
+      }
+    };
+
+    var moveFlag = function(flag, x, y) {
+      // check x and y to prevent motion on 0,0
+      if (x && y) {
+        flag.style.left = "" + x + "px";
+        flag.style.top = "" + y + "px";
+      }
+    };
+
+    var mouseClick = function(event) {
+        event = event || window.event;
+
+        // :(
+        if (me.readonly || window._ie9) return;
+
+        var x = event.clientX + window.pageXOffset;
+        var y = event.clientY + window.pageYOffset;
+
+        clickFlag(me.country, x, y);
+        emit('click', {
+          id: me.id,
+          x: x,
+          y: y,
+          country: me.country
+        });
+      };
+
+    var clickFlag = function(country, x, y) {
       if (!visible) return;
 
       var elem = document.createElement("div");
@@ -621,6 +567,76 @@
         }, 500);
       }, 10);
     };
+
+
+/**** Chat mechanics ****/
+
+    var welcomeUser = function() {
+      log.public("= Your name is " + me.name + ". Hello, " + me.name + ".");
+      log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
+    };
+
+    var say = function(message) {
+      if (!message) return;
+      if (user.live.chat != "true") return;
+
+      said = true;
+      emit('chat', {
+        id: me.id, // TODO: make this unnecessary
+        name: me.name, // TODO: server-side
+        country: me.country, // TODO: server-side post-initialization
+        message: message,
+        time: Date.now()
+      });
+    };
+
+    // TODO: move this server-side
+    var rename = function(name) {
+      if (!name) return;
+      me.name = name.slice(0,20);
+
+      log.public("= Your name: " + me.name);
+    };
+
+    on('chat', function(data) {
+      if (!said) {
+        chatsSince += 1;
+        if (chatsSince >= 10) {
+          welcomeUser();
+          chatsSince = 0;
+        }
+      }
+
+      log.public("[" + data.country + "] " + data.name + ": " + data.message);
+    });
+
+
+
+/**** Admin powers ***/
+
+    on('config', function(data) {
+      log.info("= live config change: " + data.key + " [" + user.live[data.key] + " -> " + data.value + "]");
+      user.live[data.key] = data.value;
+    });
+
+    on('command', function(data) {
+      log.info("= command: " + data.command + " (" + data.arguments.join(",") + ")");
+      (commands[data.command] || noop).apply(null, data.arguments);
+    })
+
+    command('blast', function(message) {
+      log.public("= Server message: " + message);
+    })
+
+    command('reconnect', function() {
+      log.public("= Server asked us to reconnect, closing connection");
+      socket.close();
+    });
+
+    command('refresh', function() {
+      log.public("= Server asked us to refresh, whooaaaaa");
+      window.location = window.location;
+    })
 
 
 /**** rate limiting utilities **/
