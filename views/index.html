@@ -183,8 +183,7 @@
       }
     };
 
-    // TODO: move into me.flag once we no longer emit just 'me'
-    var meFlag = null;
+    me.flag = null;
     me.alreadyArrived = false;
 
     // sockjs server endpoint
@@ -342,8 +341,8 @@
       me.id = null;
       me.transport = null;
       me.time = null;
-      if (meFlag && meFlag.parentElement)
-        meFlag.parentElement.removeChild(meFlag);
+      if (me.flag && me.flag.parentElement)
+        me.flag.parentElement.removeChild(me.flag);
 
       setRetry();
     };
@@ -457,9 +456,9 @@
 /**** FLAG MECHANICS ***/
 
     var setCursor = function(country) {
-      meFlag = flagFor(country, "me");
-      meFlag._new = true; // used to lazy-add element only if moved
-      meFlag.style.zIndex = 9999; // on top of the world
+      me.flag = flagFor(country, "me");
+      me.flag._new = true; // used to lazy-add element only if moved
+      me.flag.style.zIndex = 9999; // on top of the world
     };
 
     var flagFor = function(country, klass) {
@@ -500,14 +499,14 @@
       event = event || window.event;
 
       // only show it on first movement
-      if (meFlag._new && visible && event.clientX && event.clientY) {
-        document.body.appendChild(meFlag);
+      if (me.flag._new && visible && event.clientX && event.clientY) {
+        document.body.appendChild(me.flag);
         document.body.style.cursor = "none";
         document.getElementById("answer").style.cursor = "none";
-        meFlag._new = false;
+        me.flag._new = false;
       }
 
-      moveFlag(meFlag,
+      moveFlag(me.flag,
         event.clientX + window.pageXOffset,
         event.clientY + window.pageYOffset
       );
