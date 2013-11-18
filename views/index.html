@@ -386,11 +386,7 @@
       registerOther(other);
 
       // let a new arrival know you are already here
-      emit("here", {
-        to: other.id,
-        id: me.id,
-        country: me.country
-      });
+      emit("here", {to: other.id});
     });
 
     on('here', function(other) {
@@ -495,7 +491,7 @@
 
     // there is sadly no international standard on flag aspect ratio
     var flagWidth = function(country) {
-      return (Christmas.countries[country].width || 40);
+      return ((Christmas.countries[country] && Christmas.countries[country].width) || 40);
     }
 
 
