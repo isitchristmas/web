@@ -280,11 +280,17 @@
 /*** user join/leave management ***/
 
     on('hello', function(data) {
-      me.id = data._user_id;
+      log.info("= Assigned ID: " + data.user.id + " [on: " + data.server + "]");
+
+      // used only directly by other clients when packets are blindly rebroadcast.
+      // me.id will never be depended on by the server.
+      me.id = data.user.id;
+
+      // convenience only for console poking, can safely delete
       me.server = data.server;
 
-      if (data.name) me.name = data.name;
-      log.info("= Assigned ID: " + me.id + " [on: " + me.server + "]");
+      // TODO: make convenience only
+      me.name = data.user.name;
 
       // server-overridden client options
       for (var key in data.live)
@@ -314,11 +320,9 @@
     // core user details
     var myHeart = function() {
       return {
-        id: me.id,
-        alreadyArrived: me.alreadyArrived,
-        server: me.server,
-        name: me.name,
-        country: me.country,
+        id: me.id, // used in rebroadcasting only
+        alreadyArrived: me.alreadyArrived, // new or reconnect?
+        country: me.country, // TODO: ditch, server-side
         transport: me.transport,
         browser: me.browser,
         version: me.version,
