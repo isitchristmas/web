@@ -9,7 +9,7 @@ such as isitchristmas.com.
 
 isitchristmas.com and its principals and employees will in fact comply with such warrants and their provisions for secrecy.
 
-isitchristmas.com will also make available, weekly, a "warrant canary" in the form of a cryptographically signed message containing the following:
+isitchristmas.com will also make available, daily, a "warrant canary" in the form of a cryptographically signed message containing the following:
 
 - a declaration that, up to that point, no warrants have been served, nor have any searches or seizures taken place
 
