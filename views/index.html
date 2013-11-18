@@ -393,27 +393,9 @@
       registerOther(other);
     });
 
-    on('motion', function(other) {
-      // toss junk motion
-      if (!(other.x && other.y)) return;
-
-      if (!others[other.id] || !others[other.id].flag)
-        showOther(other);
-
-      moveFlag(others[other.id].flag, other.x, other.y);
-    });
-
-    on('click', function(other) {
-      // :(
-      if (me.readonly || window._ie9) return;
-
-      clickFlag(other.country, other.x, other.y);
-    });
-
     on('leave', function(data) {
       removeOther(data.id);
     });
-
 
 
     var registerOther = function(other) {
@@ -515,11 +497,21 @@
         emit('motion', {
           x: event.clientX + window.pageXOffset,
           y: event.clientY + window.pageYOffset,
-          id: me.id, // TODO: unnecessary?
-          c: me.country // TODO: unnecessary?
+          id: me.id, // needed for quick rebroadcast
+          c: me.country // needed for quick rebroadcast (possible quick registration)
         });
       }
     };
+
+    on('motion', function(other) {
+      // toss junk motion
+      if (!(other.x && other.y)) return;
+
+      if (!others[other.id] || !others[other.id].flag)
+        showOther(other);
+
+      moveFlag(others[other.id].flag, other.x, other.y);
+    });
 
     var moveFlag = function(flag, x, y) {
       // check x and y to prevent motion on 0,0
@@ -530,22 +522,28 @@
     };
 
     var mouseClick = function(event) {
-        event = event || window.event;
+      event = event || window.event;
 
-        // :(
-        if (me.readonly || window._ie9) return;
+      // :(
+      if (me.readonly || window._ie9) return;
 
-        var x = event.clientX + window.pageXOffset;
-        var y = event.clientY + window.pageYOffset;
+      var x = event.clientX + window.pageXOffset;
+      var y = event.clientY + window.pageYOffset;
 
-        clickFlag(me.country, x, y);
-        emit('click', {
-          id: me.id, // TODO: unnecessary?
-          x: x,
-          y: y,
-          country: me.country // TODO: unnecessary?
-        });
-      };
+      clickFlag(me.country, x, y);
+      emit('click', {
+        x: x,
+        y: y,
+        id: me.id // needed for quick rebroadcast
+      });
+    };
+
+    on('click', function(other) {
+      // :(
+      if (me.readonly || window._ie9) return;
+
+      clickFlag(others[other.id].country, other.x, other.y);
+    });
 
     var clickFlag = function(country, x, y) {
       if (!visible) return;
