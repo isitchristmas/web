@@ -289,7 +289,7 @@
       // convenience only for console poking, can safely delete
       me.server = data.server;
 
-      // TODO: make convenience only
+      // for display only, never sent, is overwritten on server-validated rename
       me.name = data.user.name;
 
       // server-overridden client options
@@ -593,16 +593,20 @@
 
       said = true;
       emit('chat', {message: message});
-      // TODO server: name, id, time, country
     };
 
     // TODO: move this server-side
     var rename = function(name) {
       if (!name) return;
-      me.name = name.slice(0,20);
+
+      emit('rename', {name: name})
+    };
+
+    on('rename', function(data) {
+      me.name = data.name;
 
       log.public("= Your name: " + me.name);
-    };
+    });;
 
     on('chat', function(data) {
       if (!said) {
@@ -613,7 +617,7 @@
         }
       }
 
-      log.public("[" + data.country + "] " + data.name + ": " + data.message);
+      log.public("[" + data.country + "][" + data.id.slice(0,5) + "] " + data.name + ": " + data.message);
     });
 
 
