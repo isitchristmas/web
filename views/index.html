@@ -42,12 +42,9 @@
     .flag {
       position: absolute;
       cursor: none;
-    }
 
-    .flag.me {pointer-events: none;}
-
-    .flag img {
       border: 1px solid #d6d6d6;
+
       -webkit-border-radius: 2px;
            -o-border-radius: 2px;
               border-radius: 2px;
@@ -57,6 +54,10 @@
            -o-transition: opacity 1s;
               transition: opacity 1s;
     }
+
+    .flag.ghost {opacity: 0.4;}
+
+    .flag.me {pointer-events: none;}
 
     /* click effect, width and height set dynamically */
     .click {
@@ -91,6 +92,9 @@
 
   <!--[if IE 9 ]>
     <script type="text/javascript">window._ie9 = true;</script>
+  <![endif]-->
+  <!--[if IE]>
+    <script type="text/javascript">window._ie = true;</script>
   <![endif]-->
 </head>
 
@@ -319,6 +323,7 @@
 
       document.onmousemove = mouseMove;
       document.onmousedown = mouseClick;
+      document.oncontextmenu = function() {return false};
     });
 
     // core user details
@@ -455,14 +460,16 @@
       flag.src = "/countries/" + country + ".png";
 
       // create a legend in the top-right when you mouse over other people's flags
-      div.onmouseover = function() {
-        clearTimeout(legendTimeout);
-        legend.innerHTML = Christmas.countries[country].names.join("<br/>");
-        legend.style.opacity = 1;
-        legendTimeout = setTimeout(function() {
-          legend.style.opacity = 0;
-        }, 30000)
-      };
+      if (klass == "other") {
+        div.onmouseover = function() {
+          clearTimeout(legendTimeout);
+          legend.innerHTML = Christmas.countries[country].names.join("<br/>");
+          legend.style.opacity = 1;
+          legendTimeout = setTimeout(function() {
+            legend.style.opacity = 0;
+          }, 30000)
+        };
+      }
 
       div.appendChild(flag);
 
@@ -530,26 +537,37 @@
     var mouseClick = function(event) {
       event = event || window.event;
 
+      // reference: http://www.quirksmode.org/js/events_properties.html
+      var ieMap = {1: "left", 4: "middle", 2: "right"};
+      var elseMap = {0: "left", 1: "middle", 2: "right"};
+      var button = window._ie ? ieMap[event.button] : elseMap[event.button];
+
       // :(
       if (me.readonly || window._ie9) return;
 
       var x = event.clientX + window.pageXOffset;
       var y = event.clientY + window.pageYOffset;
 
-      clickFlag(me.country, x, y);
+      if (button == "left")
+        leftClickFlag(me.country, x, y);
+      else if (button == "right")
+        rightClickFlag(me.country, x, y);
 
       // is quick-rebroadcast, no server processing
-      emit('click', {x: x, y: y, id: me.id});
+      emit('click', {x: x, y: y, id: me.id, button: button});
     };
 
     on('click', function(other) {
       // :(
       if (me.readonly || window._ie9) return;
 
-      clickFlag(others[other.id].country, other.x, other.y);
+      if (other.button == "left")
+        leftClickFlag(others[other.id].country, other.x, other.y);
+      else
+        rightClickFlag(others[other.id].country, other.x, other.y);
     });
 
-    var clickFlag = function(country, x, y) {
+    var leftClickFlag = function(country, x, y) {
       if (!visible) return;
 
       var elem = document.createElement("div");
@@ -576,6 +594,23 @@
           elem.parentElement.removeChild(elem);
         }, 500);
       }, 10);
+    };
+
+    // create a translucent ghost flag
+    var rightClickFlag = function(country, x, y) {
+      if (!visible) return;
+
+      var ghost = flagFor(country, "ghost");
+      document.body.appendChild(ghost);
+      moveFlag(ghost, x, y);
+
+      // exists for 1s, fades for 1s
+      setTimeout(function() {
+        ghost.style.opacity = 0;
+        setTimeout(function() {
+          ghost.parentElement.removeChild(ghost);
+        }, 1000)
+      }, 1000);
     };
 
 
@@ -683,7 +718,7 @@
 /** christmas midnight effect **/
 
     // live flip when it's Xmas, and when it's not again
-    var flagRule = addCSSRule("img");
+    var flagRule = addCSSRule(".flag");
     var clickRule = addCSSRule("div.click");
     var legendRule = addCSSRule("div#legend");
     function flagFade(centerTime) {
