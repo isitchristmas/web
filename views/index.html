@@ -49,17 +49,14 @@
            -o-border-radius: 2px;
               border-radius: 2px;
 
-      -webkit-transition: opacity 1s;
-         -moz-transition: opacity 1s;
-           -o-transition: opacity 1s;
-              transition: opacity 1s;
+      -webkit-transition: opacity 0.5s;
+         -moz-transition: opacity 0.5s;
+           -o-transition: opacity 0.5s;
+              transition: opacity 0.5s;
     }
-
     .flag.ghost {opacity: 0.4;}
-
     .flag.me {pointer-events: none;}
 
-    /* click effect, width and height set dynamically */
     .click {
       position: absolute;
       border: 1px solid #000;
@@ -187,11 +184,15 @@
         mouse_rate: 20,
         heartbeat_interval: 3000,
         death_interval: 6000,
-        chat: "true"
+        chat: "true",
+
+        ghost_duration: 2000,
+        ghost_max: 10
       }
     };
 
     me.flag = null;
+    me.ghosts = 0;
     me.alreadyArrived = false;
 
     // sockjs server endpoint
@@ -410,7 +411,10 @@
     var registerOther = function(other) {
       if (others[other.id]) return;
 
-      others[other.id] = {country: other.country};
+      others[other.id] = {
+        country: other.country,
+        ghosts: 0
+      };
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
     };
@@ -549,9 +553,9 @@
       var y = event.clientY + window.pageYOffset;
 
       if (button == "left")
-        leftClickFlag(me.country, x, y);
+        leftClickFlag(me, x, y);
       else if (button == "right")
-        rightClickFlag(me.country, x, y);
+        rightClickFlag(me, x, y);
 
       // is quick-rebroadcast, no server processing
       emit('click', {x: x, y: y, id: me.id, button: button});
@@ -562,17 +566,17 @@
       if (me.readonly || window._ie9) return;
 
       if (other.button == "left")
-        leftClickFlag(others[other.id].country, other.x, other.y);
+        leftClickFlag(others[other.id], other.x, other.y);
       else
-        rightClickFlag(others[other.id].country, other.x, other.y);
+        rightClickFlag(others[other.id], other.x, other.y);
     });
 
-    var leftClickFlag = function(country, x, y) {
+    var leftClickFlag = function(person, x, y) {
       if (!visible) return;
 
       var elem = document.createElement("div");
 
-      var width = flagWidth(country)
+      var width = flagWidth(person.country)
       var height = 20; // constant flag height
       var xOff = Math.floor(width / 2);
       var yOff = Math.floor(height / 2);
@@ -597,20 +601,26 @@
     };
 
     // create a translucent ghost flag
-    var rightClickFlag = function(country, x, y) {
+    var rightClickFlag = function(person, x, y) {
       if (!visible) return;
 
-      var ghost = flagFor(country, "ghost");
+      // enforce ghost cap
+      if (person.ghosts >= user.live.ghost_max)
+        return;
+
+      var ghost = flagFor(person.country, "ghost");
       document.body.appendChild(ghost);
       moveFlag(ghost, x, y);
+      person.ghosts += 1;
 
       // exists for 1s, fades for 1s
       setTimeout(function() {
         ghost.style.opacity = 0;
         setTimeout(function() {
           ghost.parentElement.removeChild(ghost);
-        }, 1000)
-      }, 1000);
+          person.ghosts -= 1;
+        }, 500); // matches 1s in CSS for opacity transition
+      }, user.live.ghost_duration);
     };
 
 
