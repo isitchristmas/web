@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": "asahskfjahdsfjhasdfa",
+      "country": "CA"
+    },
+    {
+      "id": "asahskfjahdsfjhasdfb",
+      "country": "FI"
+    },
+    {
+      "id": "asahskfjahdsfjhasdfc",
+      "country": "US"
+    },
+    {
+      "id": "asahskfjahdsfjhasdfb",
+      "country": "UK"
+    }
+  ]
+}
