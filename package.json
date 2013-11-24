@@ -22,6 +22,8 @@
     "date-utils": "*",
     "time": "*",
 
+    "request": "*",
+
     "mongodb": "*",
     "csv": "*",
     "optimist": "*"

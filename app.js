@@ -100,18 +100,19 @@ var ipToInteger = function(ip) {
 
 /** configuration **/
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , dateFormat = require('dateformat')
-  , Christmas = require("./public/js/christmas"); // re-use christmas.js
+var express = require('express'),
+    http = require('http'),
+    request = require('request'),
+    path = require('path'),
+    dateFormat = require('dateformat'),
+    Christmas = require("./public/js/christmas"); // re-use christmas.js
 require('date-utils'); // date helpers
 
 
-var app = express()
-  , config = require('./config')[app.get('env')]
-  , mongo = require('./mongo')
-  , db = null; // connect on first request (why is this my best option?)
+var app = express(),
+    config = require('./config')[app.get('env')],
+    mongo = require('./mongo'),
+    db = null; // connect on first request (why is this my best option?)
 
 app.configure(function(){
   app.engine('.html', require('ejs').__express);
@@ -131,7 +132,8 @@ app.configure('development', function(){
 app.get('/', index);
 app.get('/rss.xml', rss);
 app.get('/canary.txt', canary);
-
+// proxy flag data from a room from the streaming server
+app.get('/flags', function(req, res) {req.pipe(request(config.streaming[0] + '/flags')).pipe(res)});
 
 /** start server */
 
