@@ -407,6 +407,12 @@
       removeOther(data.id);
     });
 
+    on('ping', function(data) {
+      var x = parseInt(me.flag.style.left);
+      var y = parseInt(me.flag.style.top);
+      if (!isNaN(x) && !isNaN(y))
+        emit("pong", {x: x, y: y});
+    })
 
     var registerOther = function(other) {
       if (others[other.id]) return;
@@ -445,7 +451,6 @@
       delete others[id];
       log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
     };
-
 
 
 /**** FLAG MECHANICS ***/
