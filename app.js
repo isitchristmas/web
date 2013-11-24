@@ -45,6 +45,18 @@ var canary = function(req, res) {
   });
 };
 
+// static view uses same admin password to grab/render snapshot from admin app
+var boards = function(req, res) {
+  if (req.param("admin") != config.admin.password)
+    res.status(403).send("Huh?");
+  else {
+    res.render('boards', {
+      req: req,
+      config: config
+    });
+  }
+};
+
 
 
 /** helpers **/
@@ -124,9 +136,7 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+app.configure('development', function() {app.use(express.errorHandler())});
 
 
 app.get('/', index);
@@ -134,8 +144,9 @@ app.get('/rss.xml', rss);
 app.get('/canary.txt', canary);
 // proxy flag data from a room from the streaming server
 app.get('/flags', function(req, res) {req.pipe(request(config.streaming[0] + '/flags')).pipe(res)});
+app.get('/boards', boards);
 
-/** start server */
+
 
 var startServer = function() {
 
