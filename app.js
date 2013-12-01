@@ -145,10 +145,8 @@ app.get('/canary.txt', canary);
 app.get('/boards', boards);
 
 
-
 var startServer = function() {
-
-  app.enable('trust proxy'); // allow it to use forwarded headers/IPs/etc
+  app.enable('trust proxy');
 
   http.createServer(app).listen(app.get('port'), function(){
     console.log("Express %s server listening on port %s", app.settings.env, app.get('port'));
@@ -157,11 +155,7 @@ var startServer = function() {
 
 app.configure('development', function() {
   app.use(express.errorHandler());
-
-  require('reloader')({
-    watchModules: true,
-    onReload: startServer
-  });
+  require('reloader')({watchModules: true, onReload: startServer});
 });
 
 app.configure('production', startServer);
