@@ -142,8 +142,6 @@ app.configure('development', function() {app.use(express.errorHandler())});
 app.get('/', index);
 app.get('/rss.xml', rss);
 app.get('/canary.txt', canary);
-// proxy flag data from a room from the streaming server
-app.get('/flags', function(req, res) {req.pipe(request(config.streaming[0] + '/flags')).pipe(res)});
 app.get('/boards', boards);
 
 
