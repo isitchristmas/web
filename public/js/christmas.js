@@ -54,7 +54,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
   Swaziland, Syrian Arab Republic, Taiwan, Tajikistan, Tanzania,
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
-  Tuvalu, Uganda, Ukraine, United Arab Emirates, United Kingdom,
+  Tuvalu, Uganda, United Arab Emirates, United Kingdom,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
   Virgin Islands (U.S.), Wallis and Futuna, Yemen, Zambia, Zimbabwe
 
@@ -132,6 +132,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "JM": "YES", // Jamaica
       "BB": "YES", // Barbado
       "BZ": "YES", // Belize
+      "UA": "ТАК", // Ukraine - https://github.com/isitchristmas/web/issues/67
       "KY": "YES", // Cayman Islands
       "NI": "SÍ", // Nicaragua
       "PY": "HÊE", // Paraguay
@@ -216,6 +217,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "JM": "NO", // Jamaica
       "BB": "NO", // Barbado
       "BZ": "NO", // Belize
+      "UA": "НІ", // Ukraine - https://github.com/isitchristmas/web/issues/67
       "KY": "NO", // Cayman Islands
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
