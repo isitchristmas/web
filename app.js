@@ -1,47 +1,42 @@
 require('time')(Date);
 
 var index = function(req, res) {
-  findCountry(req, function(country) {
+  // this is only used as a fallback for clients who don't use JavaScript
+  // if I must pick a timezone for them, let's choose the opposite of the dateline
+  var utcTime = new Date();
+  utcTime.setTimezone("UTC");
 
-    // this is only used as a fallback for clients who don't use JavaScript
-    // if I must pick a timezone for them, let's choose the opposite of the dateline
-    var utcTime = new Date();
-    utcTime.setTimezone("UTC");
+  var country = findCountry(req);
 
-    res.render('index', {
-      answer: Christmas.answer(country, utcTime),
-      country: country,
+  res.render('index', {
+    answer: Christmas.answer(country, utcTime),
+    country: country,
 
-      req: req,
-      config: config,
-      env: app.get('env')
-    });
+    req: req,
+    config: config,
+    env: app.get('env')
   });
 };
 
 var rss = function(req, res) {
   res.set({'Content-Type': 'application/rss+xml'});
 
-  findCountry(req, function(country) {
-    res.render('rss.xml', {
-      country: country,
-      Christmas: Christmas,
-      dateFormat: dateFormat,
+  res.render('rss.xml', {
+    country: findCountry(req),
+    Christmas: Christmas,
+    dateFormat: dateFormat,
 
-      config: config,
-      env: app.get('env')
-    });
+    config: config,
+    env: app.get('env')
   });
 };
 
 var canary = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  findCountry(req, function(country) {
-    res.render('canary.txt', {
-      Christmas: Christmas,
-      dateFormat: dateFormat,
-      country: country
-    });
+  res.render('canary.txt', {
+    Christmas: Christmas,
+    dateFormat: dateFormat,
+    country: findCountry(req)
   });
 };
 
@@ -61,54 +56,28 @@ var boards = function(req, res) {
 
 /** helpers **/
 
-var findCountry = function(req, callback) {
+var findCountry = function(req) {
   if (req.param("country"))
-    return callback(req.param("country"));
+    return req.param("country");
 
   var forwarded = req.header("X-Forwarded-For");
   var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
 
-  if (db == null) {
-    console.log("Connecting to MongoDB for first time...");
-    mongo.connect(config.mongodb, function(database) {
-      db = database; // cache database
-      lookupCountry(ip, db, callback);
-    });
-  } else
-    lookupCountry(ip, db, callback);
+  var country = geoipLookup(ip);
+  // console.log("Found country [" + country + "]");
+  return country;
 };
 
-var lookupCountry = function(ip, database, callback) {
-  database.collection("blocks", function(err, collection) {
-    if (err) {console.log("Error connecting to 'blocks'"); return "EO";}
+var geoipLookup = function(ip) {
+  // debug: French IP
+  // ip = "193.51.208.14";
 
-    // debug: French IP
-    // ip = "193.51.208.14";
+  // console.log("Looking up IP [" + ip + "]");
 
-    var intIp = ipToInteger(ip);
-
-    collection.findOne({ip_start: {"$lte": intIp}, ip_end: {"$gte": intIp}}, function(err, item) {
-      if (err) {console.log("Error finding row"); return callback("EO");}
-
-      if (item == null) {
-        // console.log("Invalid IP address (" + ip + ":" + intIp + "), returning 'US'");
-        callback("EO");
-      } else {
-        country = item.country;
-        // console.log("Found country for " + ip + ": " + country);
-        callback(country);
-      }
-    });
-  })
+  var data = countries.lookupSync(ip);
+  return data ? data.country_code : null;
 };
 
-var ipToInteger = function(ip) {
-  var pieces = ip.split(".");
-  return (parseInt(pieces[0]) * 16777216)
-    + (parseInt(pieces[1]) * 65536)
-    + (parseInt(pieces[2]) * 256)
-    + parseInt(pieces[3]);
-}
 
 /** configuration **/
 
@@ -120,11 +89,12 @@ var express = require('express'),
     Christmas = require("./public/js/christmas"); // re-use christmas.js
 require('date-utils'); // date helpers
 
+// must have downloaded a country-level geoip dat file ahead of time
+var geoip = require('geoip'),
+    countries = new geoip.Country('data/countries.dat');
 
 var app = express(),
-    config = require('./config')[app.get('env')],
-    mongo = require('./mongo'),
-    db = null; // connect on first request (why is this my best option?)
+    config = require('./config')[app.get('env')];
 
 app.configure(function(){
   app.engine('.html', require('ejs').__express);

@@ -24,7 +24,6 @@
 
     "request": "*",
 
-    "mongodb": "*",
     "csv": "*",
     "optimist": "*"
   }
