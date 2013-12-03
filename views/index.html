@@ -195,6 +195,7 @@
 
     me.flag = null;
     me.ghosts = 0;
+    me.angle = 0;
     me.alreadyArrived = false;
 
     // sockjs server endpoint
@@ -439,7 +440,8 @@
 
       others[other.id] = {
         country: other.country,
-        ghosts: 0
+        ghosts: 0,
+        angle: 0
       };
 
       log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
@@ -479,6 +481,10 @@
       me.flag = flagFor(country, "me");
       me.flag._new = true; // used to lazy-add element only if moved
       me.flag.style.zIndex = 9999; // on top of the world
+    };
+
+    var setRotate = function(elem, angle) {
+      elem.style.transform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
     };
 
     var flagFor = function(country, klass) {
@@ -565,22 +571,40 @@
     var mouseWheel = function(event) {
       event = event || window.event;
 
-      // console.log(event.wheelDelta);
-      // console.log(event.detail);
-
       // how many clicks, and in which direction
-      var notches;
+      var direction;
       if (event.wheelDelta)
-        notches = (event.wheelDelta > 0) ? 1 : -1;
+        direction = (event.wheelDelta > 0) ? 1 : -1;
       else if (event.detail && (event.detail != 0))
-        notches = (event.detail > 0) ? -1 : 1;
+        direction = (event.detail > 0) ? -1 : 1;
 
-      console.log("notches: " + notches);
-      // emit('scroll', {id: me.id});
+      console.log(event.wheelDelta);
+      console.log(event.detail);
+      console.log("direction: " + direction);
+
+      rotateFlag(me, direction);
+      emit('scroll', {id: me.id, direction: direction});
 
       if (event.preventDefault) event.preventDefault();
       return false;
     }
+
+    on('scroll', function(other) {
+      // :(
+      if (me.readonly || window._ie9) return;
+
+      rotateFlag(others[other.id], other.direction);
+    });
+
+    var rotateFlag = function(person, direction) {
+      // TODO: configurable
+      if (direction > 0)
+        person.angle += 10;
+      else
+        person.angle -= 10;
+
+      setRotate(person.flag, person.angle);
+    };
 
     var mouseClick = function(event) {
       event = event || window.event;
@@ -631,6 +655,8 @@
       elem.style.left = "" + (x - xOff) + "px";
       elem.style.top = "" + (y - yOff) + "px";
 
+      setRotate(elem, person.angle);
+
       document.body.appendChild(elem);
       setTimeout(function() {
         elem.style.width = "" + (width*2) + "px";
@@ -653,6 +679,7 @@
         return;
 
       var ghost = flagFor(person.country, "ghost");
+      setRotate(ghost, person.angle);
       document.body.appendChild(ghost);
       moveFlag(ghost, x, y);
       person.ghosts += 1;
