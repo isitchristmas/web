@@ -24,6 +24,7 @@ def checkout():
 
 def links():
   run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
+  run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
 
 def make_current():
   # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
