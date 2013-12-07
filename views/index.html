@@ -52,11 +52,6 @@
       -webkit-border-radius: 2px;
            -o-border-radius: 2px;
               border-radius: 2px;
-
-      -webkit-transition: opacity 0.5s;
-         -moz-transition: opacity 0.5s;
-           -o-transition: opacity 0.5s;
-              transition: opacity 0.5s;
     }
     .flag.ghost {opacity: 0.4;}
     .flag.me {pointer-events: none;}
@@ -81,11 +76,6 @@
       padding-right: 15px; padding-top: 5px;
       text-align: right;
       font-size: 10pt;
-
-      -webkit-transition: 0.25s linear;
-         -moz-transition: 0.25s linear;
-           -o-transition: 0.25s linear;
-              transition: 0.25s linear;
     }
   </style>
 
@@ -485,8 +475,9 @@
       me.flag.style.zIndex = 9999; // on top of the world
     };
 
+    // [m|M]ozTransform is for older Firefox versions
     var setRotate = function(elem, angle) {
-      elem.style.transform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
+      elem.style.transform = elem.style.mozTransform = elem.style.MozTransform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
     };
 
     var flagFor = function(country, klass) {
@@ -504,7 +495,7 @@
           legend.style.opacity = 1;
           legendTimeout = setTimeout(function() {
             legend.style.opacity = 0;
-          }, 30000)
+          }, 20000)
         };
       }
 
@@ -688,11 +679,8 @@
 
       // exists for 1s, fades for 1s
       setTimeout(function() {
-        ghost.style.opacity = 0;
-        setTimeout(function() {
-          ghost.parentElement.removeChild(ghost);
-          person.ghosts -= 1;
-        }, 500); // matches 1s in CSS for opacity transition
+        ghost.parentElement.removeChild(ghost);
+        person.ghosts -= 1;
       }, user.live.ghost_duration);
     };
 
