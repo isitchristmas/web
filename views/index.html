@@ -244,6 +244,12 @@
       });
     <% } %>
 
+    // reference: http://www.quirksmode.org/js/events_properties.html
+    var ieMap = {1: "left", 4: "middle", 2: "right"};
+    var elseMap = {0: "left", 1: "middle", 2: "right"};
+    var clickMap = window._ie ? ieMap : elseMap;
+    var clickbacks = {};
+
 
 /**** basic connection and event management ***/
 
@@ -571,10 +577,6 @@
       else if (event.detail && (event.detail != 0))
         direction = (event.detail > 0) ? -1 : 1;
 
-      console.log(event.wheelDelta);
-      console.log(event.detail);
-      console.log("direction: " + direction);
-
       rotateFlag(me, direction);
       emit('scroll', {id: me.id, direction: direction});
 
@@ -602,10 +604,7 @@
     var mouseClick = function(event) {
       event = event || window.event;
 
-      // reference: http://www.quirksmode.org/js/events_properties.html
-      var ieMap = {1: "left", 4: "middle", 2: "right"};
-      var elseMap = {0: "left", 1: "middle", 2: "right"};
-      var button = window._ie ? ieMap[event.button] : elseMap[event.button];
+      var button = clickMap[event.button];
 
       // :(
       if (me.readonly || window._ie9) return;
@@ -613,10 +612,7 @@
       var x = event.clientX + window.pageXOffset;
       var y = event.clientY + window.pageYOffset;
 
-      if (button == "left")
-        leftClickFlag(me, x, y);
-      else if (button == "right")
-        rightClickFlag(me, x, y);
+      clickbacks[button](me, x, y);
 
       // is quick-rebroadcast, no server processing
       emit('click', {x: x, y: y, id: me.id, button: button});
@@ -626,13 +622,10 @@
       // :(
       if (me.readonly || window._ie9) return;
 
-      if (other.button == "left")
-        leftClickFlag(others[other.id], other.x, other.y);
-      else
-        rightClickFlag(others[other.id], other.x, other.y);
+      clickbacks[other.button](others[other.id], other.x, other.y);
     });
 
-    var leftClickFlag = function(person, x, y) {
+    clickbacks.left = function(person, x, y) {
       if (!visible) return;
 
       var elem = document.createElement("div");
@@ -664,7 +657,7 @@
     };
 
     // create a translucent ghost flag
-    var rightClickFlag = function(person, x, y) {
+    clickbacks.right = function(person, x, y) {
       if (!visible) return;
 
       // enforce ghost cap
@@ -682,6 +675,11 @@
         ghost.parentElement.removeChild(ghost);
         person.ghosts -= 1;
       }, user.live.ghost_duration);
+    };
+
+    clickbacks.middle = function(person, x, y) {
+      person.angle = 0;
+      setRotate(person.flag, 0);
     };
 
 
