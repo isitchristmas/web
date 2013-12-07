@@ -181,7 +181,9 @@
         chat: "true",
 
         ghost_duration: 2000,
-        ghost_max: 10
+        ghost_max: 10,
+
+
       }
     };
 
@@ -281,8 +283,10 @@
     var rawSend = function(message) {socket.send(message)};
     var limiters = {
       chat: ratelimit(rawSend, 500),
-      click: ratelimit(rawSend, 20),
-      motion: ratelimitMouse(rawSend) // dynamic
+      motion: ratelimitLive(rawSend, 'mouse_rate'),
+
+      // covers click, scroll, anything else
+      default: ratelimit(rawSend, 20)
     };
 
     function emit(event, data) {
@@ -294,7 +298,7 @@
       data = data || {};
       data._event = event;
       var message = JSON.stringify(data);
-      (limiters[event] || rawSend)(message);
+      (limiters[event] || limiters.default)(message);
     }
 
 
@@ -772,11 +776,11 @@
     }
 
     // special version of ratelimit that looks to live-changeable value
-    function ratelimitMouse(fn) {
+    function ratelimitLive(fn, live) {
       var last = (new Date()).getTime();
       return (function() {
         var now = (new Date()).getTime();
-        if ((now - last) > user.live.mouse_rate) {
+        if ((now - last) > user.live[live]) {
           last = now;
           return fn.apply(null, arguments);
         }
