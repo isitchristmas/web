@@ -596,11 +596,12 @@
     });
 
     var rotateFlag = function(person, direction) {
-      // TODO: configurable
+      var increment = 15;
+
       if (direction > 0)
-        person.angle += 10;
+        person.angle += increment;
       else
-        person.angle -= 10;
+        person.angle -= increment;
 
       setRotate(person.flag, person.angle);
     };
