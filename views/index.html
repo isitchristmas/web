@@ -704,7 +704,7 @@
     var said = false;
     var chatsSince = 0;
 
-    var sayMyName = function() {
+    var myName = function() {
       var hello = "%cYour name is ";
       hello += "%c" + me.name;
       hello += "%c. Hello, ";
@@ -715,7 +715,7 @@
 
     var welcomeUser = function() {
       if (user.log.system) {
-        sayMyName();
+        myName();
         var spam = "%cPlease";
         spam += "%c don't spam and ruin the chat. I put a lot of work into this!";
         console.log(spam, styles.please, styles.spam);
@@ -756,7 +756,7 @@
 
     on('rename', function(data) {
       me.name = data.name;
-      if (user.log.system) sayMyName();
+      if (user.log.system) myName();
     });
 
     on('chat', function(data) {
