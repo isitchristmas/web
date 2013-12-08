@@ -488,6 +488,7 @@
 
     // [m|M]ozTransform is for older Firefox versions
     var setRotate = function(elem, angle) {
+      if (!elem) return;
       elem.style.transform = elem.style.mozTransform = elem.style.MozTransform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
     };
 
@@ -696,21 +697,42 @@
     var said = false;
     var chatsSince = 0;
 
+    var sayMyName = function() {
+      var hello = "%cYour name is ";
+      hello += "%c" + me.name;
+      hello += "%c. Hello, ";
+      hello += "%c" + me.name;
+      hello += "%c.";
+      console.log(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
+    }
+
     var welcomeUser = function() {
       if (user.log.system) {
-        var hello = "%c= Your name is ";
-        hello += "%c" + me.name;
-        hello += "%c. Hello, ";
-        hello += "%c" + me.name;
-        hello += "%c.";
-        console.log(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
+        sayMyName();
+        var spam = "%cPlease";
+        spam += "%c don't spam and ruin the chat. I put a lot of work into this!";
+        console.log(spam, styles.please, styles.spam);
+        console.log(" ");
 
-        var help = "%c= ";
-        help += "say(\"message\")";
-        help += " to speak, ";
-        help += "rename(\"Name\")";
-        help += " to change names."
-        console.log(help, styles.system);
+        console.log("%cCommands:", styles.help);
+        var help1 = "%csay(\"message\")";
+        help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
+        var help2 = "%crename(\"Name\")";
+        help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
+        var help3 = "%chelp%c - See this message again.";
+        // help4 = "%cwhat%c - What??";
+        console.log(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
+        console.log(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
+        console.log(help3, styles.help_bold, styles.help);
+        // console.log(help4, styles.help_bold, styles.help);
+
+        return ""; // when used via 'help'
+      }
+    };
+
+    var whatIsThis = function() {
+      if (user.log.system) {
+        console.log("This is nonsense by https://twitter.com/konklone")
       }
     };
 
@@ -733,7 +755,7 @@
       me.name = data.name;
 
       if (user.log.system)
-        console.log("%c= Your name is now: %c" + me.name, styles.system, styles.chat_my_name);
+        sayMyName();
     });;
 
     on('chat', function(data) {
@@ -900,6 +922,10 @@
       chat_name: "color: #006600",
       chat_my_name: "color: #006600; font-weight: bold",
       chat_message: "color: #444444",
+      spam: "color: #336699", // #990000 for urgency
+      please: "color: #336699; font-weight: bold",
+      help: "color: #630053",
+      help_bold: "color: #630053; font-weight: bold",
       // how is this possible
       chat_flag: function(country) {
         return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: cover; border: 1px solid #d6d6d6";
@@ -909,6 +935,15 @@
 
 
 /**** misc and browser-specific fixes **/
+
+    // if someone types just 'help', display help text.
+    // side note: do people know you can do this??
+    var help = function() {};
+    help.toString = welcomeUser;
+
+    // okay
+    var candy = function() {};
+    candy.toString = function() {window.location = "http://candybox2.net/";}
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
