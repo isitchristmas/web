@@ -163,7 +163,8 @@
         debug: <%= config.log.debug %>, // you know
 
         life: true,  // life and death events
-        public: true // messages for the public
+        chat: true,  // chat messages
+        system: true // messages from the system for the public
       },
 
       retry: {
@@ -696,8 +697,21 @@
     var chatsSince = 0;
 
     var welcomeUser = function() {
-      log.public("= Your name is " + me.name + ". Hello, " + me.name + ".");
-      log.public("= say(\"message\") to speak, rename(\"Name\") to change names.");
+      if (user.log.system) {
+        var hello = "%c= Your name is ";
+        hello += "%c" + me.name;
+        hello += "%c. Hello, ";
+        hello += "%c" + me.name;
+        hello += "%c.";
+        console.log(hello, colors.system, colors.chat_name, colors.system, colors.chat_name, colors.system);
+
+        var help = "%c= ";
+        help += "say(\"message\")";
+        help += " to speak, ";
+        help += "rename(\"Name\")";
+        help += " to change names."
+        console.log(help, colors.system);
+      }
     };
 
     var say = function(message) {
@@ -718,7 +732,8 @@
     on('rename', function(data) {
       me.name = data.name;
 
-      log.public("= Your name: " + me.name);
+      if (user.log.system)
+        console.log("%c= Your name is now: %c" + me.name, colors.system, colors.chat_name);
     });;
 
     on('chat', function(data) {
@@ -730,7 +745,14 @@
         }
       }
 
-      log.public("[" + data.country + "](" + data.id.slice(0,5) + ") " + data.name + ": " + data.message);
+      // avoid using logging system here, to do complex coloring
+      if (user.log.chat) {
+        var message = "%c[" + data.country + "](" + data.id.slice(0,5) + ") ";
+        message += "%c" + data.name + ": ";
+        message += "%c" + data.message;
+
+        console.log(message, colors.debug, colors.chat_name, colors.chat_message);
+      }
     });
 
 
@@ -748,16 +770,16 @@
     })
 
     command('blast', function(message) {
-      log.public("= Server message: " + message);
+      log.system("= Server message: " + message);
     })
 
     command('reconnect', function() {
-      log.public("= Server asked us to reconnect, closing connection");
+      log.system("= Server asked us to reconnect, closing connection");
       socket.close();
     });
 
     command('refresh', function() {
-      log.public("= Server asked us to refresh, whooaaaaa");
+      log.system("= Server asked us to refresh, whooaaaaa");
       window.location = window.location;
     })
 
@@ -830,7 +852,7 @@
         flagFade(nextXmas);
 
         christmasTimer = setTimeout(function() {
-          log.public("Christmas!");
+          log.system("Christmas!");
           updateChristmas(true);
         }, (nextXmas - Date.now()));
       }
@@ -840,7 +862,7 @@
         flagFade(afterXmas);
 
         christmasEndTimer = setTimeout(function() {
-          log.public("Not Christmas.");
+          log.system("Not Christmas.");
           updateChristmas(false);
         }, (afterXmas - Date.now()));
       }
@@ -849,14 +871,32 @@
 
 /**** minimalist logging system **/
 
-    var log = function(message, severity) {
-      if (user.log[severity]) console.log(message);
+    var log = function(message, severity, colors) {
+      if (user.log[severity])
+        console.log(message, colors);
     };
-    log.debug = function(message) {log(message, "debug")};
-    log.info = function(message) {log(message, "info")};
-    log.join = function(message) {log(message, "join")};
-    log.public = function(message) {log(message, "public")};
-    log.life = function(message) {log(message, "life")};
+
+    log.colored = function(message, severity) {
+      log("%c" + message, severity, colors[severity]);
+    };
+
+    log.debug = function(message) {log.colored(message, "debug")};
+    log.info = function(message) {log.colored(message, "info")};
+    log.join = function(message) {log.colored(message, "join")};
+    log.system = function(message) {log.colored(message, "system")};
+    log.life = function(message) {log.colored(message, "life")};
+    // log.chat = function(message) {log.colored(message, "chat")};
+
+    var cc = function(c) {return "color: " + c};
+    var colors = {
+      debug: cc("#999999"),
+      join: cc("#777777"),
+      info: cc("#777777"),
+      system: cc("#006611"),
+      life: cc("#ff0000"),
+      chat_name: cc("#444444"),
+      chat_message: cc("#336699")
+    }
 
 
 /**** misc and browser-specific fixes **/
