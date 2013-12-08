@@ -703,7 +703,7 @@
         hello += "%c. Hello, ";
         hello += "%c" + me.name;
         hello += "%c.";
-        console.log(hello, styles.system, styles.chat_name, styles.system, styles.chat_name, styles.system);
+        console.log(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
 
         var help = "%c= ";
         help += "say(\"message\")";
@@ -733,7 +733,7 @@
       me.name = data.name;
 
       if (user.log.system)
-        console.log("%c= Your name is now: %c" + me.name, styles.system, styles.chat_name);
+        console.log("%c= Your name is now: %c" + me.name, styles.system, styles.chat_my_name);
     });;
 
     on('chat', function(data) {
@@ -747,13 +747,13 @@
 
       // avoid using logging system here, to do complex coloring
       if (user.log.chat) {
-        var message = "%c" + data.country + " ";
-        message += "%c" + data.name + ": ";
-        message += "%c" + data.message;
+        var message = "%c   ";
+        message += "%c " + data.name + ":";
+        message += "%c " + data.message;
 
         console.log(message,
-          styles.debug,
-          styles.chat_name + (data.id == me.id ? "; font-weight: bold" : ""),
+          styles.chat_flag(data.country),
+          (data.id == me.id ? styles.chat_my_name : styles.chat_name),
           styles.chat_message);
       }
     });
@@ -896,8 +896,14 @@
       info: "color: #444444",
       system: "color: #336699",
       life: "color: #ff0000",
+      chat_country: "color: #999999",
       chat_name: "color: #006600",
+      chat_my_name: "color: #006600; font-weight: bold",
       chat_message: "color: #444444",
+      // how is this possible
+      chat_flag: function(country) {
+        return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: cover; border: 1px solid #d6d6d6";
+      },
       answer: "color: black; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
     }
 
