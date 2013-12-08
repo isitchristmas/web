@@ -727,11 +727,12 @@
         var help2 = "%crename(\"Name\")";
         help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
         var help3 = "%chelp%c - See this message again.";
-        var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Off by default.)";
+        var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
+        help4 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
         console.log(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
         console.log(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
         console.log(help3, styles.help_bold, styles.help);
-        console.log(help4, styles.help_bold, styles.help);
+        console.log(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
 
         return " "; // when used via 'help'
       }
