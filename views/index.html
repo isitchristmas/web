@@ -448,7 +448,9 @@
         angle: 0
       };
 
-      log.join("[" + other.id + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")");
+      if (user.log.join) {
+        console.log("%c   %c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")", styles.flag(other.country), styles.join);
+      }
     };
 
     // the creation of an element per-user is only sparked by that user's mouse motion.
@@ -475,7 +477,9 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      log.join("[" + id + "] Departed from " + country + " (" + Christmas.countries[country].name + ")");
+      if (user.log.join) {
+        console.log("%c   %c [" + id.slice(8) + "] Departed from " + country + " (" + Christmas.countries[country].name + ")", styles.flag(country), styles.join);
+      }
     };
 
 
@@ -721,13 +725,13 @@
         var help2 = "%crename(\"Name\")";
         help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
         var help3 = "%chelp%c - See this message again.";
-        // help4 = "%cwhat%c - What??";
+        var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Off by default.)";
         console.log(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
         console.log(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
         console.log(help3, styles.help_bold, styles.help);
-        // console.log(help4, styles.help_bold, styles.help);
+        console.log(help4, styles.help_bold, styles.help);
 
-        return ""; // when used via 'help'
+        return " "; // when used via 'help'
       }
     };
 
@@ -779,7 +783,7 @@
 
         console.log.apply(console, [
           message,
-          styles.chat_flag(data.country),
+          styles.flag(data.country),
           (data.id == me.id ? styles.chat_my_name : styles.chat_name),
           styles.chat_message
         ].concat(emojis));
@@ -923,6 +927,7 @@
       join: "color: #999999",
       info: "color: #444444",
       system: "color: #336699",
+      system_bold: "color: #336699; font-weight: bold",
       life: "color: #ff0000",
       chat_country: "color: #999999",
       chat_name: "color: #006600",
@@ -933,7 +938,7 @@
       help: "color: #630053",
       help_bold: "color: #630053; font-weight: bold",
       // how is this possible
-      chat_flag: function(country) {
+      flag: function(country) {
         return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: cover; border: 1px solid #d6d6d6";
       },
       emoji: function(emoji) {
@@ -950,18 +955,18 @@
     var help = function() {};
     help.toString = welcomeUser;
 
-    var debug = function() {};
-    debug.toString = function() {
-      if (user.log)
-      user.log.debug = !user.log.debug;
+    var traffic = function() {};
+    traffic.toString = function() {
       user.log.join = !user.log.join;
-      user.log.info = !user.log.info;
+      console.log("%cTurned traffic messages %c" + (user.log.join ? "on" : "off") + "%c.", styles.system, styles.system_bold, styles.system);
+      return " ";
     }
 
     // candy
     var candy = function() {};
     candy.toString = function() {window.location = "http://candybox2.net/";}
 
+    // convenience for functions so they don't say 'undefined' in the console
     var blank = function() {
       var nothing = function() {};
       nothing.toString = function() {return " "};
