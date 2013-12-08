@@ -852,7 +852,11 @@
         flagFade(nextXmas);
 
         christmasTimer = setTimeout(function() {
-          log.system("Christmas!");
+          var message = "%cC" + "%cH" + "%cR" + "%cI" +
+            "%cS" + "%cT" + "%cM" + "%cA" + "%cS" + "%c!";
+          console.log(message, colors.red, colors.green,
+            colors.red, colors.green, colors.red, colors.green,
+            colors.red, colors.green, colors.red, colors.green);
           updateChristmas(true);
         }, (nextXmas - Date.now()));
       }
@@ -885,17 +889,19 @@
     log.join = function(message) {log.colored(message, "join")};
     log.system = function(message) {log.colored(message, "system")};
     log.life = function(message) {log.colored(message, "life")};
-    // log.chat = function(message) {log.colored(message, "chat")};
+    // chat and christmas use own custom logging
 
     var cc = function(c) {return "color: " + c};
     var colors = {
       debug: cc("#999999"),
       join: cc("#777777"),
       info: cc("#777777"),
-      system: cc("#006611"),
+      system: cc("#336699"),
       life: cc("#ff0000"),
-      chat_name: cc("#444444"),
-      chat_message: cc("#336699")
+      chat_name: cc("#006600"),
+      chat_message: cc("#444444"),
+      red: cc("red"),
+      green: cc("green")
     }
 
 
