@@ -737,11 +737,13 @@
 
       said = true;
       emit('chat', {message: message});
+      return blank();
     };
 
     var rename = function(name) {
       if (!name) return;
       emit('rename', {name: name})
+      return blank();
     };
 
     on('rename', function(data) {
@@ -949,6 +951,12 @@
     // candy
     var candy = function() {};
     candy.toString = function() {window.location = "http://candybox2.net/";}
+
+    var blank = function() {
+      var nothing = function() {};
+      nothing.toString = function() {return " "};
+      return nothing;
+    }
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
