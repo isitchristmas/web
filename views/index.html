@@ -151,6 +151,7 @@
   <script src="/js/browser.js"></script>
   <script src="/js/css.js"></script>
   <script src="/js/sockjs.min.js"></script>
+  <script src="/js/emoji.js"></script>
   <script type="text/javascript">
 
     var socket;
@@ -730,12 +731,6 @@
       }
     };
 
-    var whatIsThis = function() {
-      if (user.log.system) {
-        console.log("This is nonsense by https://twitter.com/konklone")
-      }
-    };
-
     var say = function(message) {
       if (!message) return;
       if (user.live.chat != "true") return;
@@ -744,19 +739,15 @@
       emit('chat', {message: message});
     };
 
-    // TODO: move this server-side
     var rename = function(name) {
       if (!name) return;
-
       emit('rename', {name: name})
     };
 
     on('rename', function(data) {
       me.name = data.name;
-
-      if (user.log.system)
-        sayMyName();
-    });;
+      if (user.log.system) sayMyName();
+    });
 
     on('chat', function(data) {
       if (!said) {
@@ -771,12 +762,23 @@
       if (user.log.chat) {
         var message = "%c   ";
         message += "%c " + data.name + ":";
+
+        var emojis = [];
+        while (found = Emoji.regexp.exec(data.message)) {
+          emojis.push(styles.emoji(found[1]));
+          emojis.push(styles.chat_message)
+        };
+        if (emojis.length > 0)
+          data.message = data.message.replace(Emoji.regexp, "%c  %c");
+
         message += "%c " + data.message;
 
-        console.log(message,
+        console.log.apply(console, [
+          message,
           styles.chat_flag(data.country),
           (data.id == me.id ? styles.chat_my_name : styles.chat_name),
-          styles.chat_message);
+          styles.chat_message
+        ].concat(emojis));
       }
     });
 
@@ -929,6 +931,9 @@
       // how is this possible
       chat_flag: function(country) {
         return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: cover; border: 1px solid #d6d6d6";
+      },
+      emoji: function(emoji) {
+        return "background-image: url(\"http://localhost:2000/emojis/" + emoji + ".png\"); background-size: cover";
       },
       answer: "color: black; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
     }
