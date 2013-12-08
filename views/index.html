@@ -703,14 +703,14 @@
         hello += "%c. Hello, ";
         hello += "%c" + me.name;
         hello += "%c.";
-        console.log(hello, colors.system, colors.chat_name, colors.system, colors.chat_name, colors.system);
+        console.log(hello, styles.system, styles.chat_name, styles.system, styles.chat_name, styles.system);
 
         var help = "%c= ";
         help += "say(\"message\")";
         help += " to speak, ";
         help += "rename(\"Name\")";
         help += " to change names."
-        console.log(help, colors.system);
+        console.log(help, styles.system);
       }
     };
 
@@ -733,7 +733,7 @@
       me.name = data.name;
 
       if (user.log.system)
-        console.log("%c= Your name is now: %c" + me.name, colors.system, colors.chat_name);
+        console.log("%c= Your name is now: %c" + me.name, styles.system, styles.chat_name);
     });;
 
     on('chat', function(data) {
@@ -747,11 +747,14 @@
 
       // avoid using logging system here, to do complex coloring
       if (user.log.chat) {
-        var message = "%c[" + data.country + "](" + data.id.slice(0,5) + ") ";
+        var message = "%c" + data.country + " ";
         message += "%c" + data.name + ": ";
         message += "%c" + data.message;
 
-        console.log(message, colors.debug, colors.chat_name, colors.chat_message);
+        console.log(message,
+          styles.debug,
+          styles.chat_name + (data.id == me.id ? "; font-weight: bold" : ""),
+          styles.chat_message);
       }
     });
 
@@ -842,7 +845,7 @@
       nextXmas = nextXmas.getTime();
 
       var afterXmas = nextXmas + (24 * 60 * 60 * 1000); // 1 day later
-      // var afterXmas = nextXmas + (10 * 1000); // 10 seconds later
+      // var afterXmas = nextXmas + (5 * 1000); // 10 seconds later
 
       // console.log("Christmas set for: " + new Date(nextXmas));
       // console.log("Christmas ends: " + new Date(afterXmas));
@@ -852,11 +855,7 @@
         flagFade(nextXmas);
 
         christmasTimer = setTimeout(function() {
-          var message = "%cC" + "%cH" + "%cR" + "%cI" +
-            "%cS" + "%cT" + "%cM" + "%cA" + "%cS" + "%c!";
-          console.log(message, colors.red, colors.green,
-            colors.red, colors.green, colors.red, colors.green,
-            colors.red, colors.green, colors.red, colors.green);
+          console.log("%c" + Christmas.yes(country), styles.answer);
           updateChristmas(true);
         }, (nextXmas - Date.now()));
       }
@@ -866,7 +865,7 @@
         flagFade(afterXmas);
 
         christmasEndTimer = setTimeout(function() {
-          log.system("Not Christmas.");
+          console.log("%c" + Christmas.no(country), styles.answer);
           updateChristmas(false);
         }, (afterXmas - Date.now()));
       }
@@ -875,33 +874,31 @@
 
 /**** minimalist logging system **/
 
-    var log = function(message, severity, colors) {
+    var log = function(message, severity, styles) {
       if (user.log[severity])
-        console.log(message, colors);
+        console.log(message, styles);
     };
 
-    log.colored = function(message, severity) {
-      log("%c" + message, severity, colors[severity]);
+    log.styled = function(message, severity) {
+      log("%c" + message, severity, styles[severity]);
     };
 
-    log.debug = function(message) {log.colored(message, "debug")};
-    log.info = function(message) {log.colored(message, "info")};
-    log.join = function(message) {log.colored(message, "join")};
-    log.system = function(message) {log.colored(message, "system")};
-    log.life = function(message) {log.colored(message, "life")};
+    log.debug = function(message) {log.styled(message, "debug")};
+    log.info = function(message) {log.styled(message, "info")};
+    log.join = function(message) {log.styled(message, "join")};
+    log.system = function(message) {log.styled(message, "system")};
+    log.life = function(message) {log.styled(message, "life")};
     // chat and christmas use own custom logging
 
-    var cc = function(c) {return "color: " + c};
-    var colors = {
-      debug: cc("#999999"),
-      join: cc("#999999"),
-      info: cc("#444444"),
-      system: cc("#336699"),
-      life: cc("#ff0000"),
-      chat_name: cc("#006600"),
-      chat_message: cc("#444444"),
-      red: cc("red"),
-      green: cc("green")
+    var styles = {
+      debug: "color: #999999",
+      join: "color: #999999",
+      info: "color: #444444",
+      system: "color: #336699",
+      life: "color: #ff0000",
+      chat_name: "color: #006600",
+      chat_message: "color: #444444",
+      answer: "color: black; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
     }
 
 
