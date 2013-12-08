@@ -739,6 +739,8 @@
       emit('chat', {message: message});
       return blank();
     };
+    // convenience - handle all caps typos
+    var Say = sAy = saY = SAy = SaY = sAY = SAY = say;
 
     var rename = function(name) {
       if (!name) return;
@@ -947,6 +949,14 @@
     // side note: do people know you can do this??
     var help = function() {};
     help.toString = welcomeUser;
+
+    var debug = function() {};
+    debug.toString = function() {
+      if (user.log)
+      user.log.debug = !user.log.debug;
+      user.log.join = !user.log.join;
+      user.log.info = !user.log.info;
+    }
 
     // candy
     var candy = function() {};
