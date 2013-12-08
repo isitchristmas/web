@@ -966,9 +966,6 @@
     if (window.addEventListener)
       window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
 
-    // IE9 fix: XDR does not allow http->https communication, fall back to http
-    if (window._ie9) url = url.replace("https", "http");
-
     // prevent click-drags from "grabbing" image
     document.body.onmousedown = function(event) {
       event = event || window.event;
