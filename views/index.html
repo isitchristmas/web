@@ -603,6 +603,8 @@
     });
 
     var rotateFlag = function(person, direction) {
+      if (!person) return;
+
       var increment = 15;
 
       if (direction > 0)
