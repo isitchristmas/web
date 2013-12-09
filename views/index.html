@@ -674,6 +674,7 @@
     // create a translucent ghost flag
     clickbacks.right = function(person, x, y) {
       if (!visible) return;
+      if (!person) return;
 
       // enforce ghost cap
       if (person.ghosts >= user.live.ghost_max)
@@ -688,7 +689,7 @@
       // exists for 1s, fades for 1s
       setTimeout(function() {
         ghost.parentElement.removeChild(ghost);
-        person.ghosts -= 1;
+        if (person) person.ghosts -= 1;
       }, user.live.ghost_duration);
     };
 
