@@ -255,10 +255,7 @@
       });
     <% } %>
 
-    // reference: http://www.quirksmode.org/js/events_properties.html
-    var ieMap = {1: "left", 4: "middle", 2: "right"};
-    var elseMap = {0: "left", 1: "middle", 2: "right"};
-    var clickMap = window._ie ? ieMap : elseMap;
+    var clickMap = {0: "left", 1: "middle", 2: "right"};
     var clickbacks = {};
 
 
