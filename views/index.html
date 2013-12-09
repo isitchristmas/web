@@ -922,16 +922,22 @@
     // any extra arguments are passed in to console.log,
     // assuming log formatting is enabled.
     var log = function(severity, message) {
-      if (user.log[severity]) {
-        if (plainConsole)
-          console.log(message.replace(/%c/gi, ''));
-        else {
-          var args = Array.prototype.slice.call(arguments, [2]);
-          if (args.length > 0)
-            console.log.apply(console, [message].concat(args));
-          else
-            console.log(message);
-        }
+      if (!user.log[severity]) return;
+
+      // if in plain-text mode, strip out %c and don't pass on extra args
+      if (plainConsole)
+        console.log(message.replace(/%c/gi, ''));
+
+      else {
+
+        // if any args beyond severity and message, pass them on
+        var args = Array.prototype.slice.call(arguments, [2]);
+        if (args.length > 0)
+          console.log.apply(console, [message].concat(args));
+
+        // otherwise, assume plain text bare message
+        else
+          console.log(message);
       }
     };
 
