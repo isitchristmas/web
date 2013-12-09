@@ -451,9 +451,8 @@
         angle: 0
       };
 
-      if (user.log.join) {
-        console.log("%c   %c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")", styles.flag(other.country), styles.join);
-      }
+      var flag = plainConsole ? "[" + other.country + "]" : "%c   ";
+      log.join(flag + "%c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")", styles.flag(other.country), styles.join);
     };
 
     // the creation of an element per-user is only sparked by that user's mouse motion.
@@ -480,9 +479,8 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      if (user.log.join) {
-        console.log("%c   %c [" + id.slice(8) + "] Departed from " + country + " (" + Christmas.countries[country].name + ")", styles.flag(country), styles.join);
-      }
+      var flag = plainConsole ? "[" + country + "]" : "%c   ";
+      log.join(flag + "%c [" + id.slice(8) + "] Departed from " + country + " (" + Christmas.countries[country].name + ")", styles.flag(country), styles.join);
     };
 
 
@@ -713,17 +711,17 @@
       hello += "%c. Hello, ";
       hello += "%c" + me.name;
       hello += "%c.";
-      console.log(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
+      log.system(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
     }
 
     var welcomeUser = function() {
       if (user.log.system) {
         myName();
         var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
-        console.log(spam, styles.please, styles.spam);
-        console.log(" ");
+        log.system(spam, styles.please, styles.spam);
+        log.system(" ");
 
-        console.log("%cCommands:", styles.help);
+        log.system("%cCommands:", styles.help);
         var help1 = "%csay(\"message\")";
         help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
         var help2 = "%crename(\"Name\")";
@@ -731,10 +729,10 @@
         var help3 = "%chelp%c - See this message again.";
         var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
         help4 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
-        console.log(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
-        console.log(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
-        console.log(help3, styles.help_bold, styles.help);
-        console.log(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
+        log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
+        log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
+        log.system(help3, styles.help_bold, styles.help);
+        log.system(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
 
         return " "; // when used via 'help'
       }
@@ -773,20 +771,27 @@
 
       // avoid using logging system here, to do complex coloring
       if (user.log.chat) {
-        var message = "%c   ";
+        var message = "";
+        if (plainConsole)
+          message += "[" + data.country + "]";
+        else
+          message += "%c   ";
+
         message += "%c " + data.name + ":";
 
         var emojis = [];
-        while (found = Emoji.regexp.exec(data.message)) {
-          emojis.push(styles.emoji(found[1]));
-          emojis.push(styles.chat_message)
-        };
-        if (emojis.length > 0)
-          data.message = data.message.replace(Emoji.regexp, "%c  %c");
+        if (!plainConsole) {
+          while (found = Emoji.regexp.exec(data.message)) {
+            emojis.push(styles.emoji(found[1]));
+            emojis.push(styles.chat_message)
+          };
+          if (emojis.length > 0)
+            data.message = data.message.replace(Emoji.regexp, "%c  %c");
+        }
 
         message += "%c " + data.message;
 
-        console.log.apply(console, [
+        log.chat.apply(log, [
           message,
           styles.flag(data.country),
           (data.id == me.id ? styles.chat_my_name : styles.chat_name),
@@ -892,7 +897,7 @@
         flagFade(nextXmas);
 
         christmasTimer = setTimeout(function() {
-          console.log("%c" + Christmas.yes(country), styles.answer);
+          log.system("%c" + Christmas.yes(country), styles.answer);
           updateChristmas(true);
         }, (nextXmas - Date.now()));
       }
@@ -902,7 +907,7 @@
         flagFade(afterXmas);
 
         christmasEndTimer = setTimeout(function() {
-          console.log("%c" + Christmas.no(country), styles.answer);
+          log.system("%c" + Christmas.no(country), styles.answer);
           updateChristmas(false);
         }, (afterXmas - Date.now()));
       }
@@ -911,20 +916,56 @@
 
 /**** minimalist logging system **/
 
-    var log = function(message, severity, styles) {
-      if (user.log[severity])
-        console.log(message, styles);
+    // (this logging system got a lot less minimalist once I
+    // waded into using %c for styling)
+
+    // any extra arguments are passed in to console.log,
+    // assuming log formatting is enabled.
+    var log = function(severity, message) {
+      if (user.log[severity]) {
+        if (plainConsole)
+          console.log(message.replace(/%c/gi, ''));
+        else {
+          var args = Array.prototype.slice.call(arguments, [2]);
+          if (args.length > 0)
+            console.log.apply(console, [message].concat(args));
+          else
+            console.log(message);
+        }
+      }
     };
 
-    log.styled = function(message, severity) {
-      log("%c" + message, severity, styles[severity]);
-    };
+    // generate little log.debug, log.info functions, etc.
+    var severities = ["debug", "info", "join", "system", "life", "chat", "public"];
+    log.convenience = function(severity) {
+      return function(message) {
+        var args = Array.prototype.slice.call(arguments, [1]);
 
-    log.debug = function(message) {log.styled(message, "debug")};
-    log.info = function(message) {log.styled(message, "info")};
-    log.join = function(message) {log.styled(message, "join")};
-    log.system = function(message) {log.styled(message, "system")};
-    log.life = function(message) {log.styled(message, "life")};
+        // if no style given, default to any per-severity style
+        if (args.length == 0 && (styles[severity])) {
+          message = "%c" + message;
+          args = [styles[severity]];
+        }
+
+        log.apply(window, [severity, message].concat(args));
+      }
+    }
+    severities.forEach(function(severity) {
+      log[severity] = log.convenience(severity);
+    });
+
+    // log.debug = function(message) {
+    //   log.apply(window, ["debug", message, styles[severity])
+    // };
+    // log.info = function(message) {log.styled("info", message)};
+
+    // log.join = function(message) {
+    //   log(message, "join")
+    //
+    // };
+
+    // log.system = function(message) {log.styled(message, "system")};
+    // log.life = function(message) {log.styled(message, "life")};
     // chat and christmas use own custom logging
 
     var styles = {
@@ -963,7 +1004,7 @@
     var traffic = function() {};
     traffic.toString = function() {
       user.log.join = !user.log.join;
-      console.log("%cTurned traffic messages %c" + (user.log.join ? "on" : "off") + "%c.", styles.system, styles.system_bold, styles.system);
+      log.system("%cTurned traffic messages %c" + (user.log.join ? "on" : "off") + "%c.", styles.system, styles.system_bold, styles.system);
       return " ";
     }
 
