@@ -184,9 +184,7 @@
         chat: "true",
 
         ghost_duration: 2000,
-        ghost_max: 10,
-
-
+        ghost_max: 10
       }
     };
 
@@ -208,6 +206,10 @@
 
     // whether to force into readonly mode (see mice, but no sending of own action)
     var force_readonly = <%= req.param("readonly") || "false" %>;
+
+    // whether we need to force chat to stay plain-text (no styles).
+    // right now, the only situation that's relevant is IE9 and IE10.
+    var plainConsole = <%= (req.param("console") == "plain") || "false" %> || !!window._ie;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
@@ -971,6 +973,9 @@
 
     // convenience for functions so they don't say 'undefined' in the console
     var blank = function() {
+      // IE doesn't like this method.
+      if (window._ie) return undefined;
+
       var nothing = function() {};
       nothing.toString = function() {return " "};
       return nothing;
