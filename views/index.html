@@ -642,6 +642,7 @@
 
     clickbacks.left = function(person, x, y) {
       if (!visible) return;
+      if (!person) return;
 
       var elem = document.createElement("div");
 
