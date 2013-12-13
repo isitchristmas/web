@@ -30,7 +30,7 @@ Missing translations for the list of countries below.
 File tickets at: https://github.com/isitchristmas/web/issues
 
   Afghanistan, Aland Islands, Albania, Algeria, American Samoa, Andorra, Angola, Anguilla,
-  Antarctica, Antigua and Barbuda, Armenia, Aruba, Asia/Pacific Region,
+  Antarctica, Antigua and Barbuda, Aruba, Asia/Pacific Region,
   Azerbaijan, Bahamas, Bahrain, Bangladesh, Belarus, Benin, Bhutan, Bonaire,
   Saint Eustatius and Saba, Bosnia and Herzegovina, Botswana, Bouvet Island,
   British Indian Ocean Territory, Brunei Darussalam, Burkina Faso, Burundi, Cambodia,
@@ -133,6 +133,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "BB": "YES", // Barbado
       "BZ": "YES", // Belize
       "UA": "ТАК", // Ukraine - https://github.com/isitchristmas/web/issues/67
+      "AM": "ԱՅՈ", // Armenia - https://github.com/isitchristmas/web/issues/71
       "KY": "YES", // Cayman Islands
       "NI": "SÍ", // Nicaragua
       "PY": "HÊE", // Paraguay
@@ -218,6 +219,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "BB": "NO", // Barbado
       "BZ": "NO", // Belize
       "UA": "НІ", // Ukraine - https://github.com/isitchristmas/web/issues/67
+      "AM": "ՈՉ", // Armenia - https://github.com/isitchristmas/web/issues/71
       "KY": "NO", // Cayman Islands
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
