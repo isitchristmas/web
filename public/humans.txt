@@ -21,6 +21,7 @@ Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
   github.com/ebroder
   github.com/quanganhdo
   github.com/andrederegle
+  github.com/shh-
 
 Compiled from github.com/isitchristmas/web
 
