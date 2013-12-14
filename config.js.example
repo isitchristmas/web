@@ -14,12 +14,6 @@ module.exports = {
       join: true,
       info: true,
       debug: false
-    },
-
-    mongodb: {
-      port: 27017,
-      host: "localhost",
-      database: "isitchristmas"
     }
   },
 
@@ -35,16 +29,6 @@ module.exports = {
       join: false,
       info: false,
       debug: false
-    },
-
-    mongodb: {
-      port: 27017,
-      host: "",
-      database: "",
-
-      // will use authentication if username and password are non-blank
-      username: "",
-      password: ""
     }
   },
 }
