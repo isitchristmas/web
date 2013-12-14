@@ -40,19 +40,6 @@ var canary = function(req, res) {
   });
 };
 
-// static view uses same admin password to grab/render snapshot from admin app
-var boards = function(req, res) {
-  if (req.param("admin") != config.admin.password)
-    res.status(403).send("Huh?");
-  else {
-    res.render('boards', {
-      req: req,
-      config: config
-    });
-  }
-};
-
-
 
 /** helpers **/
 
@@ -112,7 +99,6 @@ app.configure('development', function() {app.use(express.errorHandler())});
 app.get('/', index);
 app.get('/rss.xml', rss);
 app.get('/canary.txt', canary);
-app.get('/boards', boards);
 
 
 var startServer = function() {
