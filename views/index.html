@@ -435,14 +435,12 @@
     });
 
     on('ping', function(data) {
-      log.debug("Snapshot ping.");
+      log.debug("Ping.");
       if (me.flag) {
         var x = parseInt(me.flag.style.left);
         var y = parseInt(me.flag.style.top);
-        if (!isNaN(x) && !isNaN(y)) {
+        if (!isNaN(x) && !isNaN(y))
           emit("pong", {x: x, y: y});
-          log.debug("Snapshot pong: " + x + "," + y);
-        }
       }
     })
 
