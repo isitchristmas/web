@@ -6,12 +6,6 @@ module.exports = {
     port: 2000,
     visible: true,
 
-    // password to admin app (snapshot, streamer)
-    admin: {
-      host: "http://localhost:4000",
-      password: "admin"
-    },
-
     streaming: [
       "http://localhost:3000"
     ],
@@ -32,11 +26,6 @@ module.exports = {
   production: {
     port: 80,
     visible: false,
-
-    admin: {
-      host: "http://admin.example.com",
-      password: "admin" // change this in production
-    },
 
     streaming: [
       "http://sockets.example.com"
