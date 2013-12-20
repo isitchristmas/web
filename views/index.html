@@ -356,6 +356,7 @@
     var myHeart = function() {
       return {
         id: me.id, // used in rebroadcasting only
+        angle: me.angle, // useful on reconnecting
         alreadyArrived: me.alreadyArrived, // new or reconnect?
         country: me.country, // TODO: ditch, server-side
         transport: me.transport,
@@ -450,7 +451,7 @@
       others[other.id] = {
         country: other.country,
         ghosts: 0,
-        angle: 0
+        angle: (other.angle || 0)
       };
 
       var flag = plainConsole ? "[" + other.country + "]" : "%c   ";
@@ -468,6 +469,10 @@
       registerOther(other);
 
       others[other.id].flag = flagFor(other.country, "other");
+
+      if (others[other.id].angle)
+        setRotate(others[other.id].flag, others[other.id].angle);
+
       if (visible)
         document.body.appendChild(others[other.id].flag);
     };
@@ -492,6 +497,7 @@
       me.flag = flagFor(country, "me");
       me.flag._new = true; // used to lazy-add element only if moved
       me.flag.style.zIndex = 9999; // on top of the world
+      setRotate(me.flag, me.angle); // preserve angle on reconnect
     };
 
     // [m|M]ozTransform is for older Firefox versions
