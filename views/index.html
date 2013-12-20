@@ -591,8 +591,15 @@
       else if (event.detail && (event.detail != 0))
         direction = (event.detail > 0) ? -1 : 1;
 
-      rotateFlag(me, direction);
-      emit('scroll', {id: me.id, direction: direction});
+      var increment = 15;
+
+      if (direction > 0)
+        me.angle += increment;
+      else
+        me.angle -= increment;
+
+      setRotate(me.flag, me.angle);
+      emit('scroll', {id: me.id, angle: me.angle});
 
       if (event.preventDefault) event.preventDefault();
       return false;
@@ -602,21 +609,9 @@
       // :(
       if (me.readonly || window._ie9) return;
 
-      rotateFlag(others[other.id], other.direction);
+      others[other.id].angle = other.angle;
+      setRotate(others[other.id].flag, other.angle);
     });
-
-    var rotateFlag = function(person, direction) {
-      if (!person) return;
-
-      var increment = 15;
-
-      if (direction > 0)
-        person.angle += increment;
-      else
-        person.angle -= increment;
-
-      setRotate(person.flag, person.angle);
-    };
 
     var mouseClick = function(event) {
       event = event || window.event;
