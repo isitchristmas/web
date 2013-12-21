@@ -197,6 +197,9 @@
     me.angle = 0;
     me.alreadyArrived = false;
 
+    if (window.localStorage)
+      me.savedName = window.localStorage.getItem("me.name");
+
     // sockjs server endpoint
     <% if (req.param("streaming")) { %>
       var url = "<%= req.param("streaming") %>/christmas";
@@ -292,9 +295,10 @@
     var limiters = {
       chat: ratelimit(rawSend, 500),
       motion: ratelimitLive(rawSend, 'mouse_rate'),
-
+      scroll: ratelimit(rawSend, 50),
+      click: ratelimit(rawSend, 50)
       // covers click, scroll, anything else
-      fallback: ratelimit(rawSend, 20)
+      // fallback: ratelimit(rawSend, 20)
     };
 
     function emit(event, data) {
@@ -306,7 +310,7 @@
       data = data || {};
       data._event = event;
       var message = JSON.stringify(data);
-      (limiters[event] || limiters.fallback)(message);
+      (limiters[event] || rawSend)(message);
     }
 
 
@@ -330,11 +334,18 @@
       for (var key in data.live)
         user.live[key] = data.live[key];
 
-      welcomeUser();
-
       me.browser = BrowserDetect.browser;
       me.os = BrowserDetect.OS;
       me.version = BrowserDetect.version;
+
+      welcomeUser();
+
+      // if we have a saved name, re-validate that name with the server
+      if (me.savedName)
+        rename(me.savedName);
+      else
+        myName();
+
 
       // all users announce their info to the server and start a heartbeat
       emit('arrive', myHeart());
@@ -359,7 +370,7 @@
         id: me.id, // used in rebroadcasting only
         angle: me.angle, // useful on reconnecting
         alreadyArrived: me.alreadyArrived, // new or reconnect?
-        country: me.country, // TODO: ditch, server-side
+        country: me.country, // this is used only on arrival
         transport: me.transport,
         browser: me.browser,
         version: me.version,
@@ -616,6 +627,8 @@
       // :(
       if (me.readonly || window._ie9) return;
 
+      if (!others[other.id]) return;
+
       others[other.id].angle = other.angle;
       setRotate(others[other.id].flag, other.angle);
     });
@@ -712,23 +725,22 @@
     var chatsSince = 0;
 
     var myName = function() {
+      log.system(" ");
+
       var hello = "%cYour name is ";
       hello += "%c" + me.name;
       hello += "%c. Hello, ";
       hello += "%c" + me.name;
       hello += "%c.";
       log.system(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
+
+      var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
+      log.system(spam, styles.please, styles.spam);
     }
 
     // I'll have to figure out a better syntax for
     var welcomeUser = function() {
       if (user.live.chat != "true") return;
-
-      myName();
-
-      var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
-      log.system(spam, styles.please, styles.spam);
-      log.system(" ");
 
       log.system("%cCommands:", styles.help);
       var help1 = "%csay(\"message\")";
@@ -765,6 +777,10 @@
 
     on('rename', function(data) {
       me.name = data.name;
+
+      if (window.localStorage)
+        window.localStorage.setItem("me.name", me.name);
+
       myName();
     });
 
@@ -773,6 +789,7 @@
         chatsSince += 1;
         if (chatsSince >= 10) {
           welcomeUser();
+          myName();
           chatsSince = 0;
         }
       }
