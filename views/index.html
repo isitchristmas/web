@@ -338,7 +338,9 @@
       me.os = BrowserDetect.OS;
       me.version = BrowserDetect.version;
 
-      welcomeUser();
+      // welcome user, unless it's a reconnect
+      if (!me.alreadyArrived)
+        welcomeUser();
 
       // if we have a saved name, re-validate that name with the server
       if (me.savedName)
