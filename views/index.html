@@ -222,7 +222,7 @@
     var default_transports = [
       "websocket", // most everyone nowadays
       "xhr-streaming", // older versions of non-IE, and when networks block websockets
-      "xdr-streaming" // IE9
+      "xdr-streaming" // IE9 9_9
     ];
 
     // tiny events/commands system
@@ -236,9 +236,11 @@
     var heartbeat, death;
     var suicide = false; // why would you do this
 
+    // country legend and fade timer
     var legend = document.getElementById("legend")
       , legendTimeout;
 
+    // timers for xmas-in and xmas-out
     var christmasTimer
       , christmasEndTimer;
 
@@ -328,8 +330,7 @@
       for (var key in data.live)
         user.live[key] = data.live[key];
 
-      if (user.live.chat == "true")
-        welcomeUser();
+      welcomeUser();
 
       me.browser = BrowserDetect.browser;
       me.os = BrowserDetect.OS;
@@ -721,27 +722,28 @@
 
     // I'll have to figure out a better syntax for
     var welcomeUser = function() {
-      if (user.log.system) {
-        myName();
-        var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
-        log.system(spam, styles.please, styles.spam);
-        log.system(" ");
+      if (user.live.chat != "true") return;
 
-        log.system("%cCommands:", styles.help);
-        var help1 = "%csay(\"message\")";
-        help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
-        var help2 = "%crename(\"Name\")";
-        help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
-        var help3 = "%chelp%c - See this message again.";
-        var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
-        help4 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
-        log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
-        log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
-        log.system(help3, styles.help_bold, styles.help);
-        log.system(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      myName();
 
-        return " "; // when used via 'help'
-      }
+      var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
+      log.system(spam, styles.please, styles.spam);
+      log.system(" ");
+
+      log.system("%cCommands:", styles.help);
+      var help1 = "%csay(\"message\")";
+      help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
+      var help2 = "%crename(\"Name\")";
+      help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
+      var help3 = "%chelp%c - See this message again.";
+      var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
+      help4 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
+      log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(help3, styles.help_bold, styles.help);
+      log.system(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
+
+      return " "; // when used via 'help'
     };
 
     var say = function(message) {
@@ -763,7 +765,7 @@
 
     on('rename', function(data) {
       me.name = data.name;
-      if (user.log.system) myName();
+      myName();
     });
 
     on('chat', function(data) {
@@ -776,34 +778,32 @@
       }
 
       // avoid using logging system here, to do complex coloring
-      if (user.log.chat) {
-        var message = "";
-        if (plainConsole)
-          message += "[" + data.country + "]";
-        else
-          message += "%c   ";
+      var message = "";
+      if (plainConsole)
+        message += "[" + data.country + "]";
+      else
+        message += "%c   ";
 
-        message += "%c " + data.name + ":";
+      message += "%c " + data.name + ":";
 
-        var emojis = [];
-        if (!plainConsole) {
-          while (found = Emoji.regexp.exec(data.message)) {
-            emojis.push(styles.emoji(found[1]));
-            emojis.push(styles.chat_message)
-          };
-          if (emojis.length > 0)
-            data.message = data.message.replace(Emoji.regexp, "%c  %c");
-        }
-
-        message += "%c " + data.message;
-
-        log.chat.apply(log, [
-          message,
-          styles.flag(data.country),
-          (data.id == me.id ? styles.chat_my_name : styles.chat_name),
-          styles.chat_message
-        ].concat(emojis));
+      var emojis = [];
+      if (!plainConsole) {
+        while (found = Emoji.regexp.exec(data.message)) {
+          emojis.push(styles.emoji(found[1]));
+          emojis.push(styles.chat_message)
+        };
+        if (emojis.length > 0)
+          data.message = data.message.replace(Emoji.regexp, "%c  %c");
       }
+
+      message += "%c " + data.message;
+
+      log.chat.apply(log, [
+        message,
+        styles.flag(data.country),
+        (data.id == me.id ? styles.chat_my_name : styles.chat_name),
+        styles.chat_message
+      ].concat(emojis));
     });
 
 
