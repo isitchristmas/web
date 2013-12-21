@@ -736,8 +736,8 @@
       hello += "%c.";
       log.system(hello, styles.system, styles.chat_my_name, styles.system, styles.chat_my_name, styles.system);
 
-      var spam = "%cPlease%c don't spam and ruin the chat. I put a lot of work into this!";
-      log.system(spam, styles.please, styles.spam);
+      var spam = "%cPlease%c don't spam and ruin the chat! %c  %c %c  %c %c  ";
+      log.system(spam, styles.please, styles.spam, styles.emoji("smiley"), styles.spam, styles.emoji("heart"), styles.spam, styles.emoji("christmas_tree"));
     }
 
     // I'll have to figure out a better syntax for
@@ -745,20 +745,97 @@
       if (user.live.chat != "true") return;
 
       log.system("%cCommands:", styles.help);
+      log.system(" ");
       var help1 = "%csay(\"message\")";
       help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
       var help3 = "%chelp%c - See this message again.";
-      var help4 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
-      help4 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
+      var help4 = "%cadvanced%c - See menu of advanced options.";
       log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
-      log.system(help4, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(help4, styles.help_bold, styles.help);
 
       return " "; // when used via 'help'
     };
+
+    var showAdvanced = function() {
+      if (user.live.chat != "true") return;
+
+      var advanced1 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
+      advanced1 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
+      var advanced2 = "%cemoji%c - How to use emoji in chat.";
+      var advanced3 = "%croom%c - Stats about the room you're in."
+      var advanced4 = "%cwtf%c - How is this happening"
+
+      var credit = "%cMade by https://twitter.com/konklone, full credits at https://isitchristmas.com/humans.txt";
+
+      log.system(" ");
+      log.system("%cAdvanced commands:", styles.help);
+      log.system(" ");
+      log.system(advanced1, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(advanced2, styles.help_bold, styles.help);
+      log.system(advanced3, styles.help_bold, styles.help);
+      log.system(advanced4, styles.help_bold, styles.help);
+      log.system(" ");
+      log.system(credit, styles.system);
+
+      return " ";
+    };
+
+    var showEmoji = function() {
+      log.system("%cYou can put :'s around some words to create emoji.", styles.system)
+      log.system(" ");
+      log.system("%cFor example, %csay(%c\"I am :worried: you will :facepunch: me\"%c)", styles.system, styles.info, styles.info_bold, styles.info);
+      log.system("%cwill say: %cI am %c  %c you will %c  %c me", styles.system, styles.info_bold, styles.emoji("worried"), styles.info_bold, styles.emoji("facepunch"), styles.info_bold);
+      log.system(" ");
+      log.system("%cfull emoji reference (and my data source): http://www.emoji-cheat-sheet.com", styles.system)
+      return " ";
+    };
+
+    var showRoom = function() {
+      // re-key others by country
+      var countries = {};
+      for (var id in others) {
+        var country = others[id].country;
+        if (!countries[country]) countries[country] = [];
+        countries[country].push(id);
+      }
+
+      // sort by size
+      var stats = Object.keys(countries);
+      stats.sort(function(a, b) {
+        return countries[a].length < countries[b].length
+      });
+
+      log.system("%cYou're in a randomly chosen 'room' with the other flags. Stats about your room:", styles.system)
+      log.system(" ");
+
+      stats.forEach(function(country) {
+        var name = Christmas.countries[country].names[0];
+        var num = countries[country].length;
+        var people = num == 1 ? "person" : "people";
+        log.system("%c[" + country + "]%c[" + name + "] " + num + " " + people, styles.debug, styles.info);
+      });
+
+      log.system(" ");
+      log.system("%c(Not all connected people are visible.)", styles.system)
+      log.system("%c(Chat is universal and goes through every room.)", styles.system);
+
+      return " ";
+    };
+
+    var showWtf = function() {
+      log.system(" ");
+
+      log.system("%cWhat basically is happening: https://konklone.com/post/isitchristmas-dot-com-2012", styles.system);
+      log.system("%cWhat precisely is happening: https://github.com/isitchristmas", styles.system);
+      log.system("%cData from Christmases past: https://github.com/isitchristmas/data", styles.system);
+      log.system("%cWhat it looked like last year: https://www.flickr.com/photos/konklone/sets/72157632388653620/", styles.system)
+
+      return " ";
+    }
 
     var say = function(message) {
       if (!message) return;
@@ -1006,6 +1083,7 @@
       debug: "color: #999999",
       join: "color: #999999",
       info: "color: #444444",
+      info_bold: "color: #444444; font-weight: bold",
       system: "color: #336699",
       system_bold: "color: #336699; font-weight: bold",
       life: "color: #ff0000",
@@ -1041,6 +1119,18 @@
       log.system("%cTurned traffic messages %c" + (user.log.join ? "on" : "off") + "%c.", styles.system, styles.system_bold, styles.system);
       return " ";
     }
+
+    var advanced = function() {};
+    advanced.toString = showAdvanced;
+
+    var emoji = function() {};
+    emoji.toString = showEmoji;
+
+    var room = function() {};
+    room.toString = showRoom;
+
+    var wtf = function() {};
+    wtf.toString = showWtf;
 
     // candy
     var candy = function() {};

@@ -25,6 +25,10 @@ Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
 
 Compiled from github.com/isitchristmas/web
 
+And to the good people whose emoji I copied, at:
+
+  http://www.emoji-cheat-sheet.com
+  https://github.com/arvida/emoji-cheat-sheet.com
 
 /* SITE */
 
