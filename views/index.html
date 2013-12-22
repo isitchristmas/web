@@ -243,12 +243,12 @@
     var suicide = false; // why would you do this
 
     // country legend and fade timer
-    var legend = document.getElementById("legend")
-      , legendTimeout;
+    var legend = document.getElementById("legend"),
+        legendTimeout;
 
     // timers for xmas-in and xmas-out
-    var christmasTimer
-      , christmasEndTimer;
+    var christmasTimer,
+        christmasEndTimer;
 
     <% if (req.param("serverId")) { %>
       // tiny tapping system, send up serverId.
@@ -851,6 +851,8 @@
       log.system("%cWhat precisely is happening: https://github.com/isitchristmas", styles.system);
       log.system("%cData from Christmases past: https://github.com/isitchristmas/data", styles.system);
       log.system("%cWhat it looked like last year: https://www.flickr.com/photos/konklone/sets/72157632388653620/", styles.system)
+      log.system(" ");
+      log.system("%cSend any screenshots/screencasts to %ceric@konklone.com%c.", styles.system, styles.system_bold, styles.system);
 
       return " ";
     }
