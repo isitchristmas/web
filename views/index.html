@@ -831,7 +831,7 @@
       log.system(" ");
 
       stats.forEach(function(country) {
-        var name = Christmas.countries[country].names[0];
+        var name = Christmas.countries[country].name;
         var num = countries[country].length;
         var people = num == 1 ? "person" : "people";
         log.system("%c[" + country + "]%c[" + name + "] " + num + " " + people, styles.debug, styles.info);
