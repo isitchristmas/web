@@ -348,8 +348,10 @@
       // if we have a saved name, re-validate that name with the server
       if (me.savedName)
         rename(me.savedName);
-      else
+      else {
         myName();
+        log.system(" ");
+      }
 
 
       // all users announce their info to the server and start a heartbeat
@@ -730,8 +732,6 @@
     var chatsSince = 0;
 
     var myName = function() {
-      log.system(" ");
-
       var hello = "%cYour name is ";
       hello += "%c" + me.name;
       hello += "%c. Hello, ";
@@ -750,8 +750,8 @@
     }
 
     var spam = function() {
-      var spam = "%cPlease%c don't spam and ruin the chat! %c  %c %c  %c %c  ";
-      log.system(spam, styles.please, styles.spam, styles.emoji("smiley"), styles.spam, styles.emoji("heart"), styles.spam, styles.emoji("christmas_tree"));
+      var msg = "%cPlease%c don't spam and ruin the chat! %c  %c %c  %c %c  ";
+      log.system(msg, styles.please, styles.spam, styles.emoji("smiley"), styles.spam, styles.emoji("heart"), styles.spam, styles.emoji("christmas_tree"));
     }
 
     // I'll have to figure out a better syntax for
@@ -774,6 +774,7 @@
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
+      log.system(" ");
 
       return " "; // when used via 'help'
     };
@@ -849,6 +850,7 @@
 
       log.system("%cWhat basically is happening: https://konklone.com/post/isitchristmas-dot-com-2012", styles.system);
       log.system("%cWhat precisely is happening: https://github.com/isitchristmas", styles.system);
+      log.system("%cHow this console works: https://konklone.com/post/how-to-hack-the-developer-console-to-be-needlessly-interactive", styles.system);
       log.system("%cData from Christmases past: https://github.com/isitchristmas/data", styles.system);
       log.system("%cWhat it looked like last year: https://www.flickr.com/photos/konklone/sets/72157632388653620/", styles.system)
       log.system(" ");
