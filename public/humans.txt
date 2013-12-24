@@ -22,6 +22,7 @@ Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
   github.com/quanganhdo
   github.com/andrederegle
   github.com/shh-
+  github.com/c933103
 
 Compiled from github.com/isitchristmas/web
 
