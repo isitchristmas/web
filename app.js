@@ -26,6 +26,7 @@ var rss = function(req, res) {
     Christmas: Christmas,
     dateFormat: dateFormat,
 
+    req: req,
     config: config,
     env: app.get('env')
   });
