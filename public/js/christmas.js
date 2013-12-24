@@ -42,7 +42,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Guyana, Heard Island and McDonald Islands, Holy See (Vatican City State), Honduras,
   Indonesia, Iran, Iraq, Isle of Man, Jersey, Jordan, Kazakhstan, Kenya, Kiribati,
   South Korea, Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
-  Liberia, Libya, Liechtenstein, Luxembourg, Macau, Macedonia, Madagascar, Malawi,
+  Liberia, Libya, Liechtenstein, Luxembourg, Macedonia, Madagascar, Malawi,
   Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte,
   Micronesia, Moldova, Monaco, Mongolia, Montenegro,
   Montserrat, Morocco, Mozambique, Namibia, Nauru, Nepal, New Caledonia, Niger,
@@ -52,7 +52,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino,
   Sao Tome and Principe, Saudi Arabia, Senegal, Serbia,
   Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
-  Swaziland, Syrian Arab Republic, Taiwan, Tajikistan, Tanzania,
+  Swaziland, Syrian Arab Republic, Tajikistan, Tanzania,
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
   Tuvalu, Uganda, United Arab Emirates, United Kingdom,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
@@ -95,6 +95,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "EE": "JAA", // Estonia
       "HR": "DA", // Croatia
       "CN": "是", // China (Mandarin)
+      "TW": "是", // Taiwan (Mandarin)
       "IN": "HAANJI", // India
       "SG": "YA", // Singapore
       "PH": "ÓO", // Phillipines
@@ -111,6 +112,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "LV": "JĀ", // Latvia
       "RU": "ДА", // Russia
       "HK": "係", // Hong Kong (Cantonese)
+      "MO": "係", // Macau (Cantonese)
       "TR": "EVET", // Turkey
       "MY": "YA", // Malaysia
       "PR": "SÍ", // Puerto Rico
@@ -181,6 +183,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "EE": "EI", // Estonia
       "HR": "NE", // Croatia
       "CN": "不是", // China (Mandarin)
+      "TW": "不是", // Taiwan (Mandarin)
       "IN": "NAHIN", // India
       "SG": "TIDAK", // Singapore
       "PH": "HINDI", // Phillipines
@@ -197,6 +200,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "LV": "NĒ", // Latvia
       "RU": "НЕТ", // Russia
       "HK": "唔係", // Hong Kong (Cantonese)
+      "MO": "唔係", // Macau (Cantonese)
       "TR": "HAYIR", // Turkey
       "MY": "TIDAK", // Malaysia
       "PR": "NO", // Puerto Rico
@@ -811,7 +815,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "width": 30,
       "height": 20,
       "names": [
-        "香港"
+        "香港",
         "Hong Kong"
       ]
     },
@@ -1206,8 +1210,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "width": 30,
       "height": 20,
       "names": [
-        "澳門"
-        "Macao"
+        "澳門",
+        "Macao",
         "Macau"
       ]
     },
