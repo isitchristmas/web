@@ -874,8 +874,8 @@
       say(prompt("What do you want to say?"));
       return " ";
     };
-    // convenience - handle all caps typos
-    var Say = sAy = saY = SAy = SaY = sAY = SAY = say;
+    // convenience - handle all caps typos, and s
+    var s = S = Say = sAy = saY = SAy = SaY = sAY = SAY = say;
 
     var rename = function(name) {
       if (!name) return;
