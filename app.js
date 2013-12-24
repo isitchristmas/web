@@ -1,4 +1,10 @@
+
+// imbues Date with timezone abilities
 require('time')(Date);
+
+// allow port to be passed in via command lne
+var optimist = require('optimist');
+var args = optimist.alias('port', 'p').argv;
 
 var index = function(req, res) {
   // this is only used as a fallback for clients who don't use JavaScript
@@ -88,7 +94,7 @@ app.configure(function(){
   app.engine('.html', require('ejs').__express);
   app.engine('.xml', require('ejs').__express);
   app.engine('.txt', require('ejs').__express);
-  app.set('port', config.port || process.env.PORT || 80);
+  app.set('port', parseInt(process.env.PORT || args.port || config.port || 80));
   app.set('view engine', 'html');
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.static(path.join(__dirname, 'public')));
