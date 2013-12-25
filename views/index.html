@@ -207,9 +207,10 @@
     me.alreadyArrived = false;
     me.notify = false;
 
-    if (window.localStorage)
+    if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
       me.notify = window.localStorage.getItem("me.notify");
+    }
 
     // sockjs server endpoint
     <% if (req.param("streaming")) { %>
@@ -683,9 +684,8 @@
       var xOff = Math.floor(width / 2);
       var yOff = Math.floor(height / 2);
 
-      if (me.notify) {
+      if (me.notify)
         window.webkitNotifications.requestPermission();
-      }
 
       elem.className = "click";
       elem.style.width = "" + width + "px";
@@ -900,23 +900,21 @@
 
       me.notify = setting;
 
-      if (window.localStorage) {
+      if (window.localStorage)
         window.localStorage.setItem("me.notify", me.notify);
-      }
 
-      if (me.notify) {
+      if (me.notify)
         message = "%cPlease click your flag to enable notifications.%c";
-      } else {
+      else
         message = "%cNotifications have been disabled.%c";
-      }
 
-      
+
       log.system(message, styles.system, styles.system);
     }
 
     // no params default
     notifications.toString = function() {
-      notify(true);
+      notifications(!me.notify);
       return " ";
     }
 
