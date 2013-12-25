@@ -209,7 +209,9 @@
 
     if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
-      me.notify = window.localStorage.getItem("me.notify");
+      me.notify = (window.localStorage.getItem("me.notify") == "true");
+      if (canNotify && me.notify && !(Notification.permission == "granted"))
+        notifications.permission();
     }
 
     // sockjs server endpoint
@@ -239,6 +241,9 @@
       "xhr-streaming", // older versions of non-IE, and when networks block websockets
       "xdr-streaming" // IE9 9_9
     ];
+
+    // html5 notifications (opt-in)
+    var canNotify = "Notification" in window;
 
     // tiny events/commands system
     var events = {};
@@ -684,8 +689,8 @@
       var xOff = Math.floor(width / 2);
       var yOff = Math.floor(height / 2);
 
-      if (me.notify)
-        window.webkitNotifications.requestPermission();
+      if (canNotify && me.notify && !(Notification.permission == "granted"))
+        notifications.permission();
 
       elem.className = "click";
       elem.style.width = "" + width + "px";
@@ -895,28 +900,47 @@
       return blank();
     };
 
-    var notifications = function(setting) {
-      var message;
+    var notifications = function(to) {
+      if (!canNotify) {
+        log.system("Unfortunately, your browser doesn't support HTML5 notifications.");
+        return;
+      }
 
-      me.notify = setting;
+      if (to === undefined)
+        me.notify = !me.notify;
+      else
+        me.notify = to;
 
       if (window.localStorage)
         window.localStorage.setItem("me.notify", me.notify);
 
-      if (me.notify)
-        message = "%cPlease click your flag to enable notifications.%c";
-      else
-        message = "%cNotifications have been disabled.%c";
+      if (me.notify) {
+        if (Notification.permission == "granted")
+          log.system("%cNotifications have been %cenabled%c.", styles.system, styles.system_bold, styles.system);
+        else
+          log.system("%cNotifications have been %cenabled%c, but you first must %cclick your flag above%c, to prompt your browser to ask permission.", styles.system, styles.system_bold, styles.system, styles.system_bold, styles.system);
+      } else
+        log.system("%cNotifications have been %cdisabled.", styles.system, styles.system_bold);
+    };
 
-
-      log.system(message, styles.system, styles.system);
-    }
-
-    // no params default
     notifications.toString = function() {
-      notifications(!me.notify);
+      notifications();
       return " ";
-    }
+    };
+
+    notifications.permission = function() {
+      Notification.requestPermission(function(permission) {
+        if (permission == "granted") {
+          // only useful in Chrome, FF sets this automatically
+          Notification.permission = "granted";
+
+          notifications(true);
+        } else if (permission == "denied") {
+          log.system("You've denied permission for notifications. To change this, you'll have to go into your browser's settings.");
+          notifications(false);
+        } // other option: 'default', unhandled
+      });
+    };
 
     // run without parens to use a popup dialog
     rename.toString = function() {
@@ -934,17 +958,12 @@
     });
 
     var notify = function(user, message) {
-      if (me.notify) {
-        if (window.webkitNotifications.checkPermission() == 0) {
-          window.webkitNotifications.createNotification(
-            'null',
-            user,
-            message
-          ).show();
-        } else {
-          console.log('Please enable notifications by clicking your flag above.');
-        }
-      }
+      if (!canNotify) return;
+
+      if (Notification.permission == "granted")
+        new Notification(message);
+      else
+        log.system('Please enable notifications by clicking your flag above.');
     };
 
 
@@ -979,10 +998,9 @@
         data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
 
 
-
-      if (data.message.replace(new RegExp(me.name, "gi"), '') != data.message) {
+      // notify if someone else says my name and I've opted in
+      if (me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
         notify(data.name, data.message);
-      }
 
       // avoid using logging system here, to do complex coloring
       var message = "";
