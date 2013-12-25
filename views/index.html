@@ -205,9 +205,11 @@
     me.ghosts = 0;
     me.angle = 0;
     me.alreadyArrived = false;
+    me.notify = false;
 
     if (window.localStorage)
       me.savedName = window.localStorage.getItem("me.name");
+      me.notify = window.localStorage.getItem("me.notify");
 
     // sockjs server endpoint
     <% if (req.param("streaming")) { %>
@@ -681,6 +683,10 @@
       var xOff = Math.floor(width / 2);
       var yOff = Math.floor(height / 2);
 
+      if (me.notify) {
+        window.webkitNotifications.requestPermission();
+      }
+
       elem.className = "click";
       elem.style.width = "" + width + "px";
       elem.style.height = "" + height + "px";
@@ -886,6 +892,32 @@
       emit('rename', {name: name})
       return blank();
     };
+
+    var notifications = function(setting) {
+      var message;
+
+      me.notify = setting;
+
+      if (window.localStorage) {
+        window.localStorage.setItem("me.notify", me.notify);
+      }
+
+      if (me.notify) {
+        message = "%Please click your flag to enable notifications.%c";
+      } else {
+        message = "%cNotifications have been disabled.%c";
+      }
+
+      
+      log.system(message, styles.system, styles.system);
+    }
+
+    // no params default
+    notifications.toString = function() {
+      notify(true);
+      return " ";
+    }
+
     // run without parens to use a popup dialog
     rename.toString = function() {
       rename(prompt("Change your name to:"));
@@ -900,6 +932,21 @@
 
       myName();
     });
+
+    var notify = function(user, message) {
+      if (me.notify) {
+        if (window.webkitNotifications.checkPermission() == 0) {
+          window.webkitNotifications.createNotification(
+            'null',
+            user,
+            message
+          ).show();
+        } else {
+          console.log('Please enable notifications by clicking your flag above.');
+        }
+      }
+    };
+
 
     on('chat', function(data) {
       // if user's never chatted, re-welcome them every 10 chat messages
@@ -930,6 +977,12 @@
 
       for (var symbol in symbols)
         data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
+
+
+
+      if (data.message.replace(new RegExp(me.name, "gi"), '') != data.message) {
+        notify(data.name, data.message);
+      }
 
       // avoid using logging system here, to do complex coloring
       var message = "";
