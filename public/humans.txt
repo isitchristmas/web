@@ -24,6 +24,8 @@ Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
   github.com/shh-
   github.com/c933103
 
+  and github.com/morgante for adding HTML5 notifications
+
 Compiled from github.com/isitchristmas/web
 
 And to the good people whose emoji I copied, at:
