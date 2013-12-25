@@ -2314,6 +2314,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
     },
     "AQ": {
       "name": "Antarctica",
+      "width": 30,
+      "height": 20,
       "names": [
         "Antarctica"
       ]
