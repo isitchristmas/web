@@ -38,5 +38,5 @@ Lots of things!
   2007-2011: PHP/MySQL + Dreamhost/Webfaction
   2012: PHP/MySQL + Webfaction, Node + Nodejitsu
     https://konklone.com/post/isitchristmas-dot-com-2012
-  2013: Node + EC2, Node + Nodejitsu
+  2013: Node + EC2, Node + Nodejitsu/Heroku/dotCloud
     https://konklone.com/post/how-to-hack-the-developer-console-to-be-needlessly-interactive
