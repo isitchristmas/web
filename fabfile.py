@@ -26,10 +26,12 @@ def links():
   run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
   run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
 
+# TODO: why did I do this? (cp instead of ln)
 def make_current():
   # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
   run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
 
+# TODO: prune releases
 def prune_releases():
   pass
 
@@ -37,13 +39,13 @@ def prune_releases():
 ## can be run on their own
 
 def start():
-  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2000 && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2001" % (current_path, environment, logs, environment, logs))
+  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2000" % (current_path, environment, logs))
 
 def stop():
-  run("forever stop app.js -p 2000 && forever stop app.js -p 2001")
+  run("forever stop app.js -p 2000")
 
 def restart():
-  run("forever restart app.js -p 2000 && forever restart app.js -p 2001")
+  run("forever restart app.js -p 2000")
 
 def deploy():
   execute(checkout)
