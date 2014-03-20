@@ -29,7 +29,7 @@ var Christmas = {
 Missing translations for the list of countries below.
 File tickets at: https://github.com/isitchristmas/web/issues
 
-  Afghanistan, Aland Islands, Albania, Algeria, American Samoa, Andorra, Angola, Anguilla,
+  Afghanistan, Albania, Algeria, American Samoa, Andorra, Angola, Anguilla,
   Antarctica, Antigua and Barbuda, Aruba, Asia/Pacific Region,
   Azerbaijan, Bahamas, Bahrain, Bangladesh, Belarus, Benin, Bhutan, Bonaire,
   Saint Eustatius and Saba, Bosnia and Herzegovina, Botswana, Bouvet Island,
@@ -54,7 +54,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
   Swaziland, Syrian Arab Republic, Tajikistan, Tanzania,
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
-  Tuvalu, Uganda, United Arab Emirates, United Kingdom,
+  Tuvalu, Uganda, United Arab Emirates,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
   Virgin Islands (U.S.), Wallis and Futuna, Yemen, Zambia, Zimbabwe
 
@@ -71,6 +71,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "UK": "YES", // United Kingdom
       "CA": "YES/OUI", // Canada (English/French)
       "PL": "TAK", // Poland
+      "AX": "JA", // Åland Islands
       "SE": "JA", // Sweden
       "LT": "TAIP", // Lithuania
       "DE": "JA", // Germany
@@ -159,6 +160,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "UK": "NO", // United Kingdom
       "CA": "NO/NON", // Canada (English/French)
       "PL": "NIE", // Poland
+      "AX": "NEJ", // Åland Islands
       "SE": "NEJ", // Sweden
       "LT": "NE", // Lithuania
       "DE": "NEIN", // Germany
@@ -1838,11 +1840,11 @@ File tickets at: https://github.com/isitchristmas/web/issues
       ]
     },
     "AX": {
-      "name": "Aland Islands",
+      "name": "Åland Islands",
       "width": 31,
       "height": 20,
       "names": [
-        "Aland Islands"
+        "Åland Islands"
       ]
     },
     "BI": {
