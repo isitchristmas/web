@@ -81,6 +81,8 @@ var express = require('express'),
     path = require('path'),
     dateFormat = require('dateformat'),
     Christmas = require("./public/js/christmas"); // re-use christmas.js
+
+// TODO: is this even used anywhere?
 require('date-utils'); // date helpers
 
 // must have downloaded a country-level geoip dat file ahead of time
@@ -118,7 +120,7 @@ var startServer = function() {
 
 app.configure('development', function() {
   app.use(express.errorHandler());
-  require('reloader')({watchModules: true, onReload: startServer});
+  startServer();
 });
 
 app.configure('production', startServer);
