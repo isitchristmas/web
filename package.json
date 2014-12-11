@@ -23,8 +23,8 @@
     "time": "*",
 
     "request": "*",
+    "geoip": "*",
 
-    "csv": "*",
     "optimist": "*"
   }
 }
