@@ -1,17 +1,27 @@
 {
   "name": "web",
-  "version": "3.2.7",
+  "version": "4.0",
   "private": true,
 
-  "subdomain": "iic_web",
-  "domains": [
-    "isitchristmas.com"
-  ],
-  "engines": {"node": "0.10.x"},
+  "description": "Web app for isitchristmas.com.",
 
-  "scripts": {
-    "start": "node app.js"
+  "engines": {"node": "0.10.x"},
+  "main": "app.js",
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/isitchristmas/web.git"
   },
+  "author": {
+    "name": "Eric Mill",
+    "email": "eric@konklone.com",
+    "url": "https://konklone.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isitchristmas/web/issues"
+  },
+  "homepage": "https://isitchristmas.com",
 
   "dependencies": {
     "express": "3.x",
