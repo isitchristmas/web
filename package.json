@@ -22,7 +22,6 @@
     "date-utils": "*",
     "time": "*",
 
-    "request": "*",
     "geoip": "*",
 
     "optimist": "*"
