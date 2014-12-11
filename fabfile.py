@@ -13,6 +13,7 @@ username = "christmas"
 home = "/home/christmas/web"
 logs = "/home/christmas/data/log"
 shared_path = "%s/shared" % home
+versions_path = "%s/versions" % home
 version_path = "%s/versions/%s" % (home, time.strftime("%Y%m%d%H%M%S"))
 current_path = "%s/current" % home
 
@@ -29,8 +30,8 @@ def links():
   run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
 
 def make_current():
-  run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
-  # run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
+  # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
+  run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
 
 def dependencies():
   run("cd %s && npm install" % version_path)
@@ -68,7 +69,8 @@ def deploy():
   execute(links)
   execute(dependencies)
   execute(make_current)
-  execute(restart)
+  execute(stop)
+  execute(start)
   execute(cleanup)
 
 def deploy_cold():
