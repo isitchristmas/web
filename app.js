@@ -77,7 +77,6 @@ var geoipLookup = function(ip) {
 
 var express = require('express'),
     http = require('http'),
-    request = require('request'),
     path = require('path'),
     dateFormat = require('dateformat'),
     Christmas = require("./public/js/christmas"); // re-use christmas.js
@@ -92,18 +91,13 @@ var geoip = require('geoip'),
 var app = express(),
     config = require('./config')[app.get('env')];
 
-app.configure(function(){
-  app.engine('.html', require('ejs').__express);
-  app.engine('.xml', require('ejs').__express);
-  app.engine('.txt', require('ejs').__express);
-  app.set('port', parseInt(process.env.PORT || args.port || config.port || 80));
-  app.set('view engine', 'html');
-  app.use(express.favicon(__dirname + '/public/favicon.ico'));
-  app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function() {app.use(express.errorHandler())});
-
+app.engine('.html', require('ejs').__express);
+app.engine('.xml', require('ejs').__express);
+app.engine('.txt', require('ejs').__express);
+app.set('port', parseInt(process.env.PORT || args.port || config.port || 80));
+app.set('view engine', 'html');
+app.use(express.favicon(__dirname + '/public/favicon.ico'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', index);
 app.get('/rss.xml', rss);
@@ -118,9 +112,7 @@ var startServer = function() {
   });
 }
 
-app.configure('development', function() {
+if (app.get('env') == 'development')
   app.use(express.errorHandler());
-  startServer();
-});
 
-app.configure('production', startServer);
+startServer();
