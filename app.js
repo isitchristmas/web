@@ -38,15 +38,6 @@ var rss = function(req, res) {
   });
 };
 
-var canary = function(req, res) {
-  res.setHeader('Content-Type', 'text/plain');
-  res.render('canary.txt', {
-    Christmas: Christmas,
-    dateFormat: dateFormat,
-    country: findCountry(req)
-  });
-};
-
 
 /** helpers **/
 
