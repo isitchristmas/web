@@ -42,3 +42,5 @@ Lots of things!
     https://konklone.com/post/isitchristmas-dot-com-2012
   2013: Node + EC2, Node + Nodejitsu/Heroku/dotCloud
     https://konklone.com/post/how-to-hack-the-developer-console-to-be-needlessly-interactive
+    https://konklone.com/post/isitchristmas-dot-com-2013-more-and-better
+  2014: Node + EC2, Node + Heroku
