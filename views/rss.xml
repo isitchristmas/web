@@ -8,8 +8,6 @@
       Is it Christmas?
       <% if (req.param("only") == "yes") { %>
         (Christmas only)
-      <% } else if (req.param("only") == "no") { %>
-        (Not Christmas only)
       <% } %>
     </description>
     <atom:link href="https://isitchristmas.com/rss.xml" rel="self" type="application/rss+xml" />
@@ -24,8 +22,7 @@
 
         if (
           !req.param("only") ||
-          (req.param("only") == "yes" && itIs) ||
-          (req.param("only") == "no" && !itIs)
+          (req.param("only") == "yes" && itIs)
         ) {
       %>
         <item>
