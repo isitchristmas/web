@@ -507,10 +507,9 @@
       setRotate(me.flag, me.angle); // preserve angle on reconnect
     };
 
-    // [m|M]ozTransform is for older Firefox versions
     var setRotate = function(elem, angle) {
       if (!elem) return;
-      elem.style.transform = elem.style.mozTransform = elem.style.MozTransform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
+      elem.style.transform = elem.style.webkitTransform = elem.style.msTransform = "rotate(" + angle + "deg)";
     };
 
     var flagFor = function(country, klass) {
@@ -570,7 +569,7 @@
         x: event.clientX + window.pageXOffset,
         y: event.clientY + window.pageYOffset,
         id: me.id,
-        c: me.country
+        c: me.country // TODO: have server re-look-up country
       });
     };
 
