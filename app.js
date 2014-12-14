@@ -93,7 +93,6 @@ var app = express(),
 
 app.engine('.html', require('ejs').__express);
 app.engine('.xml', require('ejs').__express);
-app.engine('.txt', require('ejs').__express);
 app.set('port', parseInt(process.env.PORT || args.port || config.port || 80));
 app.set('view engine', 'html');
 app.use(express.favicon(__dirname + '/public/favicon.ico'));
@@ -101,7 +100,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', index);
 app.get('/rss.xml', rss);
-app.get('/canary.txt', canary);
 
 
 var startServer = function() {
