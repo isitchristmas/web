@@ -78,17 +78,12 @@
 
   <script type="text/javascript" src="/js/christmas.js"></script>
 
-  <script type="text/javascript">window._ie9 = false;</script>
-  <!--[if IE 9 ]>
-    <script type="text/javascript">window._ie9 = true;</script>
-  <![endif]-->
-
   <!-- IE10 JS targeting, from http://stackoverflow.com/a/17099988 -->
   <!-- IE11 JS targeting, from http://stackoverflow.com/a/17447695 -->
   <script type="text/javascript">
     window._ie10 = ("onpropertychange" in document && !!window.matchMedia);
     window._ie11 = !!navigator.userAgent.match(/Trident\/7.0; rv 11/);
-    window._ie = window._ie9 || window._ie10 || window._ie11;
+    window._ie = window._ie10 || window._ie11;
   </script>
 </head>
 
@@ -214,22 +209,15 @@
     // whether activity is visible to the user
     var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
 
-    // whether to force into readonly mode (see mice, but no sending of own action)
-    var force_readonly = <%= req.param("readonly") || "false" %>;
-
     // whether we need to force chat to stay plain-text (no styles).
-    // right now, the only situation that's relevant is IE9 and IE10.
+    // right now, the only situation that's relevant is IE.
     var plainConsole = <%= (req.param("console") == "plain") || "false" %> || !!window._ie;
 
     // force it to use a particular transport
     var transport = "<%= req.param("transport") || "" %>";
 
-    // allowed transports
-    var default_transports = [
-      "websocket", // most everyone nowadays
-      "xhr-streaming", // older versions of non-IE, and when networks block websockets
-      "xdr-streaming" // IE9 9_9
-    ];
+    // we only need websockets these days (huzzah!)
+    var default_transports = ["websocket"];
 
     // html5 notifications (opt-in)
     var canNotify = "Notification" in window;
@@ -281,9 +269,6 @@
         log.info("= Connected via " + socket.protocol);
 
         me.transport = socket.protocol;
-
-        // XDR doesn't have good enough upstream speed for mouse motion
-        me.readonly = force_readonly || (me.transport == "xdr-streaming");
 
         // reset retry timer, we're in
         user.retry.current = user.retry.initial;
@@ -580,15 +565,13 @@
         event.clientY + window.pageYOffset
       );
 
-      if (!me.readonly) {
-        // is quick-rebroadcast, no server processing
-        emit('motion', {
-          x: event.clientX + window.pageXOffset,
-          y: event.clientY + window.pageYOffset,
-          id: me.id,
-          c: me.country
-        });
-      }
+      // is quick-rebroadcast, no server processing
+      emit('motion', {
+        x: event.clientX + window.pageXOffset,
+        y: event.clientY + window.pageYOffset,
+        id: me.id,
+        c: me.country
+      });
     };
 
     on('motion', function(other) {
@@ -634,9 +617,6 @@
     }
 
     on('scroll', function(other) {
-      // :(
-      if (me.readonly || window._ie9) return;
-
       if (!others[other.id]) return;
 
       others[other.id].angle = other.angle;
@@ -648,9 +628,6 @@
 
       var button = clickMap[event.button];
 
-      // :(
-      if (me.readonly || window._ie9) return;
-
       var x = event.clientX + window.pageXOffset;
       var y = event.clientY + window.pageYOffset;
 
@@ -661,9 +638,6 @@
     };
 
     on('click', function(other) {
-      // :(
-      if (me.readonly || window._ie9) return;
-
       clickbacks[other.button](others[other.id], other.x, other.y);
     });
 
