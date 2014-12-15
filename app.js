@@ -18,7 +18,6 @@ var index = function(req, res) {
     answer: Christmas.answer(country, utcTime),
     country: country,
 
-    req: req,
     config: config,
     env: app.get('env')
   });
@@ -32,7 +31,6 @@ var rss = function(req, res) {
     Christmas: Christmas,
     dateFormat: dateFormat,
 
-    req: req,
     config: config,
     env: app.get('env')
   });
@@ -68,7 +66,6 @@ var geoipLookup = function(ip) {
 
 var express = require('express'),
     http = require('http'),
-    path = require('path'),
     dateFormat = require('dateformat'),
     Christmas = require("./public/js/christmas"); // re-use christmas.js
 
@@ -82,26 +79,28 @@ var geoip = require('geoip'),
 var app = express(),
     config = require('./config')[app.get('env')];
 
-app.engine('.html', require('ejs').__express);
-app.engine('.xml', require('ejs').__express);
-app.set('port', parseInt(process.env.PORT || args.port || config.port || 80));
-app.set('view engine', 'html');
-app.use(express.favicon(__dirname + '/public/favicon.ico'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.enable('trust proxy')
+  .set('view engine', 'html')
+  .engine('.xml', require('ejs').__express)
+  .engine('.html', require('ejs').__express)
+  .use(require('serve-favicon')(__dirname + '/public/favicon.ico'))
+  .use(express.static(__dirname + '/public'))
+  .use(function(req,res,next){
+    res.locals.req = req;
+    next();
+  })
+  .set('port', parseInt(process.env.PORT || args.port || config.port || 80));
 
+if (app.get('env') == "development")
+  app.use(require('errorhandler')({dumpExceptions: true, showStack: true}))
+else
+  app.use(require('errorhandler')())
+
+// small app
 app.get('/', index);
 app.get('/rss.xml', rss);
 
 
-var startServer = function() {
-  app.enable('trust proxy');
-
-  http.createServer(app).listen(app.get('port'), function(){
-    console.log("Express %s server listening on port %s", app.settings.env, app.get('port'));
-  });
-}
-
-if (app.get('env') == 'development')
-  app.use(express.errorHandler());
-
-startServer();
+app.listen(app.get('port'), function() {
+  console.log("Express %s server listening on port %s", app.get('env'), app.get('port'));
+});

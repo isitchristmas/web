@@ -24,7 +24,9 @@
   "homepage": "https://isitchristmas.com",
 
   "dependencies": {
-    "express": "3.x",
+    "express": "4.x",
+    "errorhandler": "*",
+    "serve-favicon": "*",
 
     "ejs": "*",
     "dateformat": "*",
