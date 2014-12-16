@@ -25,6 +25,7 @@
 
   "dependencies": {
     "express": "4.x",
+    "body-parser": "*",
     "errorhandler": "*",
     "serve-favicon": "*",
 
@@ -34,8 +35,6 @@
     "time": "*",
 
     "geoip": "*",
-    "optimist": "*",
-
-    "body-parser": "*"
+    "optimist": "*"
   }
 }
