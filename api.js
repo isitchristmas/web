@@ -55,7 +55,7 @@ module.exports = function(app, config, findCountry) {
                     answer: Christmas.yes(country),
                     christmas: true,
                     christmas_day: christmasDay.toISOString(),
-                    christmas_time: christmasDay.getTime(),
+                    christmas_time: (christmasDay.getTime() / 1000),
                     year: year,
                     id: "christmas-" + year,
                     timezone: timezone,
