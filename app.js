@@ -85,6 +85,7 @@ app.enable('trust proxy')
   .engine('.html', require('ejs').__express)
   .use(require('serve-favicon')(__dirname + '/public/favicon.ico'))
   .use(express.static(__dirname + '/public'))
+  .use(require('body-parser').json())
   .use(function(req,res,next){
     res.locals.req = req;
     next();
@@ -101,7 +102,7 @@ app.get('/', index);
 app.get('/rss.xml', rss);
 
 // mount the api
-require('./api')(app, config);
+app.use('/api', require('./api')(app, config));
 
 app.listen(app.get('port'), function() {
   console.log("Express %s server listening on port %s", app.get('env'), app.get('port'));
