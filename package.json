@@ -34,6 +34,8 @@
     "time": "*",
 
     "geoip": "*",
-    "optimist": "*"
+    "optimist": "*",
+
+    "body-parser": "*"
   }
 }

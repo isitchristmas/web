@@ -100,6 +100,8 @@ else
 app.get('/', index);
 app.get('/rss.xml', rss);
 
+// mount the api
+require('./api')(app, config);
 
 app.listen(app.get('port'), function() {
   console.log("Express %s server listening on port %s", app.get('env'), app.get('port'));
