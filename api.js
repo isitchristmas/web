@@ -55,6 +55,7 @@ module.exports = function(app, config, findCountry) {
                     answer: Christmas.yes(country),
                     christmas: true,
                     christmas_day: christmasDay.toISOString(),
+                    christmas_time: christmasDay.getTime(),
                     year: year,
                     id: "christmas-" + year,
                     timezone: timezone,
@@ -72,10 +73,11 @@ module.exports = function(app, config, findCountry) {
         return {
             answer: christmas.answer,
             year: christmas.year,
+            created_at: christmas.christmas_day,
             meta: {
                 // should only ever fire once a year
                 id: christmas.id,
-                timestamp: christmas.christmas_day,
+                timestamp: christmas.christmas_time,
             }
         }
     };
@@ -129,13 +131,13 @@ module.exports = function(app, config, findCountry) {
             // no more than 20 years of christmas data, tops
             items = items.slice(0, (req.body.limit || 20));
 
-            res.json({data: items});
+            res.json({"data": items});
         }
     });
 
 
     router.get('/ifttt/v1/status', function(req, res) {
-        if (!authed(req)) return res.status(401).json(UNAUTHORIZED_RESPONSE);
+        if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
 
         res.json({
             "data": {
@@ -147,7 +149,7 @@ module.exports = function(app, config, findCountry) {
     });
 
     router.post('/ifttt/v1/test/setup', function(req, res) {
-        if (!authed(req)) return res.status(401).json(UNAUTHORIZED_RESPONSE);
+        if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
         res.json({
             "data": {
                 "samples": {
