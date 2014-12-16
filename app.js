@@ -87,10 +87,10 @@ app.enable('trust proxy')
   })
   .set('port', parseInt(process.env.PORT || args.port || config.port || 80));
 
-if (app.get('env') == "development")
-  app.use(require('errorhandler')({dumpExceptions: true, showStack: true}))
-else
-  app.use(require('errorhandler')())
+// if (app.get('env') == "development")
+//   app.use(require('errorhandler')({dumpExceptions: true, showStack: true}))
+// else
+//   app.use(require('errorhandler')())
 
 // small app
 app.get('/', index);
