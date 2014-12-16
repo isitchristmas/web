@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var Christmas = require("./public/js/christmas");
+var Christmas = require("./public/js/christmas"),
+    zones = require("./public/js/zones");
 
 module.exports = function(app, config) {
 
