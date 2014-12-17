@@ -106,6 +106,7 @@ module.exports = function(app, config, findCountry) {
     });
 
     router.post('/ifttt/v1/triggers/:trigger', function(req, res) {
+        console.log("trigger: " + req.params.trigger);
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
 
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
