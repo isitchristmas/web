@@ -3,6 +3,7 @@ var router = express.Router();
 
 var Christmas = require("./public/js/christmas"),
     zones = require("./public/js/zones"),
+    labels = require("./public/js/labels"),
     time = require("time");
 
 module.exports = function(app, config, findCountry) {
@@ -17,8 +18,12 @@ module.exports = function(app, config, findCountry) {
 
     var UNAUTHORIZED = "No thank you.",
         BAD_TRIGGER = "Invalid trigger.",
+        BAD_TRIGGER_FIELD = "Invalid trigger field.",
         BAD_TIMEZONE = "Invalid timezone.",
-        BAD_COUNTRY = "Invalid country code."
+        BAD_COUNTRY = "Invalid country code.",
+        INVALID_TIMEZONE = "Not a valid timezone.",
+        MISSING_TRIGGER_FIELDS = "Missing trigger fields.",
+        EVERYTHING_IS_FINE = "Everything is fine."
 
 
     // if a client secret is set, gate access to some methods
@@ -111,15 +116,16 @@ module.exports = function(app, config, findCountry) {
 
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
 
+        if (!req.body.triggerFields || !req.body.triggerFields.timezone) return res.status(400).json(ERROR(MISSING_TRIGGER_FIELDS));
+        if (!zones[req.body.triggerFields.timezone]) return res.status(400).json(ERROR(INVALID_TIMEZONE));
+
         if (req.body.limit === 0)
             res.json({"data": []});
         else {
+
             // map IFTTT zone name to standard zone name
-            var timezone;
-            if (req.body.user)
-                timezone = zones[req.body.user.timezone];
-            else
-                timezone = "UTC";
+            // we've validated that this field is here
+            var timezone = zones[req.body.triggerFields.timezone];
 
             // every christmas since 2007 in the user's time zone
             // for IFTTT, sadly I must just assume English
@@ -136,6 +142,27 @@ module.exports = function(app, config, findCountry) {
         }
     });
 
+    router.post('/ifttt/v1/triggers/:trigger/fields/:field/options', function(req, res) {
+        if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
+        console.log('triggerfield, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
+        if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
+        if (req.params.field != "timezone") return res.status(400).json(ERROR(BAD_TRIGGER_FIELD));
+
+        res.json({"data": labels});
+    });
+
+    router.post('/ifttt/v1/triggers/:trigger/fields/:field/validate', function(req, res) {
+        if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
+        console.log('triggerfield validate, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
+        if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
+        if (req.params.field != "timezone") return res.status(400).json(ERROR(BAD_TRIGGER_FIELD));
+
+        if (zones[req.body.value])
+            res.json({"data": {valid: true}});
+        else
+            res.json({"data": {valid: false, message: INVALID_TIMEZONE}});
+
+    });
 
     router.get('/ifttt/v1/status', function(req, res) {
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
@@ -144,7 +171,7 @@ module.exports = function(app, config, findCountry) {
             "data": {
                 "status": "OK",
                 "time": new Date().toISOString(),
-                "message": "Everything is fine."
+                "message": EVERYTHING_IS_FINE
             }
         });
     });
@@ -156,7 +183,15 @@ module.exports = function(app, config, findCountry) {
                 "samples": {
                     "triggers": {
                         "christmas": {
-
+                            "timezone": "Pacific Time (US & Canada)"
+                        }
+                    },
+                    "triggerFieldValidations": {
+                        "christmas": {
+                            "timezone": {
+                                "valid": "Pacific Time (US & Canada)",
+                                "invalid": "America/Los_Angeles"
+                            }
                         }
                     }
                 }
