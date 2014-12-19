@@ -54,8 +54,8 @@ module.exports = function(app, config, findCountry) {
             var year = thisYear - i; // reverse chronological order
             var christmasDay = Christmas.forYear(time, year, timezone);
 
-            // only show christmases past
-            if (now > christmasDay) {
+            // only show christmases past, OR turn on a debug param to always allow
+            if ((now > christmasDay) || config.ifttt_debug) {
                 christmases.push({
                     answer: Christmas.yes(country),
                     christmas: true,
