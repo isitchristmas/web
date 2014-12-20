@@ -1,5 +1,5 @@
 var IIC = {
-    userListeners = {};
+    userListeners: {},
     
     addEventListener: function(event, listener) {
         // We aren't calling user listeners for this event: start doing so.
