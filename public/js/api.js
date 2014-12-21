@@ -36,6 +36,10 @@ var IIC = {
         return !!others[userId];
     },
     
+    getConnectedIds: function() {
+        return Object.getOwnPropertyNames(others);
+    },
+    
     getId: function() {
         return me.id;
     },
@@ -52,7 +56,9 @@ var IIC = {
     // Country
     
     getCountry: function(userId) {
-        return userId ? others[userId].country : me.country;
+        if(userId)
+            return others[userId] ? others[userId].country : null;
+        return me.country;
     },
     
     setCountry: function(countryCode) {
@@ -81,9 +87,15 @@ var IIC = {
     // Flag position
     
     getPosition: function(userId) {
-        var flag = userId ? others[userId].flag : me.flag;
+        var flag;
+        if(userId)
+            flag = others[userId] ? others[userId].flag : null;
+        else
+            flag = me.flag;
+        
         if(!flag || !flag.style.left || !flag.style.top)
             return null;
+        
         return { x: parseInt(flag.style.left), y: parseInt(flag.style.top) };
     },
     
