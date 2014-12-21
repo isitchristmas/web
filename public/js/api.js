@@ -60,11 +60,9 @@ var IIC = {
         
         // Delete the old cursor and remember its position, if necessary.
         var isFlagVisible = me.flag && me.flag.parentElement;
-        var oldFlagPosition = null;
-        if(isFlagVisible) {
+        var oldFlagPosition = this.getPosition();
+        if(isFlagVisible)
             me.flag.parentElement.removeChild(me.flag);
-            oldFlagPosition = this.getPosition();
-        }
         
         // Create a new cursor.
         setCursor(me.country);
@@ -83,15 +81,9 @@ var IIC = {
     // Flag position
     
     getPosition: function(userId) {
-        var flag;
-        if(userId) {
-            if(!others[userId].flag)
-                return null;
-            flag = others[userId].flag;
-        }
-        else
-            flag = me.flag;
-        
+        var flag = userId ? others[userId].flag : me.flag;
+        if(!flag || !flag.style.left || !flag.style.top)
+            return null;
         return { x: parseInt(flag.style.left), y: parseInt(flag.style.top) };
     },
     
