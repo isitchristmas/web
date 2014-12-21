@@ -38,16 +38,22 @@ var IIC = {
     
     // Connection
     
-    isConnected: function(userId) {
-        return !!others[userId];
+    getId: function() {
+        return me.id;
     },
     
     getConnectedIds: function() {
         return Object.getOwnPropertyNames(others);
     },
     
-    getId: function() {
-        return me.id;
+    isConnected: function(userId) {
+        return !!others[userId];
+    },
+    
+    onConnection: function(listener) {
+        return this.addEventListener('arrive', function(data) {
+            listener(data.id);
+        });
     },
     
     // Chat
@@ -193,7 +199,7 @@ var IIC = {
         point.element.style.width = this._DEBUG_POINT_SIZE + 'px';
         point.element.style.height = this._DEBUG_POINT_SIZE + 'px';
         
-        point.element.style.backgroundColor = color ? color : 'black';
+        point.element.style.backgroundColor = color || 'black';
         
         return point.index;
     },
@@ -203,6 +209,7 @@ var IIC = {
         textbox.element.innerText = text;
         
         textbox.element.style.fontFamily = 'sans-serif';
+        textbox.element.style.fontSize = '12px';
         
         if(color)
             textbox.element.style.color = color;
