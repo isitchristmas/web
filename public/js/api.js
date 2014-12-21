@@ -204,12 +204,28 @@ var IIC = {
         return point.index;
     },
     
+    debugLine: function(x1, y1, x2, y2, color) {
+        var line = this._addDebugDiv(x1, y1);
+        
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        line.element.style.width = Math.sqrt(dx*dx + dy*dy) + 'px';
+        line.element.style.height = '2px';
+        line.element.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
+        line.element.style.transformOrigin = '0% 0%';
+        
+        line.element.style.backgroundColor = color || 'black';
+        
+        return line.index;
+    },
+    
     debugText: function(x, y, text, color) {
         var textbox = this._addDebugDiv(x, y);
         textbox.element.innerText = text;
         
         textbox.element.style.fontFamily = 'sans-serif';
         textbox.element.style.fontSize = '12px';
+        textbox.element.style.textShadow = '-1px 0px 0px white, 1px 0px 0px white, 0px -1px 0px white, 0px 1px 0px white';
         
         if(color)
             textbox.element.style.color = color;
