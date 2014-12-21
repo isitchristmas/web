@@ -1,12 +1,12 @@
 var IIC = {
     // User-defined events
     
-    userListeners: {},
+    _userListeners: {},
     
     addEventListener: function(event, listener) {
         // We aren't calling user listeners for this event: start doing so.
-        if(!this.userListeners[event]) {
-            this.userListeners[event] = [];
+        if(!this._userListeners[event]) {
+            this._userListeners[event] = [];
             
             var defaultListener = events[event];
             events[event] = function(data) {
@@ -14,25 +14,25 @@ var IIC = {
                 defaultListener(data);
                 
                 // And then all of the user-defined ones.
-                for(var i = 0; i < this.userListeners[event].length; i++) {
-                    if(this.userListeners[event][i])
-                        this.userListeners[event][i](data);
+                for(var i = 0; i < this._userListeners[event].length; i++) {
+                    if(this._userListeners[event][i])
+                        this._userListeners[event][i](data);
                 }
             }.bind(this);
         }
         
         // Add user's listener.
-        return [ event, this.userListeners[event].push(listener) - 1 ];
+        return [ event, this._userListeners[event].push(listener) - 1 ];
     },
     
     removeEventListener: function(listenerId) {
         // Make sure the id is valid and the listener exists.
         if(!listenerId || !listenerId[0] || (typeof listenerId[1]) === 'undefined'
-           || !this.userListeners[listenerId[0]] || !this.userListeners[listenerId[0]][listenerId[1]])
+           || !this._userListeners[listenerId[0]] || !this._userListeners[listenerId[0]][listenerId[1]])
             return false;
 
         // Delete the listener.
-        this.userListeners[listenerId[0]][listenerId[1]] = null;
+        this._userListeners[listenerId[0]][listenerId[1]] = null;
         return true;
     },
     
@@ -167,5 +167,48 @@ var IIC = {
             if(data.button === 'right')
                 listener(data.id, data.x, data.y);
         });
+    },
+    
+    // Debugging
+    
+    _DEBUG_POINT_SIZE: 4,
+    _debugElements: [],
+    
+    _addDebugDiv: function(x, y) {
+        var element = document.createElement('div');
+        
+        element.style.position = 'absolute';
+        element.style.left = x + 'px';
+        element.style.top = y + 'px';
+        
+        document.body.appendChild(element);
+        this._debugElements.push(element);
+        
+        return element;
+    },
+    
+    debugPoint: function(x, y, color) {
+        var pointElement = this._addDebugElement(x - this._DEBUG_POINT_SIZE / 2, y - this._DEBUG_POINT_SIZE / 2);
+        
+        pointElement.style.width = this._DEBUG_POINT_SIZE + 'px';
+        pointElement.style.height = this._DEBUG_POINT_SIZE + 'px';
+        
+        pointElement.style.backgroundColor = color;
+    },
+    
+    debugPrint: function(x, y, string, color) {
+        var textElement = this._addDebugElement(x, y);
+        textElement.innerText = string;
+        
+        textElement.style.fontFamily = 'sans-serif';
+        
+        if(color)
+            textElement.style.color = color;
+    },
+    
+    debugErase: function() {
+        for(var i = 0; i < this._debugElements.length; i++)
+            this._debugElements[i].parentElement.removeChild(this._debugElements[i]);
+        this._debugElements = [];
     }
 };
