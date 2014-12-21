@@ -60,7 +60,7 @@ var IIC = {
     
     onChat: function(listener) {
         return this.addEventListener('chat', function(data) {
-            listener(data.id, data.message);
+            listener(data.id, data.name, data.message);
         });
     },
     
