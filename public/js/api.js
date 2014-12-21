@@ -26,8 +26,14 @@ var IIC = {
     },
     
     removeEventListener: function(listenerId) {
+        // Make sure the id is valid and the listener exists.
+        if(!listenerId || !listenerId[0] || (typeof listenerId[1]) === 'undefined'
+           || !this.userListeners[listenerId[0]] || !this.userListeners[listenerId[0]][listenerId[1]])
+            return false;
+
         // Delete the listener.
         this.userListeners[listenerId[0]][listenerId[1]] = null;
+        return true;
     },
     
     // Connection
