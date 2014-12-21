@@ -90,6 +90,16 @@ var IIC = {
         }
     },
     
+    // Flag dimensions
+    
+    getFlagWidth: function(countryCode) {
+        return flagWidth(countryCode);
+    },
+    
+    getFlagHeight: function(countryCode) {
+        return 20;
+    },
+    
     // Flag position
     
     getPosition: function(userId) {
