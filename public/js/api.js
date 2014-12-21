@@ -54,12 +54,11 @@ var IIC = {
     
     onChat: function(listener) {
         return this.addEventListener('chat', function(data) {
-            if(data.id !== me.id)
-                listener(data.id, data.message);
+            listener(data.id, data.message);
         });
     },
     
-    // Country
+    // Countries
     
     getCountry: function(userId) {
         if(userId)
@@ -104,7 +103,7 @@ var IIC = {
     
     getPosition: function(userId) {
         var flag;
-        if(userId)
+        if(userId && userId !== me.id)
             flag = others[userId] ? others[userId].flag : null;
         else
             flag = me.flag;
@@ -185,33 +184,44 @@ var IIC = {
         element.style.top = y + 'px';
         
         document.body.appendChild(element);
-        this._debugElements.push(element);
-        
-        return element;
+        return { element: element, index: this._debugElements.push(element) - 1 };
     },
     
     debugPoint: function(x, y, color) {
-        var pointElement = this._addDebugDiv(x - this._DEBUG_POINT_SIZE / 2, y - this._DEBUG_POINT_SIZE / 2);
+        var point = this._addDebugDiv(x - this._DEBUG_POINT_SIZE / 2, y - this._DEBUG_POINT_SIZE / 2);
         
-        pointElement.style.width = this._DEBUG_POINT_SIZE + 'px';
-        pointElement.style.height = this._DEBUG_POINT_SIZE + 'px';
+        point.element.style.width = this._DEBUG_POINT_SIZE + 'px';
+        point.element.style.height = this._DEBUG_POINT_SIZE + 'px';
         
-        pointElement.style.backgroundColor = color;
+        point.element.style.backgroundColor = color ? color : 'black';
+        
+        return point.index;
     },
     
     debugText: function(x, y, text, color) {
-        var textElement = this._addDebugDiv(x, y);
-        textElement.innerText = text;
+        var textbox = this._addDebugDiv(x, y);
+        textbox.element.innerText = text;
         
-        textElement.style.fontFamily = 'sans-serif';
+        textbox.element.style.fontFamily = 'sans-serif';
         
         if(color)
-            textElement.style.color = color;
+            textbox.element.style.color = color;
+        
+        return textbox.index;
     },
     
-    debugErase: function() {
+    debugErase: function(elementId) {
+        if(!this._debugElements[elementId])
+            return false;
+        
+        this._debugElements[elementId].parentElement.removeChild(this._debugElements[elementId]);
+        this._debugElements[elementId] = null;
+        return true;
+    },
+    
+    debugEraseAll: function() {
         for(var i = 0; i < this._debugElements.length; i++)
-            this._debugElements[i].parentElement.removeChild(this._debugElements[i]);
+            this.debugErase(i);
         this._debugElements = [];
     }
 };
