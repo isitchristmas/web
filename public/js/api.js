@@ -172,10 +172,13 @@ var IIC = {
     // Debugging
     
     _DEBUG_POINT_SIZE: 4,
+    _DEBUG_Z_INDEX: 10000,
     _debugElements: [],
     
     _addDebugDiv: function(x, y) {
         var element = document.createElement('div');
+        
+        element.style.zIndex = this._DEBUG_Z_INDEX;
         
         element.style.position = 'absolute';
         element.style.left = x + 'px';
