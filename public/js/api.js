@@ -203,20 +203,24 @@ var IIC = {
         
         return point.index;
     },
-    
+
     debugLine: function(x1, y1, x2, y2, color) {
-        var line = this._addDebugDiv(x1, y1);
-        
         var dx = x2 - x1;
         var dy = y2 - y1;
-        line.element.style.width = Math.sqrt(dx*dx + dy*dy) + 'px';
-        line.element.style.height = '2px';
-        line.element.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
-        line.element.style.transformOrigin = '0% 0%';
+        return this.debugRay(x1, y1, Math.sqrt(dx*dx + dy*dy), Math.atan2(dy, dx), color);
+    },
+    
+    debugRay: function(x, y, length, angle, color) {
+        var ray = this._addDebugDiv(x, y);
         
-        line.element.style.backgroundColor = color || 'black';
+        ray.element.style.width = length + 'px';
+        ray.element.style.height = '2px';
+        ray.element.style.transform = 'rotate(' + angle + 'rad)';
+        ray.element.style.transformOrigin = '0% 0%';
         
-        return line.index;
+        ray.element.style.backgroundColor = color || 'black';
+        
+        return ray.index;
     },
     
     debugText: function(x, y, text, color) {
