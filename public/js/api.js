@@ -1,4 +1,6 @@
 var IIC = {
+    // User-defined events
+    
     userListeners: {},
     
     addEventListener: function(event, listener) {
@@ -28,38 +30,26 @@ var IIC = {
         this.userListeners[listenerId[0]][listenerId[1]] = null;
     },
     
-    
-    onChat: function(listener) {
-        return this.addEventListener('chat', function(data) { listener(data.id, data.message); });
-    },
-    
-    onMovement: function(listener) {
-        return this.addEventListener('motion', function(data) { listener(data.id, data.x, data.y); });
-    },
-    
-    onRotation: function(listener) {
-        return this.addEventListener('scroll', function(data) { listener(data.id, data.angle / 180 * Math.PI); });
-    },
-    
-    onWave: function(listener) {
-        return this.addEventListener('click', function(data) {
-            if(data.button === 'left')
-                listener(data.id, data.x, data.y);
-        });
-    },
-    
-    onGhost: function(listener) {
-        return this.addEventListener('click', function(data) {
-            if(data.button === 'right')
-                listener(data.id, data.x, data.y);
-        });
-    },
-    
+    // Connection
     
     isConnected: function(userId) {
         return !!others[userId];
     },
     
+    getId: function() {
+        return me.id;
+    },
+    
+    // Chat
+    
+    onChat: function(listener) {
+        return this.addEventListener('chat', function(data) {
+            if(data.id !== me.id)
+                listener(data.id, data.message);
+        });
+    },
+    
+    // Country
     
     getCountry: function(userId) {
         return userId ? others[userId].country : me.country;
@@ -73,7 +63,7 @@ var IIC = {
         var oldFlagPosition = null;
         if(isFlagVisible) {
             me.flag.parentElement.removeChild(me.flag);
-            oldFlagPosition = { left: me.flag.style.left, top: me.flag.style.top };
+            oldFlagPosition = this.getPosition();
         }
         
         // Create a new cursor.
@@ -83,11 +73,26 @@ var IIC = {
         if(isFlagVisible) {
             document.body.appendChild(me.flag);
             
-            me.flag.style.left = oldFlagPosition.left;
-            me.flag.style.top = oldFlagPosition.top;
+            me.flag.style.left = oldFlagPosition.x + 'px';
+            me.flag.style.top = oldFlagPosition.y + 'px';
             
             me.flag._new = false;
         }
+    },
+    
+    // Flag position
+    
+    getPosition: function(userId) {
+        var flag;
+        if(userId) {
+            if(!others[userId].flag)
+                return null;
+            flag = others[userId].flag;
+        }
+        else
+            flag = me.flag;
+        
+        return { x: parseInt(flag.style.left), y: parseInt(flag.style.top) };
     },
     
     setPosition: function(x, y) {
@@ -95,7 +100,17 @@ var IIC = {
         mouseMove({ clientX: x, clientY: y });
     },
     
-    setAngle: function(angle /* radians */) {
+    onMovement: function(listener) {
+        return this.addEventListener('motion', function(data) { listener(data.id, data.x, data.y); });
+    },
+    
+    // Flag rotation
+    
+    getAngle: function(userId) {
+        return (userId ? others[userId].angle : me.angle) / 180 * Math.PI;
+    },
+    
+    setAngle: function(angle) {
         // Set the rotation of the cursor.
         me.angle = angle / Math.PI * 180;
         setRotate(me.flag, me.angle);
@@ -104,13 +119,33 @@ var IIC = {
         emit('scroll', { id: me.id, angle: me.angle });
     },
     
+    onRotation: function(listener) {
+        return this.addEventListener('scroll', function(data) { listener(data.id, data.angle / 180 * Math.PI); });
+    },
+    
+    // Waves and ghosts
+    
     makeWave: function(x, y) {
         // Pretend we made a left mouse click.
         mouseClick({ clientX: x, clientY: y, button: 0 });
     },
     
+    onWave: function(listener) {
+        return this.addEventListener('click', function(data) {
+            if(data.button === 'left')
+                listener(data.id, data.x, data.y);
+        });
+    },
+    
     makeGhost: function(x, y) {
         // Pretend we made a right mouse click.
         mouseClick({ clientX: x, clientY: y, button: 2 });
+    },
+    
+    onGhost: function(listener) {
+        return this.addEventListener('click', function(data) {
+            if(data.button === 'right')
+                listener(data.id, data.x, data.y);
+        });
     }
 };
