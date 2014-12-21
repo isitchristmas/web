@@ -188,7 +188,7 @@ var IIC = {
     },
     
     debugPoint: function(x, y, color) {
-        var pointElement = this._addDebugElement(x - this._DEBUG_POINT_SIZE / 2, y - this._DEBUG_POINT_SIZE / 2);
+        var pointElement = this._addDebugDiv(x - this._DEBUG_POINT_SIZE / 2, y - this._DEBUG_POINT_SIZE / 2);
         
         pointElement.style.width = this._DEBUG_POINT_SIZE + 'px';
         pointElement.style.height = this._DEBUG_POINT_SIZE + 'px';
@@ -196,9 +196,9 @@ var IIC = {
         pointElement.style.backgroundColor = color;
     },
     
-    debugPrint: function(x, y, string, color) {
-        var textElement = this._addDebugElement(x, y);
-        textElement.innerText = string;
+    debugText: function(x, y, text, color) {
+        var textElement = this._addDebugDiv(x, y);
+        textElement.innerText = text;
         
         textElement.style.fontFamily = 'sans-serif';
         
