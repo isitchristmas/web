@@ -237,6 +237,16 @@ var IIC = {
         return textbox.index;
     },
     
+    debugFlag: function(x, y, a, countryCode) {
+        var element = flagFor(countryCode, 'ghost');
+        document.body.appendChild(element);
+        
+        setRotate(element, a / Math.PI * 180);
+        moveFlag(element, x, y);
+        
+        return this._debugElements.push(element) - 1;
+    },
+    
     debugErase: function(elementId) {
         if(!this._debugElements[elementId])
             return false;
