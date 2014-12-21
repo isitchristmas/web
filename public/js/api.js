@@ -216,7 +216,7 @@ var IIC = {
         ray.element.style.width = length + 'px';
         ray.element.style.height = '2px';
         ray.element.style.transform = 'rotate(' + angle + 'rad)';
-        ray.element.style.transformOrigin = '0% 0%';
+        ray.element.style.transformOrigin = '0% 50%';
         
         ray.element.style.backgroundColor = color || 'black';
         
