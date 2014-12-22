@@ -811,6 +811,7 @@
       var advanced3 = "%croom%c - Stats about the room you're in."
       var advanced4 = "%cwtf%c - How is this happening"
       var advanced5 = "%cnotifications%c - Enable notifications for when you are mentioned"
+      var keys = "%cYou can use arrow keys to rotate the flag."
 
       var credit = "%cMade by https://twitter.com/konklone, full credits at https://isitchristmas.com/humans.txt";
 
@@ -821,6 +822,8 @@
       log.system(advanced3, styles.help_bold, styles.help);
       log.system(advanced4, styles.help_bold, styles.help);
       log.system(advanced5, styles.help_bold, styles.help);
+      log.system(" ");
+      log.system(keys, styles.help);
       log.system(" ");
       log.system(credit, styles.system);
       spam();
