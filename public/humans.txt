@@ -9,6 +9,8 @@ isitchristmas.com Core Team:
 
 /* THANKS */
 
+Brittany Rose, for the idea of using arrow keys for rotation.
+
 Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
 
   github.com/mherdeg
