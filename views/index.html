@@ -363,6 +363,7 @@
       document.onmousemove = mouseMove;
       document.onmousedown = mouseClick;
       document.onmousewheel = mouseWheel;
+      document.onkeydown = keyDown;
       document.addEventListener("DOMMouseScroll", mouseWheel, false);
       document.oncontextmenu = function() {return false};
     });
@@ -394,6 +395,7 @@
       document.onmousedown = null;
       document.onmousewheel = null;
       document.oncontextmenu = null;
+      document.onkeydown = null;
 
       me.id = null;
       me.transport = null;
@@ -629,6 +631,34 @@
       others[other.id].angle = other.angle;
       setRotate(others[other.id].flag, other.angle);
     });
+
+    var keyDown = function(event) {
+        event = event || window.event;
+
+        var direction;
+
+        if (event.keyCode == '37') // left
+          direction = -1;
+        else if (event.keyCode == '39') // right
+          direction = 1;
+        else
+          return true;
+
+        log.debug("key press: " + event.keyCode);
+
+        var increment = 15;
+
+        if (direction > 0)
+          me.angle += increment;
+        else
+          me.angle -= increment;
+
+        setRotate(me.flag, me.angle);
+        emit('scroll', {id: me.id, angle: me.angle});
+
+        if (event.preventDefault) event.preventDefault();
+        return false;
+    }
 
     var mouseClick = function(event) {
       event = event || window.event;
