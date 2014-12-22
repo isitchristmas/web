@@ -632,6 +632,11 @@
       setRotate(others[other.id].flag, other.angle);
     });
 
+    // Let users use left and right arrow keys to rotate the flag.
+    // Especially helpful to users with no scroll wheel! (Who has
+    // those things now anyway?)
+    //
+    // Thanks to Brittany Rose for the idea!
     var keyDown = function(event) {
         event = event || window.event;
 
@@ -785,6 +790,7 @@
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
       var help3 = "%chelp%c - See this message again.";
       var help4 = "%cadvanced%c - See menu of advanced options.";
+
       log.system(help1a, styles.help_bold, styles.help);
       log.system(help2a, styles.help_bold, styles.help);
       log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
