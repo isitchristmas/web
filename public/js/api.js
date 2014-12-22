@@ -122,7 +122,10 @@ var IIC = {
     
     setPosition: function(x, y) {
         // Pretend we moved the mouse to a given location.
-        mouseMove({ clientX: x, clientY: y });
+        mouseMove({
+            clientX: x - window.pageXOffset,
+            clientY: y - window.pageYOffset
+        });
     },
     
     onMovement: function(listener) {
@@ -152,7 +155,11 @@ var IIC = {
     
     makeWave: function(x, y) {
         // Pretend we made a left mouse click.
-        mouseClick({ clientX: x, clientY: y, button: 0 });
+        mouseClick({
+            clientX: x - window.pageXOffset,
+            clientY: y - window.pageYOffset,
+            button: 0
+        });
     },
     
     onWave: function(listener) {
@@ -164,7 +171,11 @@ var IIC = {
     
     makeGhost: function(x, y) {
         // Pretend we made a right mouse click.
-        mouseClick({ clientX: x, clientY: y, button: 2 });
+        mouseClick({
+            clientX: x - window.pageXOffset,
+            clientY: y - window.pageYOffset,
+            button: 2
+        });
     },
     
     onGhost: function(listener) {
