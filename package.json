@@ -25,6 +25,7 @@
 
   "dependencies": {
     "express": "4.x",
+    "body-parser": "*",
     "errorhandler": "*",
     "serve-favicon": "*",
 

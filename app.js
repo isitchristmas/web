@@ -1,5 +1,5 @@
 
-// imbues Date with timezone abilities
+// imbues Date with timezone abilities - must do this first
 require('time')(Date);
 
 // allow port to be passed in via command lne
@@ -39,26 +39,25 @@ var rss = function(req, res) {
 
 /** helpers **/
 
+// must have downloaded a country-level geoip dat file ahead of time
+var geoip = require('geoip'),
+    countries = new geoip.Country('data/countries.dat');
+
 var findCountry = function(req) {
-  if (req.param("country"))
-    return req.param("country");
+  if (req.param("country")) return req.param("country");
 
   var forwarded = req.header("X-Forwarded-For");
   var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
 
-  var country = geoipLookup(ip);
-  // console.log("Found country [" + country + "]");
-  return country;
-};
-
-var geoipLookup = function(ip) {
   // debug: French IP
   // ip = "193.51.208.14";
-
   // console.log("Looking up IP [" + ip + "]");
 
   var data = countries.lookupSync(ip);
-  return data ? data.country_code : null;
+  var country = data ? data.country_code : null;
+
+  // console.log("Found country [" + country + "]");
+  return country;
 };
 
 
@@ -72,10 +71,6 @@ var express = require('express'),
 // TODO: is this even used anywhere?
 require('date-utils'); // date helpers
 
-// must have downloaded a country-level geoip dat file ahead of time
-var geoip = require('geoip'),
-    countries = new geoip.Country('data/countries.dat');
-
 var app = express(),
     config = require('./config')[app.get('env')];
 
@@ -85,6 +80,7 @@ app.enable('trust proxy')
   .engine('.html', require('ejs').__express)
   .use(require('serve-favicon')(__dirname + '/public/favicon.ico'))
   .use(express.static(__dirname + '/public'))
+  .use(require('body-parser').json())
   .use(function(req,res,next){
     res.locals.req = req;
     next();
@@ -100,6 +96,8 @@ else
 app.get('/', index);
 app.get('/rss.xml', rss);
 
+// mount the api
+app.use('/api', require('./api')(app, config, findCountry));
 
 app.listen(app.get('port'), function() {
   console.log("Express %s server listening on port %s", app.get('env'), app.get('port'));

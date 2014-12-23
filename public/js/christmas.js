@@ -23,6 +23,12 @@ var Christmas = {
       return Christmas.no(countryCode);
   },
 
+  // for use from Node, where timezones are not set by user agent.
+  // first argument is the time module.
+  forYear: function(time, year, timezone) {
+    return new time.Date(year, Christmas.time.month, Christmas.time.date, timezone);
+  },
+
 
 /*
 
