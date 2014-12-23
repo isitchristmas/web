@@ -4,11 +4,13 @@ isitchristmas.com Core Team:
 
   Eric Mill, @konklone, konklone.com
   Brandon Jones, @btj, kingofprussia.com
-  Micah Rich, @micahbrich, weareagoodcompany.com
 
 
 /* THANKS */
 
+The IFTTT team, for helping me ship ifttt.com/isitchristmas
+Olivia Cheng, for the wonderful IFTTT channel icon.
+Micah Rich, for clutch design help over the years.
 Brittany Rose, for the idea of using arrow keys for rotation.
 
 Anyone who's ever submitted a patch or filed an issue in Github that I acted on:
