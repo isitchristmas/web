@@ -130,8 +130,8 @@
 
   <!-- fade in after a couple seconds -->
   <div id="links">
-    <a href="https://twitter.com/konklone">by @konklone</a>
-    <a href="https://ifttt.com/isitchristmas">on IFTTT</a>
+    <a href="https://twitter.com/konklone" target="_blank">by @konklone</a>
+    <a href="https://ifttt.com/isitchristmas" target="_blank">on IFTTT</a>
   </div>
 
   <div id="legend"></div>
@@ -1155,12 +1155,17 @@
     function setTimers() {
       // the init timer to fade in the links, used at christmas time
 
-
-
       setTimeout(function() {
-        var links = document.getElementById("links");
-        links.style.opacity = 1;
-      }, 3000);
+        document.getElementById("links").style.opacity = 1;
+      }, 2000);
+
+      links.onmouseover = function() {
+        if (me && me.flag) me.flag.style.visibility = "hidden";
+      };
+
+      links.onmouseout = function() {
+        if (me && me.flag) me.flag.style.visibility = "visible";
+      };
 
       var nextXmas = Christmas.thisYear();
       // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
