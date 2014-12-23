@@ -81,6 +81,30 @@
       text-align: right;
       font-size: 10pt;
     }
+
+    #links {
+      position: fixed;
+      top: 0; left: 0;
+      width: 200px;
+      padding-left: 15px; padding-top: 5px;
+      text-align: left;
+      font-size: 10pt;
+      z-index: 9999;
+
+      opacity: 0;
+
+      -webkit-transition: 0.5s ease-out;
+         -moz-transition: 0.5s ease-out;
+           -o-transition: 0.5s ease-out;
+              transition: 0.5s ease-out;
+    }
+
+    #links a {
+      color: #333;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    /* 4 9's, needs to be clickable */
   </style>
 
   <script type="text/javascript" src="/js/christmas.js"></script>
@@ -103,6 +127,12 @@
     title="<%= answer %>">
     <noscript><%= answer %></noscript>
   </a>
+
+  <!-- fade in after a couple seconds -->
+  <div id="links">
+    <a href="https://twitter.com/konklone">by @konklone</a>
+    <a href="https://ifttt.com/isitchristmas">on IFTTT</a>
+  </div>
 
   <div id="legend"></div>
 
@@ -514,7 +544,7 @@
     var setCursor = function(country) {
       me.flag = flagFor(country, "me");
       me.flag._new = true; // used to lazy-add element only if moved
-      me.flag.style.zIndex = 9999; // on top of the world
+      me.flag.style.zIndex = 999; // 3 9's, on top of the world
       setRotate(me.flag, me.angle); // preserve angle on reconnect
     };
 
@@ -1102,16 +1132,19 @@
     var flagRule = addCSSRule(".flag");
     var clickRule = addCSSRule("div.click");
     var legendRule = addCSSRule("div#legend");
+    var linksRule = addCSSRule("div#links");
     function flagFade(centerTime) {
       // fade out, then in
       setTimeout(function() {
         flagRule.style.opacity = 0;
         legendRule.style.display = "none";
+        linksRule.style.display = "none";
         clickRule.style.display = "none";
 
         setTimeout(function() {
           flagRule.style.opacity = 1;
           legendRule.style.display = "block";
+          linksRule.style.display = "block";
           clickRule.style.display = "block";
         }, 5000); // 2 seconds after center
 
@@ -1120,6 +1153,15 @@
 
 
     function setTimers() {
+      // the init timer to fade in the links, used at christmas time
+
+
+
+      setTimeout(function() {
+        var links = document.getElementById("links");
+        links.style.opacity = 1;
+      }, 3000);
+
       var nextXmas = Christmas.thisYear();
       // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
       // var nextXmas = new Date(Date.now()); // pretend we showed up a few milliseconds before
@@ -1202,20 +1244,6 @@
     severities.forEach(function(severity) {
       log[severity] = log.convenience(severity);
     });
-
-    // log.debug = function(message) {
-    //   log.apply(window, ["debug", message, styles[severity])
-    // };
-    // log.info = function(message) {log.styled("info", message)};
-
-    // log.join = function(message) {
-    //   log(message, "join")
-    //
-    // };
-
-    // log.system = function(message) {log.styled(message, "system")};
-    // log.life = function(message) {log.styled(message, "life")};
-    // chat and christmas use own custom logging
 
     var styles = {
       debug: "color: #999999",
