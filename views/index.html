@@ -833,8 +833,9 @@
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
       var help3 = "%chelp%c - See this message again.";
-      var help4 = "%crecent%c - See recent chat history.";
-      var help5 = "%cadvanced%c - See menu of advanced options.";
+      var help4 = "%cadvanced%c - See menu of advanced options.";
+
+      var recent = "%cUse %crecent %cto see recent chat history.";
 
       log.system(help1a, styles.help_bold, styles.help);
       log.system(help2a, styles.help_bold, styles.help);
@@ -842,7 +843,8 @@
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
-      log.system(help5, styles.help_bold, styles.help);
+      log.system(" ");
+      log.system(recent, styles.system, styles.system_bold, styles.system);
       log.system(" ");
 
       return " "; // when used via 'help'
@@ -851,6 +853,7 @@
     var showAdvanced = function() {
       if (user.live.chat != "true") return;
 
+      var advanced0 = "%crecent%c - Show recent chat history.";
       var advanced1 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
       advanced1 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
       var advanced2 = "%cemoji%c - How to use emoji in chat.";
@@ -863,6 +866,7 @@
 
       log.system("%cAdvanced commands:", styles.help);
       log.system(" ");
+      log.system(advanced0, styles.help_bold, styles.help);
       log.system(advanced1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(advanced2, styles.help_bold, styles.help);
       log.system(advanced3, styles.help_bold, styles.help);
