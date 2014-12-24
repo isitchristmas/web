@@ -89,7 +89,7 @@
     #links {
       position: fixed;
       top: 0; left: 0;
-      width: 200px;
+      width: 300px;
       padding-left: 15px; padding-top: 5px;
       text-align: left;
       font-size: 10pt;
@@ -107,7 +107,7 @@
       color: #333;
       display: inline-block;
       margin-right: 10px;
-    }
+    } #links a#console {display: none;}
     /* 4 9's, needs to be clickable */
   </style>
 
@@ -136,7 +136,8 @@
   <div id="links">
     <a href="https://twitter.com/konklone" target="_blank">by @konklone</a>
     <a href="https://ifttt.com/isitchristmas" target="_blank">on IFTTT</a>
-    <a href="https://developer.chrome.com/devtools/docs/console" target="_blank">You'll want to open the console: Command - Option - J (Mac) or Control - Shift - J (Windows/Linux)</a>
+    <!-- filled in dynamically by JavaScript -->
+    <a id="console" href="#" target="_blank">console</a>
   </div>
 
   <div id="legend"></div>
@@ -284,6 +285,13 @@
     // timers for xmas-in and xmas-out
     var christmasTimer,
         christmasEndTimer;
+
+    // display a custom console link per-browser
+    var consoles = {
+      firefox: "https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Opening_the_Web_Console",
+      chrome: "https://developer.chrome.com/devtools/docs/console#basic-operation",
+      explorer: "https://go.microsoft.com/fwlink/p/?LinkID=309077"
+    }
 
     <% if (req.param("serverId")) { %>
       // tiny tapping system, send up serverId.
@@ -1171,6 +1179,13 @@
       links.onmouseout = function() {
         if (me && me.flag) me.flag.style.visibility = "visible";
       };
+
+      var link = document.getElementById("console");
+      if (consoles[BrowserDetect.browser]) {
+        link.style.display = "inline-block";
+        link.setAttribute("href", consoles[BrowserDetect.browser]);
+      }
+
 
       var nextXmas = Christmas.thisYear();
       // var nextXmas = new Date(Date.now() + (5 * 1000)); // 5 seconds from now
