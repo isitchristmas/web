@@ -833,7 +833,8 @@
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
       var help3 = "%chelp%c - See this message again.";
-      var help4 = "%cadvanced%c - See menu of advanced options.";
+      var help4 = "%crecent%c - See recent chat history.";
+      var help5 = "%cadvanced%c - See menu of advanced options.";
 
       log.system(help1a, styles.help_bold, styles.help);
       log.system(help2a, styles.help_bold, styles.help);
@@ -841,6 +842,7 @@
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
+      log.system(help5, styles.help_bold, styles.help);
       log.system(" ");
 
       return " "; // when used via 'help'
@@ -1019,6 +1021,13 @@
     };
 
 
+    // recent chat messages
+    on('recent', function(data) {
+      log.system("Recent chat history:");
+      for (var i=0; i<data.chats.length; i++)
+        displayChat(data.chats[i]);
+    });
+
     on('chat', function(data) {
       // if user's never chatted, re-welcome them every 10 chat messages
       if (!said) {
@@ -1030,6 +1039,11 @@
           chatsSince = 0;
         }
       }
+
+      displayChat(data);
+    });
+
+    var displayChat = function(data) {
 
       // hack some extra recognized symbols in there
       var symbols = {
@@ -1085,7 +1099,7 @@
         (data.id == me.id ? styles.chat_my_name : styles.chat_name),
         styles.chat_message
       ].concat(emojis));
-    });
+    };
 
 
 
@@ -1326,6 +1340,12 @@
 
     var wtf = function() {};
     wtf.toString = showWtf;
+
+    var recent = function() {};
+    recent.toString = function() {
+      emit('recent');
+      return " ";
+    };
 
     // candy
     var candy = function() {};
