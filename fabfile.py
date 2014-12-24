@@ -6,8 +6,8 @@ environment = "production"
 env.use_ssh_config = True
 env.hosts = ["christmas"]
 
-branch = "api"
-repo = "git@github.com:konklone/web.git"
+branch = "master"
+repo = "git@github.com:isitchristmas/web.git"
 
 username = "christmas"
 home = "/home/christmas/web"
