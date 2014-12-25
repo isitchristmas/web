@@ -953,6 +953,7 @@
     var say = function(message) {
       if (!message) return;
       if (user.live.chat != "true") return;
+      message = message.toString();
 
       said = true;
       emit('chat', {message: message});
