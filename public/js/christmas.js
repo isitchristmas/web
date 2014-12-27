@@ -115,7 +115,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "IS": "JÁ", // Iceland
       "VE": "SÍ", // Venezuela
       "SI": "DA", // Slovenia
-      "TH": "CHAI", // Thailand
+      "TH": "ใช่", // Thailand
       "LV": "JĀ", // Latvia
       "RU": "ДА", // Russia
       "HK": "係", // Hong Kong (Cantonese)
@@ -204,7 +204,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "IS": "NEI", // Iceland
       "VE": "NO", // Venezuela
       "SI": "NE", // Slovenia
-      "TH": "MAI CHAI", // Thailand
+      "TH": "ไม่ใช่", // Thailand
       "LV": "NĒ", // Latvia
       "RU": "НЕТ", // Russia
       "HK": "唔係", // Hong Kong (Cantonese)
