@@ -98,6 +98,7 @@
       font-size: 10pt;
     }
 
+    /* remove display: none, and turn on setTimers(), to restore */
     #links {
       position: fixed;
       top: 0; left: 0;
@@ -108,6 +109,8 @@
       z-index: 9999;
 
       opacity: 0;
+
+      display: none;
 
       -webkit-transition: 0.5s ease-out;
          -moz-transition: 0.5s ease-out;
@@ -140,7 +143,9 @@
     calculated with UTC, for clients who do not have JS enabled.
   -->
   <a id="answer"
-    title="<%= answer %>">
+    href="https://ifttt.com/isitchristmas"
+    target="_blank"
+    title="IFTTT">
     <noscript><%= answer %></noscript>
   </a>
 
