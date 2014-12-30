@@ -1384,10 +1384,6 @@
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
 
-    // Firefox fix: prevent ESC from closing websockets connection
-    if (window.addEventListener)
-      window.addEventListener('keydown', function(e) { (e.keyCode == 27 && e.preventDefault()) })
-
     // prevent click-drags from "grabbing" image
     document.body.onmousedown = function(event) {
       event = event || window.event;
