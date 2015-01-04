@@ -1,0 +1,4 @@
+ssl_certificate_key /home/christmas/web/shared/keys/www.isitchristmas.com.key;
+ssl_certificate /home/christmas/web/shared/keys/www.isitchristmas.com.chained.crt;
+
+include ssl/ssl.rules;
