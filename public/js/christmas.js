@@ -58,7 +58,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino,
   Sao Tome and Principe, Saudi Arabia, Senegal, Serbia,
   Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
-  Swaziland, Syrian Arab Republic, Tajikistan, Tanzania,
+  Swaziland, Syrian Arab Republic, Tajikistan,
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
   Tuvalu, Uganda, United Arab Emirates,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
@@ -148,6 +148,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PY": "HÊE", // Paraguay
       "VN": "ĐÚNG", // Vietnam
       "MM": "ဟုတ္တယ္။" // Myanmar (Burmese)
+      "TZ": "NDIO" //Tanzania (Swahili)
     }
 
     return codes[countryCode] || "YES";
@@ -237,6 +238,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PY": "NO", // Paraguay
       "VN": "SAI", // Vietnam
       "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
+      "TZ": "HAPANA" //Tanzania (Swahili)
     }
 
     return codes[countryCode] || "NO";
