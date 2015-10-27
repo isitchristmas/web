@@ -46,7 +46,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Faroe Islands, Fiji, French Guiana, French Polynesia, Gabon, Gambia, Georgia, Ghana,
   Gibraltar, Greenland, Grenada, Guadeloupe, Guam, Guernsey, Guinea, Guinea-Bissau,
   Guyana, Heard Island and McDonald Islands, Holy See (Vatican City State), Honduras,
-  Indonesia, Iran, Iraq, Isle of Man, Jersey, Jordan, Kazakhstan, Kenya, Kiribati,
+  Indonesia, Iran, Iraq, Isle of Man, Jersey, Jordan, Kazakhstan, Kiribati,
   South Korea, Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
   Liberia, Libya, Liechtenstein, Luxembourg, Macedonia, Madagascar, Malawi,
   Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte,
@@ -58,7 +58,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino,
   Sao Tome and Principe, Saudi Arabia, Senegal, Serbia,
   Seychelles, Sierra Leone, Solomon Islands, Somalia, Sri Lanka, Sudan, Suriname,
-  Swaziland, Syrian Arab Republic, Tajikistan, Tanzania,
+  Swaziland, Syrian Arab Republic, Tajikistan,
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
   Tuvalu, Uganda, United Arab Emirates,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
@@ -148,6 +148,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PY": "HÊE", // Paraguay
       "VN": "ĐÚNG", // Vietnam
       "MM": "ဟုတ္တယ္။" // Myanmar (Burmese)
+      "TZ": "NDIO" //Tanzania (Swahili)
+      "KE": "NDIO" //Kenya (Swahili)
     }
 
     return codes[countryCode] || "YES";
@@ -237,6 +239,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PY": "NO", // Paraguay
       "VN": "SAI", // Vietnam
       "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
+      "TZ": "HAPANA" //Tanzania (Swahili)
+      "KE": "NDIO" //Kenya (Swahili)
     }
 
     return codes[countryCode] || "NO";
