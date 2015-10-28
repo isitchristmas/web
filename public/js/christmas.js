@@ -62,7 +62,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Turkmenistan, Turks and Caicos Islands,
   Tuvalu, Uganda, United Arab Emirates,
   United States Minor Outlying Islands, Uzbekistan, Vanuatu, Virgin Islands (British),
-  Virgin Islands (U.S.), Wallis and Futuna, Yemen, Zambia, Zimbabwe
+  Virgin Islands (U.S.), Wallis and Futuna, Yemen, Zimbabwe
 
 */
 
@@ -150,6 +150,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "MM": "ဟုတ္တယ္။" // Myanmar (Burmese)
       "TZ": "NDIO" //Tanzania (Swahili)
       "KE": "NDIO" //Kenya (Swahili)
+      "ZM": "EYA" //Zambia (Bemba)
     }
 
     return codes[countryCode] || "YES";
@@ -241,6 +242,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
       "TZ": "HAPANA" //Tanzania (Swahili)
       "KE": "NDIO" //Kenya (Swahili)
+      "ZM": "AWEH" //Zambia (Bemba)
     }
 
     return codes[countryCode] || "NO";
