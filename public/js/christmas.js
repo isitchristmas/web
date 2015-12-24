@@ -147,9 +147,9 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "NI": "SÍ", // Nicaragua
       "PY": "HÊE", // Paraguay
       "VN": "ĐÚNG", // Vietnam
-      "MM": "ဟုတ္တယ္။" // Myanmar (Burmese)
-      "TZ": "NDIO" //Tanzania (Swahili)
-      "KE": "NDIO" //Kenya (Swahili)
+      "MM": "ဟုတ္တယ္။", // Myanmar (Burmese)
+      "TZ": "NDIO", //Tanzania (Swahili)
+      "KE": "NDIO", //Kenya (Swahili)
       "ZM": "EYA" //Zambia (Bemba)
     }
 
@@ -239,9 +239,9 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
       "VN": "SAI", // Vietnam
-      "MM": "မဟုတ္ဘူ။" // Myanmar (Burmese)
-      "TZ": "HAPANA" //Tanzania (Swahili)
-      "KE": "NDIO" //Kenya (Swahili)
+      "MM": "မဟုတ္ဘူ။", // Myanmar (Burmese)
+      "TZ": "HAPANA", //Tanzania (Swahili)
+      "KE": "NDIO", //Kenya (Swahili)
       "ZM": "AWEH" //Zambia (Bemba)
     }
 
