@@ -14,7 +14,10 @@ module.exports = {
       join: true,
       info: true,
       debug: false
-    }
+    },
+
+    ifttt: "",
+    ifttt_debug: true
   },
 
   production: {
@@ -22,13 +25,16 @@ module.exports = {
     visible: false,
 
     streaming: [
-      "http://sockets.example.com"
+      "https://sockets.example.com"
     ],
 
     log: {
       join: false,
       info: false,
       debug: false
-    }
+    },
+
+    ifttt: "",
+    ifttt_debug: false
   },
 }
