@@ -29,9 +29,6 @@
 
   <meta property="og:title" content="Is It Christmas?" />
 
-  <meta name="description" content="An answer.">
-  <meta property="og:description" content="An answer." />
-
   <meta name="twitter:card" content="summary">
   <meta property="og:image" content="https://isitchristmas.com/icons/large-wide.png" />
 
@@ -841,7 +838,6 @@
     var showAdvanced = function() {
       if (user.live.chat != "true") return;
 
-      var advanced0 = "%crecent%c - Show recent chat history.";
       var advanced1 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
       advanced1 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
       var advanced2 = "%cemoji%c - How to use emoji in chat.";
@@ -855,7 +851,6 @@
 
       log.system("%cAdvanced commands:", styles.help);
       log.system(" ");
-      log.system(advanced0, styles.help_bold, styles.help);
       log.system(advanced1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(advanced2, styles.help_bold, styles.help);
       log.system(advanced3, styles.help_bold, styles.help);
