@@ -3,3 +3,4 @@
 *.pyc
 *.dat
 .python-version
+/node_modules
