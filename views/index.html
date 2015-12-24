@@ -6,14 +6,6 @@
   Bug reports and stuff:
     github.com/isitchristmas/web/issues
 
-  isitchristmas.com takes your security very seriously.
-
-  Our domain name, "isitchristmas.com", is literally hardcoded into modern
-  browsers as always HTTPS, all the time, as part of the HSTS Preload List.
-
-  If our SSL Labs score ever falls below A+, email eric@konklone.com right away:
-  https://www.ssllabs.com/ssltest/analyze.html?d=isitchristmas.com
-
 -->
 
 <!doctype html>
@@ -303,19 +295,6 @@
       chrome: "https://developer.chrome.com/devtools/docs/console#basic-operation",
       explorer: "https://go.microsoft.com/fwlink/p/?LinkID=309077"
     }
-
-    <% if (req.param("serverId")) { %>
-      // tiny tapping system, send up serverId.
-      // received packets will then be funneled from requested server,
-      // through the connected server.
-      var serverId = "<%= req.param('serverId') %>";
-
-      // you've connected to an admin - it is requesting the ID of the
-      // server you wish to tap.
-      on('identify', function(data) {
-        rawSend('identify:' + serverId);
-      });
-    <% } %>
 
     var clickMap = {0: "left", 1: "middle", 2: "right"};
     var clickbacks = {};
@@ -845,8 +824,7 @@
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
       var help3 = "%chelp%c - See this message again.";
       var help4 = "%cadvanced%c - See menu of advanced options.";
-
-      var recent = "%cUse %crecent %cto see recent chat history.";
+      var help5 = "%crecent%c - See recent chat history.";
 
       log.system(help1a, styles.help_bold, styles.help);
       log.system(help2a, styles.help_bold, styles.help);
@@ -854,8 +832,7 @@
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
-      log.system(" ");
-      log.system(recent, styles.system, styles.system_bold, styles.system);
+      log.system(help5, styles.help_bold, styles.help);
       log.system(" ");
 
       return " "; // when used via 'help'
@@ -1393,8 +1370,8 @@
 
 /**** GO ****/
 
-    // setTimers();
-    // connect(url);
+    setTimers();
+    connect(url);
 
   </script>
 </body>
