@@ -502,7 +502,7 @@
         angle: (other.angle || 0)
       };
 
-      var flag = plainConsole ? "[" + other.country + "]" : "%c   ";
+      var flag = "%c[" + other.country + "]";
       log.join(flag + "%c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")", styles.flag(other.country), styles.join);
     };
 
@@ -534,7 +534,7 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      var flag = plainConsole ? "[" + country + "]" : "%c   ";
+      var flag = "%c[" + country + "]";
       log.join(flag + "%c [" + id.slice(8) + "] Departed from " + country + " (" + Christmas.countries[country].name + ")", styles.flag(country), styles.join);
     };
 
@@ -803,7 +803,7 @@
     }
 
     var spam = function() {
-      var msg = "%cPlease%c don't spam and ruin the chat! %c  %c %c  %c %c  ";
+      var msg = "%cPlease%c don't spam and ruin the chat! :) %c  %c %c  %c %c  ";
       log.system(msg, styles.please, styles.spam, styles.emoji("smiley"), styles.spam, styles.emoji("heart"), styles.spam, styles.emoji("christmas_tree"));
     }
 
@@ -840,7 +840,7 @@
 
       var advanced1 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
       advanced1 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
-      var advanced2 = "%cemoji%c - How to use emoji in chat.";
+      // var advanced2 = "%cemoji%c - How to use emoji in chat.";
       var advanced3 = "%croom%c - Stats about the room you're in."
       var advanced4 = "%cwtf%c - How is this happening"
       var advanced5 = "%cnotifications%c - Enable notifications for when you are mentioned"
@@ -852,7 +852,7 @@
       log.system("%cAdvanced commands:", styles.help);
       log.system(" ");
       log.system(advanced1, styles.help_bold, styles.help, styles.help_bold, styles.help);
-      log.system(advanced2, styles.help_bold, styles.help);
+      // log.system(advanced2, styles.help_bold, styles.help);
       log.system(advanced3, styles.help_bold, styles.help);
       log.system(advanced4, styles.help_bold, styles.help);
       log.system(advanced5, styles.help_bold, styles.help);
@@ -1067,10 +1067,12 @@
 
       // avoid using logging system here, to do complex coloring
       var message = "";
-      if (plainConsole)
-        message += "[" + data.country + "]";
-      else
-        message += "%c   ";
+
+      // no background image support :(
+      // if (plainConsole)
+      message += "%c[" + data.country + "]";
+      // else
+      //   message += "%c   ";
 
       message += "%c " + data.name + ":";
 
