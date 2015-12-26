@@ -179,6 +179,11 @@ File tickets at: https://github.com/isitchristmas/web/issues
     return codes[countryCode] || "YES";
   },
 
+  sorta: function(countryCode) {
+    // XXX: Maybe return NO* for backward compatibility
+    return yes(countryCode) + "*";
+  },
+
   // missing your country?
   // post a ticket here: https://github.com/isitchristmas/web/issues
   no: function(countryCode) {
