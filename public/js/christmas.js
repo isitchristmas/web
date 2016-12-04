@@ -47,12 +47,12 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Gibraltar, Greenland, Grenada, Guadeloupe, Guam, Guernsey, Guinea, Guinea-Bissau,
   Guyana, Heard Island and McDonald Islands, Holy See (Vatican City State), Honduras,
   Indonesia, Iran, Iraq, Isle of Man, Jersey, Jordan, Kazakhstan, Kiribati,
-  South Korea, Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
+  Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
   Liberia, Libya, Liechtenstein, Luxembourg, Macedonia, Madagascar, Malawi,
   Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte,
   Micronesia, Moldova, Monaco, Mongolia, Montenegro,
   Montserrat, Morocco, Mozambique, Namibia, Nauru, Nepal, New Caledonia, Niger,
-  Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Oman, Pakistan, Palau,
+  Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Oman, Palau,
   Palestinian Territory, Papua New Guinea, Qatar, Reunion, Rwanda, Saint Barthelemy,
   Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin,
   Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino,
@@ -108,6 +108,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PH": "ÓO", // Phillipines
       "IL": "KEN", // Israel
       "KR": "YE", // Korea
+      "PK": "جی ہاں", // Pakistan
       "CZ": "ANO", // Czech Republic
       "BG": "ДА", // Bulgaria
       "SK": "ÁNO", // Slovakia
@@ -200,6 +201,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PH": "HINDI", // Phillipines
       "IL": "LO", // Israel
       "KR": "ANIYO", // Korea
+      "PK": "نہیں", // Pakistan
       "CZ": "NE", // Czech Republic
       "BG": "НЕ", // Bulgaria
       "SK": "NIE", // Slovakia
