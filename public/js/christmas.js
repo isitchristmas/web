@@ -107,7 +107,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "SG": "YA", // Singapore
       "PH": "ÓO", // Phillipines
       "IL": "KEN", // Israel
-      "KR": "YE", // Korea
+      "KR": "네", // Korea
       "PK": "جی ہاں", // Pakistan
       "CZ": "ANO", // Czech Republic
       "BG": "ДА", // Bulgaria
@@ -200,7 +200,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "SG": "TIDAK", // Singapore
       "PH": "HINDI", // Phillipines
       "IL": "LO", // Israel
-      "KR": "ANIYO", // Korea
+      "KR": "아니요", // Korea
       "PK": "نہیں", // Pakistan
       "CZ": "NE", // Czech Republic
       "BG": "НЕ", // Bulgaria
