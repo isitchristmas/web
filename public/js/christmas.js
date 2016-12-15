@@ -95,7 +95,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "NZ": "YES", // New Zealand
       "AT": "JA", // Austria
       "RO": "DA", // Romania
-      "CH": "JA/OUI", // Switzerland (German/French)
+      "CH": "JA/OUI/SÌ/GEA", // Switzerland (German/French/Italian/Romansh)
       "PT": "SIM", // Portugal
       "BR": "SIM", // Brazil
       "AR": "SÍ", // Argentina
@@ -188,7 +188,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "NZ": "NO", // New Zealand
       "AT": "NEIN", // Austria
       "RO": "NU", // Romania
-      "CH": "NEIN/NON", // Switzerland (German/French)
+      "CH": "NEIN/NON/NO/NA", // Switzerland (German/French/Italian/Romansh)
       "PT": "NÃO", // Portugal
       "BR": "NÃO", // Brazil
       "AR": "NO", // Argentina
