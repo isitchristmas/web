@@ -819,6 +819,7 @@
       var help2a = "%crename%c - Change to a new name.";
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
+      var helpX = "%cnotifications%c - Enable desktop notifications for when you are mentioned"
       var help3 = "%chelp%c - See this message again.";
       var help4 = "%cadvanced%c - See menu of advanced options.";
       var help5 = "%crecent%c - See recent chat history.";
@@ -827,6 +828,7 @@
       log.system(help2a, styles.help_bold, styles.help);
       log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(helpX, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
       log.system(help5, styles.help_bold, styles.help);
@@ -843,7 +845,6 @@
       // var advanced2 = "%cemoji%c - How to use emoji in chat.";
       var advanced3 = "%croom%c - Stats about the room you're in."
       var advanced4 = "%cwtf%c - How is this happening"
-      var advanced5 = "%cnotifications%c - Enable notifications for when you are mentioned"
       var keys = "%cYou can use arrow keys to rotate the flag."
       var api = "%cWant to make a bot? Check out the JavaScript API: https://github.com/isitchristmas/web/wiki"
 
@@ -855,7 +856,6 @@
       // log.system(advanced2, styles.help_bold, styles.help);
       log.system(advanced3, styles.help_bold, styles.help);
       log.system(advanced4, styles.help_bold, styles.help);
-      log.system(advanced5, styles.help_bold, styles.help);
       log.system(" ");
       log.system(keys, styles.help);
       log.system(api, styles.help);
