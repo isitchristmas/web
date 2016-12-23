@@ -117,6 +117,7 @@
   <script type="text/javascript">
     window._ie11 = !!navigator.userAgent.match(/Trident\/7.0; rv 11/);
     window._ie = window._ie11;
+    window._firefox = !!navigator.userAgent.match(/Firefox/);
   </script>
 </head>
 
@@ -256,7 +257,7 @@
 
     // whether we need to force chat to stay plain-text (no styles).
     // right now, the only situation that's relevant is IE.
-    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie;
+    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie || !!window._firefox;
 
     // force it to use a particular transport
     var transport = "<%= req.query.transport || "" %>";
@@ -1069,10 +1070,10 @@
       var message = "";
 
       // no background image support :(
-      // if (plainConsole)
-      message += "%c[" + data.country + "]";
-      // else
-      //   message += "%c   ";
+      if (plainConsole)
+        message += "%c[" + data.country + "]";
+      else
+        message += "%c   ";
 
       message += "%c " + data.name + ":";
 
