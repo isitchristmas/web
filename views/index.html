@@ -257,7 +257,9 @@
 
     // whether we need to force chat to stay plain-text (no styles).
     // right now, the only situation that's relevant is IE.
-    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie || !!window._firefox;
+    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie;
+
+    var backgroundImages = !(plainConsole || window._firefox);
 
     // force it to use a particular transport
     var transport = "<%= req.query.transport || "" %>";
@@ -1055,7 +1057,6 @@
         ";_;": ":crying_cat_face:",
         "\\${2,}": ":moneybag:",
         "\\btree\\b": ":christmas_tree:",
-        "\\bcat\\b": ":smiley_cat:"
       };
 
       for (var symbol in symbols)
@@ -1070,7 +1071,7 @@
       var message = "";
 
       // no background image support :(
-      if (plainConsole)
+      if (!backgroundImages)
         message += "%c[" + data.country + "]";
       else
         message += "%c   ";
@@ -1078,7 +1079,7 @@
       message += "%c " + data.name + ":";
 
       var emojis = [];
-      if (!plainConsole) {
+      if (backgroundImages) {
         while (found = Emoji.regexp.exec(data.message)) {
           emojis.push(styles.emoji(found[1]));
           emojis.push(styles.chat_message)
