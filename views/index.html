@@ -244,22 +244,22 @@
     }
 
     // sockjs server endpoint
-    <% if (req.param("streaming")) { %>
-      var url = "<%= req.param("streaming") %>/christmas";
+    <% if (req.query.streaming) { %>
+      var url = "<%= req.query.streaming %>/christmas";
     <% } else { %>
       <% var random = Math.floor(Math.random() * config.streaming.length); %>
       var url = "<%= config.streaming[random] %>/christmas";
     <% } %>
 
     // whether activity is visible to the user
-    var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
+    var visible = <%= (req.query.visible || config.visible) ? "true" : "false" %>;
 
     // whether we need to force chat to stay plain-text (no styles).
     // right now, the only situation that's relevant is IE.
-    var plainConsole = <%= (req.param("console") == "plain") || "false" %> || !!window._ie;
+    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie;
 
     // force it to use a particular transport
-    var transport = "<%= req.param("transport") || "" %>";
+    var transport = "<%= req.query.transport || "" %>";
 
     // we only need websockets these days (huzzah!)
     var default_transports = ["websocket"];

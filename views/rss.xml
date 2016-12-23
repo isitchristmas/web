@@ -6,7 +6,7 @@
     <language>en-us</language>
     <description>
       Is it Christmas?
-      <% if (req.param("only") == "yes") { %>
+      <% if (req.query.only == "yes") { %>
         (Christmas only)
       <% } %>
     </description>
@@ -21,8 +21,8 @@
         var answer = Christmas.answer(country, day);
 
         if (
-          !req.param("only") ||
-          (req.param("only") == "yes" && itIs)
+          !req.query.only ||
+          (req.query.only == "yes" && itIs)
         ) {
       %>
         <item>
