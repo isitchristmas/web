@@ -34,7 +34,7 @@
     "date-utils": "*",
     "time": "*",
 
-    "geoip": "*",
+    "geoip": "git://github.com/dankang/GeoIP.git#feature/support_nodejs_6x",
     "optimist": "*"
   }
 }
