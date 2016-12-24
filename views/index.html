@@ -116,7 +116,8 @@
   <!-- IE11 JS targeting, from http://stackoverflow.com/a/17447695 -->
   <script type="text/javascript">
     window._ie11 = !!navigator.userAgent.match(/Trident\/7.0; rv 11/);
-    window._ie = window._ie11;
+    window._edge = !!navigator.userAgent.match(/Edge/);
+    window._ie = window._ie11 || window._edge;
     window._firefox = !!navigator.userAgent.match(/Firefox/);
   </script>
 </head>
