@@ -5,10 +5,30 @@ var Christmas = {
     month: 11,
     date: 25
   },
+  
+  // The twelve days of Christmas
+  // https://en.wikipedia.org/wiki/Twelve_Days_of_Christmas
+  season: {
+    begin: {
+      month: 11,
+      date: 25
+    },
+    end: {
+      month: 0,
+      date: 6
+    }
+  },
 
   isIt: function(date) {
     if (!date) date = new Date();
     return (date.getMonth() == Christmas.time.month && date.getDate() == Christmas.time.date);
+  },
+  
+  isItInSeason: function(date) {
+    if (!date) date = new Date();
+    // Note: This only works when the sesason covers the end of one year and the beginning of the next
+    return (date.getMonth() >= Christmas.season.begin.month && date.getDate() >= Christmas.season.begin.date) ||
+           (date.getMonth() < Christmas.season.end.month && date.getDate() < Christmas.season.end.date);
   },
 
   thisYear: function() {
@@ -17,10 +37,13 @@ var Christmas = {
   },
 
   answer: function(countryCode, date) {
-    if (Christmas.isIt(date))
+    if (Christmas.isIt(date)) {
       return Christmas.yes(countryCode);
-    else
+    } else if (Christmas.isItInSeason(date)) {
+      return Christmas.sorta(countyCode); 
+    } else {
       return Christmas.no(countryCode);
+    }
   },
 
   // for use from Node, where timezones are not set by user agent.
@@ -155,6 +178,11 @@ File tickets at: https://github.com/isitchristmas/web/issues
     }
 
     return codes[countryCode] || "YES";
+  },
+
+  sorta: function(countryCode) {
+    // XXX: Maybe return NO* for backward compatibility
+    return yes(countryCode) + "*";
   },
 
   // missing your country?
