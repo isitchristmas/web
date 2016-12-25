@@ -1068,8 +1068,14 @@
       if (me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
         notify(data.name, data.message);
 
+      // /me command?
+      var slashMe = (data.message.indexOf("/me ") == 0);
+      if (slashMe)
+        data.message = data.message.replace(new RegExp("\/me "), '');
+
       // avoid using logging system here, to do complex coloring
       var message = "";
+      var nameStyle;
 
       // no background image support :(
       if (!backgroundImages)
@@ -1077,7 +1083,14 @@
       else
         message += "%c   ";
 
-      message += "%c " + data.name + ":";
+      if (slashMe) {
+        message += "%c * " + data.name;
+        nameStyle = styles.chat_message;
+      } else {
+        message += "%c " + data.name + ":";
+        nameStyle = (data.id == me.id ? styles.chat_my_name : styles.chat_name);
+      }
+
 
       var emojis = [];
       if (backgroundImages) {
@@ -1094,7 +1107,7 @@
       log.chat.apply(log, [
         message,
         styles.flag(data.country),
-        (data.id == me.id ? styles.chat_my_name : styles.chat_name),
+        nameStyle,
         styles.chat_message
       ].concat(emojis));
     };
