@@ -112,7 +112,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "CZ": "ANO", // Czech Republic
       "BG": "ДА", // Bulgaria
       "SK": "ÁNO", // Slovakia
-      "GR": "NE", // Greece
+      "GR": "ΝΑΙ", // Greece
       "IS": "JÁ", // Iceland
       "VE": "SÍ", // Venezuela
       "SI": "DA", // Slovenia
@@ -205,7 +205,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "CZ": "NE", // Czech Republic
       "BG": "НЕ", // Bulgaria
       "SK": "NIE", // Slovakia
-      "GR": "OHI", // Greece
+      "GR": "ΟΧΙ", // Greece
       "IS": "NEI", // Iceland
       "VE": "NO", // Venezuela
       "SI": "NE", // Slovenia
