@@ -6,6 +6,8 @@
   Bug reports and stuff:
     github.com/isitchristmas/web/issues
 
+  Open the developer console.
+
 -->
 
 <!doctype html>
@@ -111,12 +113,12 @@
 
   <script type="text/javascript" src="/js/christmas.js"></script>
 
-  <!-- IE10 JS targeting, from http://stackoverflow.com/a/17099988 -->
   <!-- IE11 JS targeting, from http://stackoverflow.com/a/17447695 -->
   <script type="text/javascript">
-    window._ie10 = ("onpropertychange" in document && !!window.matchMedia);
     window._ie11 = !!navigator.userAgent.match(/Trident\/7.0; rv 11/);
-    window._ie = window._ie10 || window._ie11;
+    window._edge = !!navigator.userAgent.match(/Edge/);
+    window._ie = window._ie11 || window._edge;
+    window._firefox = !!navigator.userAgent.match(/Firefox/);
   </script>
 </head>
 
@@ -244,22 +246,24 @@
     }
 
     // sockjs server endpoint
-    <% if (req.param("streaming")) { %>
-      var url = "<%= req.param("streaming") %>/christmas";
+    <% if (req.query.streaming) { %>
+      var url = "<%= req.query.streaming %>/christmas";
     <% } else { %>
       <% var random = Math.floor(Math.random() * config.streaming.length); %>
       var url = "<%= config.streaming[random] %>/christmas";
     <% } %>
 
     // whether activity is visible to the user
-    var visible = <%= (req.param("visible") || config.visible) ? "true" : "false" %>;
+    var visible = <%= (req.query.visible || config.visible) ? "true" : "false" %>;
 
     // whether we need to force chat to stay plain-text (no styles).
     // right now, the only situation that's relevant is IE.
-    var plainConsole = <%= (req.param("console") == "plain") || "false" %> || !!window._ie;
+    var plainConsole = <%= (req.query.console == "plain") || "false" %> || !!window._ie;
+
+    var backgroundImages = !(plainConsole || window._firefox);
 
     // force it to use a particular transport
-    var transport = "<%= req.param("transport") || "" %>";
+    var transport = "<%= req.query.transport || "" %>";
 
     // we only need websockets these days (huzzah!)
     var default_transports = ["websocket"];
@@ -819,6 +823,7 @@
       var help2a = "%crename%c - Change to a new name.";
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
+      var helpX = "%cnotifications%c - Enable desktop notifications for when you are mentioned"
       var help3 = "%chelp%c - See this message again.";
       var help4 = "%cadvanced%c - See menu of advanced options.";
       var help5 = "%crecent%c - See recent chat history.";
@@ -827,6 +832,7 @@
       log.system(help2a, styles.help_bold, styles.help);
       log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
+      log.system(helpX, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
       log.system(help5, styles.help_bold, styles.help);
@@ -843,7 +849,6 @@
       // var advanced2 = "%cemoji%c - How to use emoji in chat.";
       var advanced3 = "%croom%c - Stats about the room you're in."
       var advanced4 = "%cwtf%c - How is this happening"
-      var advanced5 = "%cnotifications%c - Enable notifications for when you are mentioned"
       var keys = "%cYou can use arrow keys to rotate the flag."
       var api = "%cWant to make a bot? Check out the JavaScript API: https://github.com/isitchristmas/web/wiki"
 
@@ -855,7 +860,6 @@
       // log.system(advanced2, styles.help_bold, styles.help);
       log.system(advanced3, styles.help_bold, styles.help);
       log.system(advanced4, styles.help_bold, styles.help);
-      log.system(advanced5, styles.help_bold, styles.help);
       log.system(" ");
       log.system(keys, styles.help);
       log.system(api, styles.help);
@@ -1039,45 +1043,57 @@
       // broken in Chrome as of sometime in 2015. :(
 
       // hack some extra recognized symbols in there
-      // var symbols = {
-      //   "<3": ":heart:",
-      //   ":\\)": ":smiley_cat:",
-      //   "o_o": ":cat:",
-      //   ";\\)": ":wink:",
-      //   ":\\*": ":kissing_closed_eyes:",
-      //   "!\\?": ":interrobang:",
-      //   "\\^_\\^": ":blush:",
-      //   "</3": ":broken_heart:",
-      //   "\\(c\\)": ":copyright:",
-      //   ":\\(": ":crying_cat_face:",
-      //   ";\\(": ":crying_cat_face:",
-      //   ";_;": ":crying_cat_face:",
-      //   "\\${2,}": ":moneybag:",
-      //   "\\btree\\b": ":christmas_tree:",
-      //   "\\bcat\\b": ":smiley_cat:"
-      // };
+      var symbols = {
+        "<3": ":heart:",
+        ":\\)": ":smiley_cat:",
+        "o_o": ":cat:",
+        ";\\)": ":wink:",
+        ":\\*": ":kissing_closed_eyes:",
+        "!\\?": ":interrobang:",
+        "\\^_\\^": ":blush:",
+        "</3": ":broken_heart:",
+        "\\(c\\)": ":copyright:",
+        ":\\(": ":crying_cat_face:",
+        ";\\(": ":crying_cat_face:",
+        ";_;": ":crying_cat_face:",
+        "\\${2,}": ":moneybag:",
+        "\\btree\\b": ":christmas_tree:",
+      };
 
-      // for (var symbol in symbols)
-      //   data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
+      for (var symbol in symbols)
+        data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
 
 
       // notify if someone else says my name and I've opted in
       if (me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
         notify(data.name, data.message);
 
+      // /me command?
+      var slashMe = (data.message.indexOf("/me ") == 0);
+      if (slashMe)
+        data.message = data.message.replace(new RegExp("\/me "), '');
+
       // avoid using logging system here, to do complex coloring
       var message = "";
+      var nameStyle;
 
       // no background image support :(
-      // if (plainConsole)
-      message += "%c[" + data.country + "]";
-      // else
-      //   message += "%c   ";
+      if (!backgroundImages)
+        message += "%c[" + data.country + "]";
+      else
+        message += "%c   ";
 
-      message += "%c " + data.name + ":";
+      if (slashMe) {
+        message += "%c * " + data.name;
+        nameStyle = styles.chat_message;
+      } else {
+        message += "%c " + data.name + ":";
+        nameStyle = (data.id == me.id ? styles.chat_my_name : styles.chat_name);
+      }
+
 
       var emojis = [];
-      if (!plainConsole) {
+      if (backgroundImages) {
         while (found = Emoji.regexp.exec(data.message)) {
           emojis.push(styles.emoji(found[1]));
           emojis.push(styles.chat_message)
@@ -1091,7 +1107,7 @@
       log.chat.apply(log, [
         message,
         styles.flag(data.country),
-        (data.id == me.id ? styles.chat_my_name : styles.chat_name),
+        nameStyle,
         styles.chat_message
       ].concat(emojis));
     };
@@ -1301,10 +1317,10 @@
       help_bold: "color: #630053; font-weight: bold",
       // how is this possible
       flag: function(country) {
-        return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: 100%; border: 1px solid #d6d6d6";
+        return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: 100% 13px; border: 1px solid #d6d6d6";
       },
       emoji: function(emoji) {
-        return "background-image: url(\"https://isitchristmas.com/emojis/" + emoji + ".png\"); background-size: 50px 50px;";
+        return "background-image: url(\"https://isitchristmas.com/emojis/" + emoji + ".png\"); background-size: 100%;";
       },
       answer: "color: black; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
     }
