@@ -44,10 +44,10 @@ var geoip = require('geoip'),
     countries = new geoip.Country('data/countries.dat');
 
 var findCountry = function(req) {
-  if (req.param("country")) return req.param("country");
+  if (req.query.country) return req.query.country;
 
   var forwarded = req.header("X-Forwarded-For");
-  var ip = req.param("ip") || forwarded || req.socket.remoteAddress;
+  var ip = req.query.ip || forwarded || req.socket.remoteAddress;
 
   // debug: French IP
   // ip = "193.51.208.14";
