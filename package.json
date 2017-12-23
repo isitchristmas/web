@@ -2,12 +2,11 @@
   "name": "web",
   "version": "4.0.0",
   "private": true,
-
   "description": "Web app for isitchristmas.com.",
-
-  "engines": {"node": "0.10.x"},
+  "engines": {
+    "node": "0.10.x"
+  },
   "main": "app.js",
-
   "repository": {
     "type": "git",
     "url": "git://github.com/isitchristmas/web.git"
@@ -22,18 +21,15 @@
     "url": "https://github.com/isitchristmas/web/issues"
   },
   "homepage": "https://isitchristmas.com",
-
   "dependencies": {
     "express": "4.x",
     "body-parser": "*",
     "errorhandler": "*",
     "serve-favicon": "*",
-
     "ejs": "*",
     "dateformat": "*",
     "date-utils": "*",
     "time": "*",
-
     "geoip": "git://github.com/dankang/GeoIP.git#feature/support_nodejs_6x",
     "optimist": "*"
   }
