@@ -506,8 +506,14 @@
         angle: (other.angle || 0)
       };
 
+      var name;
+      if (Christmas.countries[other.country])
+        name = Christmas.countries[other.country].name;
+      else
+        name = other.country;
+
       var flag = "%c[" + other.country + "]";
-      log.join(flag + "%c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + Christmas.countries[other.country].name + ")", styles.flag(other.country), styles.join);
+      log.join(flag + "%c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + name + ")", styles.flag(other.country), styles.join);
     };
 
     // the creation of an element per-user is only sparked by that user's mouse motion.
