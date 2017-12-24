@@ -539,7 +539,14 @@
 
       delete others[id];
       var flag = "%c[" + country + "]";
-      log.join(flag + "%c [" + id.slice(8) + "] Departed from " + country + " (" + Christmas.countries[country].name + ")", styles.flag(country), styles.join);
+
+      var name;
+      if (Christmas.countries[country])
+        name = Christmas.countries[country].name;
+      else
+        name = country;
+
+      log.join(flag + "%c [" + id.slice(8) + "] Departed from " + country + " (" + name + ")", styles.flag(country), styles.join);
     };
 
 
