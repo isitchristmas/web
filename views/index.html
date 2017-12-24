@@ -906,8 +906,16 @@
       log.system(" ");
 
       stats.forEach(function(country) {
-        var name = Christmas.countries[country].name;
-        var num = countries[country].length;
+        var name, num;
+        if (Christmas.countries[country]) {
+          name = Christmas.countries[country].name;
+          num = countries[country].length;
+        }
+        else {
+          name = country;
+          num = 1;
+        }
+
         var people = num == 1 ? "person" : "people";
         log.system("%c[" + country + "]%c[" + name + "] " + num + " " + people, styles.debug, styles.info);
       });
