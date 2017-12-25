@@ -1040,7 +1040,7 @@
     on('recent', function(data) {
       log.system("Recent chat history:");
       for (var i=0; i<data.chats.length; i++)
-        displayChat(data.chats[i]);
+        displayChat(data.chats[i], true);
     });
 
     on('chat', function(data) {
@@ -1058,10 +1058,7 @@
       displayChat(data);
     });
 
-    var displayChat = function(data) {
-
-      // Below symbol replacement disabled, since emoji support looks
-      // broken in Chrome as of sometime in 2015. :(
+    var displayChat = function(data, disable_notify) {
 
       // hack some extra recognized symbols in there
       var symbols = {
@@ -1086,7 +1083,7 @@
 
 
       // notify if someone else says my name and I've opted in
-      if (me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
+      if (!disable_notify && me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
         notify(data.name, data.message);
 
       // /me command?
