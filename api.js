@@ -53,8 +53,8 @@ module.exports = function(app, config, findCountry) {
             var year = thisYear - i; // reverse chronological order
             var christmasDay = Christmas.forYear(moment, year, timezone);
 
-            // only show christmases past, OR turn on a debug param to always allow
-            if ((now > christmasDay) || config.ifttt_debug) {
+            // only show christmases past
+            if (now > christmasDay) {
                 christmases.push({
                     answer: Christmas.yes(country),
                     christmas: true,
@@ -105,7 +105,7 @@ module.exports = function(app, config, findCountry) {
     });
 
     router.post('/ifttt/v1/triggers/:trigger', function(req, res) {
-        // console.log("trigger: " + req.params.trigger);
+        if (config.ifttt_debug) console.log("trigger: " + req.params.trigger);
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
 
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
@@ -138,7 +138,7 @@ module.exports = function(app, config, findCountry) {
 
     router.post('/ifttt/v1/triggers/:trigger/fields/:field/options', function(req, res) {
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
-        console.log('triggerfield, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
+        if (config.ifttt_debug) console.log('triggerfield, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
         if (req.params.field != "timezone") return res.status(400).json(ERROR(BAD_TRIGGER_FIELD));
 
@@ -147,7 +147,7 @@ module.exports = function(app, config, findCountry) {
 
     router.post('/ifttt/v1/triggers/:trigger/fields/:field/validate', function(req, res) {
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
-        console.log('triggerfield validate, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
+        if (config.ifttt_debug) console.log('triggerfield validate, trigger: ' + req.params.trigger + ', field: ' + req.params.field);
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
         if (req.params.field != "timezone") return res.status(400).json(ERROR(BAD_TRIGGER_FIELD));
 
