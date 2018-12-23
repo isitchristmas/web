@@ -5,3 +5,4 @@
 .python-version
 /node_modules
 todo.txt
+*.zip
