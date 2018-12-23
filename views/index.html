@@ -514,7 +514,11 @@
       else
         name = other.country;
 
-      var flag = "%c[" + other.country + "]";
+      var flag = "";
+      if (!backgroundImages)
+        flag += "%c[" + other.country + "]";
+      else
+        flag += "%c   ";
       log.join(flag + "%c [" + other.id.slice(8) + "] Joined from " + other.country + " (" + name + ")", styles.flag(other.country), styles.join);
     };
 
@@ -546,7 +550,12 @@
         elem.parentElement.removeChild(elem);
 
       delete others[id];
-      var flag = "%c[" + country + "]";
+
+      var flag = "";
+      if (!backgroundImages)
+        flag += "%c[" + country + "]";
+      else
+        flag += "%c   ";
 
       var name;
       if (Christmas.countries[country])
