@@ -1,21 +1,13 @@
 
-// imbues Date with timezone abilities - must do this first
-require('time')(Date);
-
 // allow port to be passed in via command lne
 var optimist = require('optimist');
 var args = optimist.alias('port', 'p').argv;
 
 var index = function(req, res) {
-  // this is only used as a fallback for clients who don't use JavaScript
-  // if I must pick a timezone for them, let's choose the opposite of the dateline
-  var utcTime = new Date();
-  utcTime.setTimezone("UTC");
-
   var country = findCountry(req);
 
   res.render('index', {
-    answer: Christmas.answer(country, utcTime),
+    answer: Christmas.answer(country),
     country: country,
 
     config: config,
@@ -40,8 +32,7 @@ var rss = function(req, res) {
 /** helpers **/
 
 // must have downloaded a country-level geoip dat file ahead of time
-var geoip = require('geoip'),
-    countries = new geoip.Country('data/countries.dat');
+var geoip = require('geoip-lite');
 
 var findCountry = function(req) {
   if (req.query.country) return req.query.country;
@@ -51,10 +42,12 @@ var findCountry = function(req) {
 
   // debug: French IP
   // ip = "193.51.208.14";
+  // debug: US IP
+  // ip = "207.97.227.239";
   // console.log("Looking up IP [" + ip + "]");
 
-  var data = countries.lookupSync(ip);
-  var country = data ? data.country_code : null;
+  var data = geoip.lookup(ip);
+  var country = data ? data.country : null;
 
   // console.log("Found country [" + country + "]");
   return country;
