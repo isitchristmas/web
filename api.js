@@ -92,7 +92,7 @@ module.exports = function(app, config, findCountry) {
         var country = findCountry(req) || "EO";
         if (!Christmas.countries[country]) return res.status(400).json(ERROR(BAD_COUNTRY));
 
-        var timezone = (req.param("timezone") || "UTC");
+        var timezone = (req.query.timezone || "UTC");
         if (moment.tz.zone(timezone) == null) {
             return res.status(400).json(ERROR(BAD_TIMEZONE));
         }
@@ -105,7 +105,7 @@ module.exports = function(app, config, findCountry) {
     });
 
     router.post('/ifttt/v1/triggers/:trigger', function(req, res) {
-        console.log("trigger: " + req.params.trigger);
+        // console.log("trigger: " + req.params.trigger);
         if (!authed(req)) return res.status(401).json(ERROR(UNAUTHORIZED));
 
         if (req.params.trigger != "christmas") return res.status(400).json(ERROR(BAD_TRIGGER));
