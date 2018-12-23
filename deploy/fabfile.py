@@ -27,7 +27,10 @@ def checkout():
 
 def links():
   run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
-  run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
+  # run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
+  # hacky but it's how geoip-lite works - needs to have data inside its own dir
+  run("rm -rf %s/node_modules/geoip-lite/data" % version_path)
+  run("ln -s %s/data %s/node_modules/geoip-lite/data" % (shared_path, version_path))
 
 def make_current():
   # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
@@ -66,8 +69,9 @@ def restart():
 
 def deploy():
   execute(checkout)
-  execute(links)
   execute(dependencies)
+  # links screws with dependencies, needs to come after
+  execute(links)
   execute(make_current)
   execute(stop)
   execute(start)
@@ -75,7 +79,8 @@ def deploy():
 
 def deploy_cold():
   execute(checkout)
-  execute(links)
   execute(dependencies)
+  # links screws with dependencies, needs to come after
+  execute(links)
   execute(make_current)
   execute(start)
