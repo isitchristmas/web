@@ -832,38 +832,38 @@
 
       log.system("%cCommands:", styles.help);
       log.system(" ");
-      var help1a = "%csay%c - Say a message to other people."
+      // var help1a = "%csay%c - Say a message to other people."
       var help1 = "%csay(\"message\")";
       help1 += "%c - Say a %cmessage %cto other people. (Include the quotes and parentheses!)";
-      var help2a = "%crename%c - Change to a new name.";
+      // var help2a = "%crename%c - Change to a new name.";
       var help2 = "%crename(\"Name\")";
       help2 += "%c - Change to a new %cName%c. (Include the quotes and parentheses!)";
-      var helpX = "%cnotifications%c - Enable desktop notifications for when you are mentioned."
-      var help3 = "%chelp%c - See this message again.";
-      var help4 = "%cadvanced%c - See menu of advanced options.";
-      var help5 = "%crecent%c - See recent chat history.";
+      var helpX = "%cnotifications()%c - Enable desktop notifications for when you are mentioned."
+      var help3 = "%chelp()%c - See this message again.";
+      var help4 = "%cadvanced()%c - See menu of advanced options.";
+      var help5 = "%crecent()%c - See recent chat history.";
 
-      log.system(help1a, styles.help_bold, styles.help);
-      log.system(help2a, styles.help_bold, styles.help);
+      // log.system(help1a, styles.help_bold, styles.help);
+      // log.system(help2a, styles.help_bold, styles.help);
       log.system(help1, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(help2, styles.help_bold, styles.help, styles.help_bold, styles.help);
       log.system(helpX, styles.help_bold, styles.help);
       log.system(help3, styles.help_bold, styles.help);
       log.system(help4, styles.help_bold, styles.help);
       log.system(help5, styles.help_bold, styles.help);
-      log.system(" ");
 
-      return " "; // when used via 'help'
+      // log.system(" ");
+      // return " "; // when used via 'help'
     };
 
     var showAdvanced = function() {
       if (user.live.chat != "true") return;
 
-      var advanced1 = "%ctraffic%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
+      var advanced1 = "%ctraffic()%c - Turn on/off messages whenever people enter/leave your room. (Currently ";
       advanced1 += "%c" + (user.log.join ? "on" : "off") + "%c.)";
       // var advanced2 = "%cemoji%c - How to use emoji in chat.";
-      var advanced3 = "%croom%c - Stats about the room you're in."
-      var advanced4 = "%cwtf%c - How is this happening"
+      var advanced3 = "%croom()%c - Stats about the room you're in."
+      var advanced4 = "%cwtf()%c - How is this happening"
       var keys = "%cYou can use arrow keys to rotate the flag."
       var api = "%cWant to make a bot? Check out the JavaScript API: https://github.com/isitchristmas/web/wiki"
 
@@ -881,8 +881,7 @@
       log.system(" ");
       log.system(credit, styles.system);
       spam();
-
-      return " ";
+      // return " ";
     };
 
     var showEmoji = function() {
@@ -892,7 +891,7 @@
       log.system("%cwill say: %cI am %c  %c you will %c  %c me", styles.system, styles.info_bold, styles.emoji("worried"), styles.info_bold, styles.emoji("facepunch"), styles.info_bold);
       log.system(" ");
       log.system("%cfull emoji reference (and my data source): http://www.emoji-cheat-sheet.com", styles.system)
-      return " ";
+      // return " ";
     };
 
     var showRoom = function() {
@@ -932,7 +931,7 @@
       log.system("%c(Not all connected people are visible.)", styles.system)
       log.system("%c(Chat is universal and goes through every room.)", styles.system);
 
-      return " ";
+      // return " ";
     };
 
     var showWtf = function() {
@@ -944,7 +943,7 @@
       log.system(" ");
       log.system("%cSend any fun screenshots/screencasts to %chttps://twitter.com/konklone%c or %ceric@konklone.com%c.", styles.system, styles.system_bold, styles.system, styles.system_bold, styles.system);
 
-      return " ";
+      // return " ";
     }
 
     var say = function(message) {
@@ -956,11 +955,13 @@
       emit('chat', {message: message});
       return blank();
     };
-    // run without parens to use a popup dialog
-    say.toString = function() {
-      say(prompt("What do you want to say?"));
-      return " ";
-    };
+
+    // // run without parens to use a popup dialog
+    // say.toString = function() {
+    //   say(prompt("What do you want to say?"));
+    //   return " ";
+    // };
+
     // convenience - handle all caps typos, and s
     var s = S = Say = sAy = saY = SAy = SaY = sAY = SAY = say;
 
@@ -993,10 +994,10 @@
         log.system("%cNotifications have been %cdisabled.", styles.system, styles.system_bold);
     };
 
-    notifications.toString = function() {
-      notifications();
-      return " ";
-    };
+    // notifications.toString = function() {
+    //   notifications();
+    //   return " ";
+    // };
 
     notifications.permission = function() {
       Notification.requestPermission(function(permission) {
@@ -1013,10 +1014,10 @@
     };
 
     // run without parens to use a popup dialog
-    rename.toString = function() {
-      rename(prompt("Change your name to:"));
-      return " ";
-    };
+    // rename.toString = function() {
+    //   rename(prompt("Change your name to:"));
+    //   return " ";
+    // };
 
     on('rename', function(data) {
       me.name = data.name;
@@ -1347,39 +1348,29 @@
 
 /**** misc and browser-specific fixes **/
 
-    // if someone types just 'help', display help text.
-    // side note: do people know you can do this??
-    var help = function() {};
-    help.toString = welcomeUser;
+    var help = welcomeUser;
 
-    var traffic = function() {};
-    traffic.toString = function() {
+    var traffic = function() {
       user.log.join = !user.log.join;
       log.system("%cTurned traffic messages %c" + (user.log.join ? "on" : "off") + "%c.", styles.system, styles.system_bold, styles.system);
-      return " ";
+      // return " ";
     }
 
-    var advanced = function() {};
-    advanced.toString = showAdvanced;
+    var advanced = showAdvanced;
 
-    var emoji = function() {};
-    emoji.toString = showEmoji;
+    var emoji = showEmoji;
 
-    var room = function() {};
-    room.toString = showRoom;
+    var room = showRoom;
 
-    var wtf = function() {};
-    wtf.toString = showWtf;
+    var wtf = showWtf;
 
-    var recent = function() {};
-    recent.toString = function() {
+    var recent = function() {
       emit('recent');
-      return " ";
+      // return " ";
     };
 
     // candy
-    var candy = function() {};
-    candy.toString = function() {window.location = "https://candybox2.github.io";}
+    var candy = function() {window.location = "https://candybox2.github.io";}
 
     // convenience for functions so they don't say 'undefined' in the console
     var blank = function() {
