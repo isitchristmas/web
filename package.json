@@ -19,15 +19,15 @@
   },
   "homepage": "https://isitchristmas.com",
   "dependencies": {
-    "express": "4.x",
-    "body-parser": "*",
-    "errorhandler": "*",
-    "serve-favicon": "*",
-    "ejs": "*",
-    "dateformat": "*",
+    "body-parser": "^1.18.3",
     "date-utils": "*",
-    "moment-timezone": "*",
+    "dateformat": "^3.0.3",
+    "ejs": "^2.6.1",
+    "errorhandler": "*",
+    "express": "^4.16.4",
     "geoip-lite": "*",
-    "optimist": "*"
+    "moment-timezone": "*",
+    "optimist": "*",
+    "serve-favicon": "^2.5.0"
   }
 }
