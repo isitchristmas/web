@@ -24,9 +24,17 @@ var Christmas = {
   },
 
   // for use from Node, where timezones are not set by user agent.
-  // first argument is the time module.
-  forYear: function(time, year, timezone) {
-    return new time.Date(year, Christmas.time.month, Christmas.time.date, timezone);
+  // first argument is the moment-timezone module.
+  forYear: function(moment, year, timezone) {
+    // produces a zone-less timestamp, e.g. "2007-12-25 00:00:00"
+    var unzoned = "" + year + "-" + (Christmas.time.month+1) + "-" + Christmas.time.date + " 00:00:00";
+
+    // produces a be-zoned timestamp, e.g. "2007-12-25T00:00:00-05:00"
+    var zoned = new moment.tz(unzoned, timezone);
+
+    // produces a Date in UTC but based in the intended timezone
+    // e.g. 2007-12-25T05:00:00.000Z
+    return new Date(zoned);
   },
 
 

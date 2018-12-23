@@ -3,8 +3,8 @@ var router = express.Router();
 
 var Christmas = require("./public/js/christmas"),
     zones = require("./public/js/zones"),
-    labels = require("./public/js/labels"),
-    time = require("time");
+    labels = require("./public/js/labels")
+    moment = require("moment-timezone");
 
 module.exports = function(app, config, findCountry) {
 
@@ -42,8 +42,7 @@ module.exports = function(app, config, findCountry) {
     var christmasesFor = function(country, timezone) {
         var firstYear = 2007; // nostalgia
 
-        var now = new time.Date();
-        now.setTimezone(timezone);
+        var now = new Date();
 
         var thisYear = 1900 + now.getYear();
         var years = thisYear - firstYear;
@@ -52,7 +51,7 @@ module.exports = function(app, config, findCountry) {
 
         for (var i=0; i<=years; i++) {
             var year = thisYear - i; // reverse chronological order
-            var christmasDay = Christmas.forYear(time, year, timezone);
+            var christmasDay = Christmas.forYear(moment, year, timezone);
 
             // only show christmases past, OR turn on a debug param to always allow
             if ((now > christmasDay) || config.ifttt_debug) {
@@ -94,12 +93,7 @@ module.exports = function(app, config, findCountry) {
         if (!Christmas.countries[country]) return res.status(400).json(ERROR(BAD_COUNTRY));
 
         var timezone = (req.param("timezone") || "UTC");
-        try {
-            var test = new time.Date(2007, 12, 25, timezone);
-        } catch (e) {
-            // ODD BUT IMPORTANT:
-            // time.Date will keep failing if not reset once with UTC.
-            var test = new time.Date(2007, 12, 25, "UTC");
+        if (moment.tz.zone(timezone) == null) {
             return res.status(400).json(ERROR(BAD_TIMEZONE));
         }
 
