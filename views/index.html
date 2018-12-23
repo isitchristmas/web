@@ -46,6 +46,7 @@
       font-family: Arial, sans-serif;
       text-decoration: none;
       color: black;
+      cursor: default;
     }
 
     .flag {
@@ -128,9 +129,10 @@
     calculated with UTC, for clients who do not have JS enabled.
   -->
   <a id="answer"
-    href="https://ifttt.com/isitchristmas"
+    href="#"
     target="_blank"
-    title="IFTTT">
+    title="<%= answer %>"
+    onclick="return false">
     <noscript><%= answer %></noscript>
   </a>
 
