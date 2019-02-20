@@ -1,0 +1,17 @@
+{
+  "short_name": "Is It Christmas?",
+  "name": "Is It Christmas?",
+  "icons": [
+    {
+      "src": "/icons/256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#fff"
+}
+
