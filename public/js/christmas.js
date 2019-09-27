@@ -111,7 +111,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "HR": "DA", // Croatia
       "CN": "是", // China (Mandarin)
       "TW": "是", // Taiwan (Mandarin)
-      "IN": "HAANJI", // India
+      "IN": "हाँ", // India (Hindi)
       "SG": "YA", // Singapore
       "PH": "ÓO", // Phillipines
       "IL": "כן", // Israel
@@ -204,7 +204,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "HR": "NE", // Croatia
       "CN": "不是", // China (Mandarin)
       "TW": "不是", // Taiwan (Mandarin)
-      "IN": "NAHIN", // India
+      "IN": "नहीं", // India (Hindi)
       "SG": "TIDAK", // Singapore
       "PH": "HINDI", // Phillipines
       "IL": "לא", // Israel
