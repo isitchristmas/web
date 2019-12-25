@@ -58,7 +58,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
   Kuwait, Kyrgyzstan, Laos, Lebanon, Lesotho,
   Liberia, Libya, Liechtenstein, Luxembourg, Macedonia, Madagascar, Malawi,
   Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte,
-  Micronesia, Moldova, Monaco, Mongolia, Montenegro,
+  Micronesia, Moldova, Monaco, Montenegro,
   Montserrat, Morocco, Mozambique, Namibia, Nauru, Nepal, New Caledonia, Niger,
   Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Oman, Palau,
   Palestinian Territory, Papua New Guinea, Qatar, Reunion, Rwanda, Saint Barthelemy,
@@ -159,7 +159,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "MM": "ဟုတ္တယ္။", // Myanmar (Burmese)
       "TZ": "NDIO", //Tanzania (Swahili)
       "KE": "NDIO", //Kenya (Swahili)
-      "ZM": "EYA" //Zambia (Bemba)
+      "ZM": "EYA", //Zambia (Bemba)
+      "MN": "Тийм" // Mongolian
     }
 
     return codes[countryCode] || "YES";
@@ -252,7 +253,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "MM": "မဟုတ္ဘူ။", // Myanmar (Burmese)
       "TZ": "HAPANA", //Tanzania (Swahili)
       "KE": "NDIO", //Kenya (Swahili)
-      "ZM": "AWEH" //Zambia (Bemba)
+      "ZM": "AWEH", //Zambia (Bemba)
+      "MN": "Угуй" // Mongolian
     }
 
     return codes[countryCode] || "NO";
