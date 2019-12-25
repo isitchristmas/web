@@ -132,7 +132,7 @@
     /* 4 9's, needs to be clickable */
   </style>
 
-  <script type="text/javascript" src="/js/christmas.js"></script>
+  <script type="text/javascript" src="/js/christmas.js?<%= (new Date()).getTime() %>"></script>
 
   <!-- IE11 JS targeting, from http://stackoverflow.com/a/17447695 -->
   <script type="text/javascript">
@@ -214,11 +214,11 @@
 
 
   <!-- optional: interaction -->
-  <script src="/js/browser.js"></script>
-  <script src="/js/css.js"></script>
-  <script src="/js/sockjs.min.js"></script>
-  <script src="/js/emoji.js"></script>
-  <script src="/js/api.js"></script>
+  <script src="/js/browser.js?<%= (new Date()).getTime() %>"></script>
+  <script src="/js/css.js?<%= (new Date()).getTime() %>"></script>
+  <script src="/js/sockjs.min.js?<%= (new Date()).getTime() %>"></script>
+  <script src="/js/emoji.js?<%= (new Date()).getTime() %>"></script>
+  <script src="/js/api.js?<%= (new Date()).getTime() %>"></script>
   <script type="text/javascript">
 
     var socket;
