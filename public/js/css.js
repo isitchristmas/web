@@ -6,15 +6,15 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
       for (var i=0; i<document.styleSheets.length; i++) { // For each stylesheet
          var styleSheet=document.styleSheets[i];          // Get the current Stylesheet
          var ii=0;                                        // Initialize subCounter.
-         var cssRule=false;                               // Initialize cssRule. 
+         var cssRule=false;                               // Initialize cssRule.
          do {                                             // For each rule in stylesheet
             if (styleSheet.cssRules) {                    // Browser uses cssRules?
                cssRule = styleSheet.cssRules[ii];         // Yes --Mozilla Style
             } else {                                      // Browser usses rules?
-               cssRule = styleSheet.rules[ii];            // Yes IE style. 
+               cssRule = styleSheet.rules[ii];            // Yes IE style.
             }                                             // End IE check.
             if (cssRule)  {                               // If we found a rule...
-               if (cssRule.selectorText.toLowerCase()==ruleName) { //  match ruleName?
+               if (cssRule.selectorText && cssRule.selectorText.toLowerCase()==ruleName) { //  match ruleName?
                   if (deleteFlag=='delete') {             // Yes.  Are we deleteing?
                      if (styleSheet.cssRules) {           // Yes, deleting...
                         styleSheet.deleteRule(ii);        // Delete rule, Moz Style
@@ -32,9 +32,9 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
       }                                                   // end For loop
    }                                                      // end styleSheet ability check
    return false;                                          // we found NOTHING!
-}                                                         // end getCSSRule 
+}                                                         // end getCSSRule
 
-function killCSSRule(ruleName) {                          // Delete a CSS rule   
+function killCSSRule(ruleName) {                          // Delete a CSS rule
    return getCSSRule(ruleName,'delete');                  // just call getCSSRule w/delete flag.
 }                                                         // end killCSSRule
 
@@ -49,4 +49,4 @@ function addCSSRule(ruleName) {                           // Create a new css ru
       }                                                   // End already exist check.
    }                                                      // End browser ability check.
    return getCSSRule(ruleName);                           // return rule we just created.
-} 
+}
