@@ -41,12 +41,12 @@
     body {
       color: black;
       background-color: #FFFFFF;
-      padding: 2rem; 
+      padding: 2rem;
       text-align: center;
     }
 
     a, body { color: black; }
-      
+
     @media (prefers-color-scheme: dark) {
       body {
         background-color: black;
@@ -700,6 +700,14 @@
       setRotate(me.flag, me.angle);
       emit('scroll', {id: me.id, angle: me.angle});
 
+      /*
+      This is generating a warning in the Chrome console. It appears harmless, though it is making the screen scroll where it's not intended to.
+
+      This is not very cross-browser yet (Chrome and IE only?) so I'm content to just let the warning sit.
+
+      More info:
+      https://developers.google.com/web/updates/2017/01/scrolling-intervention
+      */
       if (event.preventDefault) event.preventDefault();
       return false;
     }
