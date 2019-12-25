@@ -47,6 +47,22 @@
 
     a, body { color: black; }
 
+    .click {
+      position: absolute;
+      border: 1px solid #000;
+
+      -webkit-border-radius: 3px;
+              border-radius: 3px;
+
+      -webkit-transition: 0.5s ease-out;
+         -moz-transition: 0.5s ease-out;
+           -o-transition: 0.5s ease-out;
+              transition: 0.5s ease-out;
+    }
+
+    /*
+      Apparently, order matters: these dark mode rules need to come after any rule they are modifying.
+    */
     @media (prefers-color-scheme: dark) {
       body {
         background-color: black;
@@ -54,6 +70,10 @@
       }
       a#answer {
         color: white;
+      }
+
+      .click {
+        border: 1px solid #fff;
       }
 
     }
@@ -81,19 +101,6 @@
     }
     .flag.ghost {opacity: 0.4;}
     .flag.me {pointer-events: none;}
-
-    .click {
-      position: absolute;
-      border: 1px solid #000;
-
-      -webkit-border-radius: 3px;
-              border-radius: 3px;
-
-      -webkit-transition: 0.5s ease-out;
-         -moz-transition: 0.5s ease-out;
-           -o-transition: 0.5s ease-out;
-              transition: 0.5s ease-out;
-    }
 
     #legend {
       position: fixed;
@@ -266,6 +273,13 @@
       if (canNotify && me.notify && !(Notification.permission == "granted"))
         notifications.permission();
     }
+
+    // detect dark mode in JS for JS-based CSS manipulation
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      me.darkMode = true;
+    else
+      me.darkMode = false;
+    me.clickBorder = {true: "#000", false: "#fff"}[me.darkMode];
 
     // sockjs server endpoint
     <% if (req.query.streaming) { %>
@@ -796,7 +810,7 @@
       setTimeout(function() {
         elem.style.width = "" + (width*2) + "px";
         elem.style.height = "" + (height*2) + "px";
-        elem.style.borderColor = "#fff";
+        elem.style.borderColor = me.clickBorder;
         elem.style.left = "" + (x - width) + "px";
         elem.style.top = "" + (y - height) + "px";
         setTimeout(function() {
