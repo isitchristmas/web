@@ -254,7 +254,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "TZ": "HAPANA", //Tanzania (Swahili)
       "KE": "NDIO", //Kenya (Swahili)
       "ZM": "AWEH", //Zambia (Bemba)
-      "MN": "Угуй" // Mongolian
+      "MN": "Үгүй" // Mongolian
     }
 
     return codes[countryCode] || "NO";
