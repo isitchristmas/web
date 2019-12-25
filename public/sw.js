@@ -10,21 +10,22 @@ self.addEventListener('fetch',  fetchEvent => {
   const request = fetchEvent.request;
 
   fetchEvent.respondWith(async function() {
-    try {
-      // Try to fetch over the network
-      let response = await fetch(request);
+    // Try to fetch over the network
+    let responsePromise = fetch(request);
 
+    // always cache a newer version, even if one already exists, so that
+    // the cache stays fresh
+    fetchEvent.waitUntil(async function() {
       // If that works, cache it and return it
-      const responseCopy = response.clone();
+      var actualResponse = await responsePromise;
+      const responseCopy = actualResponse.clone();
       const myCache = await caches.open(cacheName);
       await myCache.put(request, responseCopy);
+    }());
 
-      return response;
-    } catch (e) {
-      // If it fails, try to return from cache
-      console.log(`Error doing network fetch: ${e}`);
+    // if the cached version exists, serve it
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || (await responsePromise);
 
-      return caches.match(request);
-    }
   }());
 });

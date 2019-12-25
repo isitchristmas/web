@@ -24,6 +24,18 @@
   <link rel="apple-touch-icon" sizes="144x144" href="/icons/144.png"/>
   <meta name="theme-color" content="#fff"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script>
+    async function loadServiceWorker() {
+      if (!navigator.serviceWorker) {
+        return;
+      }
+
+      await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      await navigator.serviceWorker.ready;
+    }
+
+    window.addEventListener('load', loadServiceWorker);
+  </script>
 
   <link rel="alternate" title="Is It Christmas?" href="/rss.xml" type="application/rss+xml" />
   <link rel="alternate" title="Is It Christmas? (Christmas only)" href="/rss.xml?only=yes" type="application/rss+xml" />
@@ -1495,21 +1507,6 @@
     connect(url);
 
   </script>
-
-  <!-- putting at the end because it's using ES6 terminology, want that to fail last for legacy clients -->
-  <script>
-    async function loadServiceWorker() {
-      if (!navigator.serviceWorker) {
-        return;
-      }
-
-      await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-      await navigator.serviceWorker.ready;
-    }
-
-    window.addEventListener('load', loadServiceWorker);
-  </script>
-
 </body>
 </html>
 
