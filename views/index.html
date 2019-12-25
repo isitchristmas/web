@@ -47,6 +47,22 @@
 
     a, body { color: black; }
 
+    .click {
+      position: absolute;
+      border: 1px solid #000;
+
+      -webkit-border-radius: 3px;
+              border-radius: 3px;
+
+      -webkit-transition: 0.5s ease-out;
+         -moz-transition: 0.5s ease-out;
+           -o-transition: 0.5s ease-out;
+              transition: 0.5s ease-out;
+    }
+
+    /*
+      Apparently, order matters: these dark mode rules need to come after any rule they are modifying.
+    */
     @media (prefers-color-scheme: dark) {
       body {
         background-color: black;
@@ -54,6 +70,10 @@
       }
       a#answer {
         color: white;
+      }
+
+      .click {
+        border: 1px solid #fff;
       }
 
     }
@@ -81,19 +101,6 @@
     }
     .flag.ghost {opacity: 0.4;}
     .flag.me {pointer-events: none;}
-
-    .click {
-      position: absolute;
-      border: 1px solid #000;
-
-      -webkit-border-radius: 3px;
-              border-radius: 3px;
-
-      -webkit-transition: 0.5s ease-out;
-         -moz-transition: 0.5s ease-out;
-           -o-transition: 0.5s ease-out;
-              transition: 0.5s ease-out;
-    }
 
     #legend {
       position: fixed;
@@ -266,6 +273,13 @@
       if (canNotify && me.notify && !(Notification.permission == "granted"))
         notifications.permission();
     }
+
+    // detect dark mode in JS for JS-based CSS manipulation
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      me.darkMode = true;
+    else
+      me.darkMode = false;
+    me.clickBorder = {true: "#000", false: "#fff"}[me.darkMode];
 
     // sockjs server endpoint
     <% if (req.query.streaming) { %>
@@ -796,7 +810,7 @@
       setTimeout(function() {
         elem.style.width = "" + (width*2) + "px";
         elem.style.height = "" + (height*2) + "px";
-        elem.style.borderColor = "#fff";
+        elem.style.borderColor = me.clickBorder;
         elem.style.left = "" + (x - width) + "px";
         elem.style.top = "" + (y - height) + "px";
         setTimeout(function() {
@@ -1356,30 +1370,59 @@
       log[severity] = log.convenience(severity);
     });
 
+    var colorModes = {
+      // light mode (default)
+      light: {
+        system_friendly: "#336699",
+        system_background: "#999999",
+        plain: "#444444",
+        life: "#ff0000",
+        chat_name: "#006600",
+        help: "#630053",
+        flag_border: "#d6d6d6",
+        answer: "black"
+      },
+
+      // dark mode (user opt-in, OS-wide or browser-wide)
+      dark: {
+        system_friendly: "#4499cc",
+        system_background: "#999999",
+        plain: "#bbbbbb",
+        life: "#ff3333",
+        chat_name: "#00cc00",
+        help: "#e35093",
+        flag_border: "#363636",
+        answer: "white"
+      }
+    };
+
+    var colors = colorModes[me.darkMode ? "dark" : "light"];
+
     var styles = {
-      debug: "color: #999999",
-      join: "color: #999999",
-      info: "color: #444444",
-      info_bold: "color: #444444; font-weight: bold",
-      system: "color: #336699",
-      system_bold: "color: #336699; font-weight: bold",
-      life: "color: #ff0000",
-      chat_country: "color: #999999",
-      chat_name: "color: #006600",
-      chat_my_name: "color: #006600; font-weight: bold",
-      chat_message: "color: #444444",
-      spam: "color: #336699", // #990000 for urgency
-      please: "color: #336699; font-weight: bold",
-      help: "color: #630053",
-      help_bold: "color: #630053; font-weight: bold",
+      debug: "color: " + colors.system_background,
+      join: "color: " + colors.system_background,
+      info: "color: " + colors.plain,
+      info_bold: "color: " + colors.plain + "; font-weight: bold",
+      system: "color: " + colors.system_friendly,
+      system_bold: "color: " + colors.system_friendly + "; font-weight: bold",
+      life: "color: " + colors.life,
+      chat_country: "color: " + colors.system_background,
+      chat_name: "color: " + colors.chat_name,
+      chat_my_name: "color: " + colors.chat_name + "; font-weight: bold",
+      chat_message: "color: " + colors.plain,
+      spam: "color: " + colors.system_friendly,
+      please: "color: " + colors.system_friendly + "; font-weight: bold",
+      help: "color: " + colors.help,
+      help_bold: "color: " + colors.help + "; font-weight: bold",
+
       // how is this possible
       flag: function(country) {
-        return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: 100% 13px; border: 1px solid #d6d6d6";
+        return "background-image: url(\"https://isitchristmas.com/countries/" + country + ".png\"); background-size: 100% 13px; border: 1px solid " + colors.flag_border;
       },
       emoji: function(emoji) {
         return "background-image: url(\"https://isitchristmas.com/emojis/" + emoji + ".png\"); background-size: 100%;";
       },
-      answer: "color: black; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
+      answer: "color: " + colors.answer + "; font-weight: bold; font-size: 120pt; text-transform: uppercase; font-family: Arial, sans-serif;"
     }
 
 
