@@ -60,23 +60,6 @@
               transition: 0.5s ease-out;
     }
 
-    /*
-      Apparently, order matters: these dark mode rules need to come after any rule they are modifying.
-    */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: black;
-        color: white;
-      }
-      a#answer {
-        color: white;
-      }
-
-      .click {
-        border: 1px solid #fff;
-      }
-
-    }
 
     a#answer {
       display: inline-block;
@@ -123,8 +106,6 @@
 
       opacity: 0;
 
-      display: none;
-
       -webkit-transition: 0.5s ease-out;
          -moz-transition: 0.5s ease-out;
            -o-transition: 0.5s ease-out;
@@ -137,6 +118,31 @@
       margin-right: 10px;
     } #links a#console {display: none;}
     /* 4 9's, needs to be clickable */
+
+
+    /*
+      Dark mode overrides.
+
+      Apparently, order matters: these dark mode rules need to come after any rule they are modifying.
+    */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: black;
+        color: white;
+      }
+      a#answer {
+        color: white;
+      }
+
+      .click {
+        border: 1px solid #fff;
+      }
+
+      #links a {
+        color: #ccc;
+      }
+
+    }
   </style>
 
   <script type="text/javascript" src="/js/christmas.js?<%= (new Date()).getTime() %>"></script>
