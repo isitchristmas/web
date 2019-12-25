@@ -34,9 +34,29 @@
   <meta name="twitter:card" content="summary">
   <meta property="og:image" content="https://isitchristmas.com/icons/large-wide.png" />
 
-  <style type="text/css">
+    <style type="text/css">
+
     html, body {height: 100%;}
-    body {text-align: center;}
+
+    body {
+      color: black;
+      background-color: #FFFFFF;
+      padding: 2rem; 
+      text-align: center;
+    }
+
+    a, body { color: black; }
+      
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: black;
+        color: white;
+      }
+      a#answer {
+        color: white;
+      }
+
+    }
 
     a#answer {
       display: inline-block;
@@ -45,7 +65,7 @@
       font-size: 120pt;
       font-family: Arial, sans-serif;
       text-decoration: none;
-      color: black;
+
       cursor: default;
     }
 
