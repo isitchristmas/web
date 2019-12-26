@@ -21,7 +21,7 @@ Example of database object to use in `updatedb.js`:
 var databases = [
   {
     type: 'country',
-    url: 'http://localhost:5000/GeoIP2-Country-CSV_20181218.zip',
+    url: 'http://localhost:5000/GeoIP2-Country-CSV_20191224.zip',
     src: [
       'GeoIP2-Country-Locations-en.csv',
       'GeoIP2-Country-Blocks-IPv4.csv',
@@ -35,7 +35,7 @@ var databases = [
   },
   {
     type: 'city',
-    url: 'http://localhost:5000/GeoLite2-City-CSV_20181218.zip',
+    url: 'http://localhost:5000/GeoLite2-City-CSV_20191224.zip',
     src: [
       'GeoLite2-City-Locations-en.csv',
       'GeoLite2-City-Blocks-IPv4.csv',
