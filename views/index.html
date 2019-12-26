@@ -391,7 +391,7 @@
 
     var rawSend = function(message) {socket.send(message)};
     var limiters = {
-      chat: ratelimit(rawSend, 500),
+      chat: ratelimit(rawSend, 3000),
       motion: ratelimitLive(rawSend, 'mouse_rate'),
       scroll: ratelimit(rawSend, 50),
       click: ratelimit(rawSend, 50)
