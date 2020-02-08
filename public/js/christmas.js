@@ -251,7 +251,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "NI": "NO", // Nicaragua
       "PY": "NO", // Paraguay
       "VN": "SAI", // Vietnam
-      "MM": "မဟုတ္ဘူ။", // Myanmar (Burmese)
+      "MM": "မဟုတ်ဘူး။", // Myanmar (Burmese) - https://github.com/isitchristmas/web/issues/151
       "TZ": "HAPANA", //Tanzania (Swahili)
       "KE": "NDIO", //Kenya (Swahili)
       "ZM": "AWEH", //Zambia (Bemba)
@@ -1220,7 +1220,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "width": 36,
       "height": 20,
       "names": [
-        "မ္ရန္မာ",
+        "မြန်မာ",
         "Burma"
       ]
     },
