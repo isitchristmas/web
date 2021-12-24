@@ -1050,7 +1050,7 @@
 
       said = true;
       emit('chat', {message: message});
-      return blank();
+      return '';
     };
 
     // // run without parens to use a popup dialog
@@ -1065,7 +1065,7 @@
     var rename = function(name) {
       if (!name) return;
       emit('rename', {name: name})
-      return blank();
+      return '';
     };
 
     var notifications = function(to) {
@@ -1497,16 +1497,6 @@
 
     // candy
     var candy = function() {window.location = "https://candybox2.github.io";}
-
-    // convenience for functions so they don't say 'undefined' in the console
-    var blank = function() {
-      // IE doesn't like this method.
-      if (window._ie) return undefined;
-
-      var nothing = function() {};
-      nothing.toString = function() {return " "};
-      return nothing;
-    }
 
     // IE fix: make console.log be okay
     if (!window.console) window.console = {};
