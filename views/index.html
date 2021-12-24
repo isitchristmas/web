@@ -535,6 +535,24 @@
       }, parseInt(user.live.death_interval));
     };
 
+    /*
+      hello to honeywand viewers:
+      https://www.tiktok.com/@honeywand/video/7045362298487295278
+
+      Please don't be disturbed by my silly comments while writing this
+      server-client heartbeat code. =) The browser and the streaming
+      server (the thing that all the streaming mouse events run through)
+      have to keep an eye on each other to watch for network timeouts
+      and glitches, so they ping back and forth to each other to test
+      the connection and keep it alive. The "suicide" variable is only used
+      for debugging, so I can manually set it to true in a browser console
+      to deliberately trigger a heartbeat failure from the client and
+      observe the effects on the server.
+
+      The server side of this code can't be seen in your browser, but it is
+      open source on GitHub here:
+      https://github.com/isitchristmas/sockets/blob/master/app.js#L76-L111
+    */
     on("heartbeat", function(data) {
       if (suicide) return; // let death take me
 
