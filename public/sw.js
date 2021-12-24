@@ -8,6 +8,9 @@ const cacheName = 'files';
 
 self.addEventListener('fetch',  fetchEvent => {
   const request = fetchEvent.request;
+  if (request.method !== 'GET') {
+    return;
+  }
 
   fetchEvent.respondWith(async function() {
     // Try to fetch over the network
