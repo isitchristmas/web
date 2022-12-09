@@ -24,7 +24,7 @@
     "dateformat": "^3.0.3",
     "ejs": "^2.6.1",
     "errorhandler": "*",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "geoip-lite": "*",
     "moment-timezone": "*",
     "optimist": "*",
