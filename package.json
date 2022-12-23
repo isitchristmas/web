@@ -22,7 +22,7 @@
     "body-parser": "^1.18.3",
     "date-utils": "*",
     "dateformat": "^3.0.3",
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.7",
     "errorhandler": "*",
     "express": "^4.16.4",
     "geoip-lite": "*",
