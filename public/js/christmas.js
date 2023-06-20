@@ -80,7 +80,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "US": "YES", // United States
       "FR": "OUI", // France
       "NL": "JA", // Netherlands
-      "ZA": "JA", // South Africa
+      "ZA": "JA/YES/YEBO/EE/EA/YEBO/EEH/EE/YEBO/EWE/YEBO", // South Africa (Afrikaans/English/Ndebele/Northern Sotho/Sotho/Swazi/Tsonga/Tswana/Venda/Xhosa/Zulu)
       "ES": "SÍ", // Spain
       "UK": "YES", // United Kingdom
       "CA": "YES/OUI", // Canada (English/French)
@@ -175,7 +175,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "US": "NO", // United States
       "FR": "NON", // France
       "NL": "NEE", // Netherlands
-      "ZA": "NEE", // South Africa
+      "ZA": "NEE/NO/AWE/HAYO/HOHO/CHA/LOKU/NE/HA/CHA/CHA" // South Africa (Afrikaans/English/Ndebele/Northern Sotho/Sotho/Swazi/Tsonga/Tswana/Venda/Xhosa/Zulu)
       "ES": "NO", // Spain
       "UK": "NO", // United Kingdom
       "CA": "NO/NON", // Canada (English/French)
