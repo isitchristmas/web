@@ -138,6 +138,20 @@
 
 
     /*
+      For now, disable flags on mobile, to focus the experience. It's just not a good mobile experience.
+    */
+    @media only screen and (max-device-width: 480px) {
+      .flag {
+        display: none;
+      }
+
+      .click {
+        border-width: 0;
+        display: none;
+      }
+    }
+
+    /*
       Dark mode overrides.
 
       Apparently, order matters: these dark mode rules need to come after any rule they are modifying.
