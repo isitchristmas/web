@@ -23,30 +23,30 @@ keep = 5
 # can be run only as part of deploy
 
 def checkout():
-  run('git clone -q -b %s %s %s' % (branch, repo, version_path))
+  conn.run('git clone -q -b %s %s %s' % (branch, repo, version_path))
 
 def links():
-  run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
+  conn.run("ln -s %s/config.js %s/config.js" % (shared_path, version_path))
   # run("ln -s %s/countries.dat %s/data/countries.dat" % (shared_path, version_path))
   # hacky but it's how geoip-lite works - needs to have data inside its own dir
-  run("rm -rf %s/node_modules/geoip-lite/data" % version_path)
-  run("ln -s %s/data %s/node_modules/geoip-lite/data" % (shared_path, version_path))
+  conn.run("rm -rf %s/node_modules/geoip-lite/data" % version_path)
+  conn.run("ln -s %s/data %s/node_modules/geoip-lite/data" % (shared_path, version_path))
 
 def make_current():
   # run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
-  run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
+  conn.run('rm -rf %s && cp -r %s %s' % (current_path, version_path, current_path))
 
 def dependencies():
-  run("cd %s && npm install" % version_path)
+  conn.run("cd %s && npm install" % version_path)
 
 def cleanup():
-  versions = run("ls -x %s" % versions_path).split()
+  versions = conn.run("ls -x %s" % versions_path).stdout.strip().split()
   # destroy all but the most recent X
   destroy = versions[:-keep]
 
   for version in destroy:
     command = "rm -rf %s/%s" % (versions_path, version)
-    run(command)
+    conn.run(command)
 
 
 ## can be run on their own
