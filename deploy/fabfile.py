@@ -1,10 +1,10 @@
 import time
-from fabric.api import run, execute, env
+from fabric import Connection, task
 
 environment = "production"
+host = "christmas"
 
-env.use_ssh_config = True
-env.hosts = ["christmas"]
+conn = Connection(host, connect_kwargs={"disabled_algorithms": {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}})
 
 branch = "master"
 repo = "git@github.com:isitchristmas/web.git"
@@ -51,36 +51,50 @@ def cleanup():
 
 ## can be run on their own
 
+def test():
+  conn.run("ls -a $HOME")
+
+
 def start():
   # run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2000" % (current_path, environment, logs))
-  run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2000 && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2001" % (current_path, environment, logs, environment, logs))
+  conn.run("cd %s && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2000 && NODE_ENV=%s forever -l %s/forever.log -a start app.js -p 2001" % (current_path, environment, logs, environment, logs))
 
 
 def stop():
   # run("forever stop app.js -p 2000")
   # run("forever stop app.js -p 2000 && forever stop app.js -p 2001")
-  run("forever stopall")
+  conn.run("forever stopall")
 
 def restart():
   # run("forever restart app.js -p 2000")
   # run("forever restart app.js -p 2000 && forever restart app.js -p 2001")
-  run("forever restartall")
+  conn.run("forever restartall")
 
 
 def deploy():
-  execute(checkout)
-  execute(dependencies)
+  checkout()
+  dependencies()
   # links screws with dependencies, needs to come after
-  execute(links)
-  execute(make_current)
-  execute(stop)
-  execute(start)
-  execute(cleanup)
+  links()
+  make_current()
+  stop()
+  start()
+  cleanup()
 
 def deploy_cold():
-  execute(checkout)
-  execute(dependencies)
+  checkout()
+  dependencies()
   # links screws with dependencies, needs to come after
-  execute(links)
-  execute(make_current)
-  execute(start)
+  links()
+  make_current()
+  start()
+
+
+# Finally got it upgraded to fabric 3, but paramiko and older versions of openssh server (which I have...)
+# don't get along and the disabled_algorithms flag above needs to be present for all connections.
+# The CLI interface in fabric3 is, by design, no longer the primary way to use the tool and it doesn't appear
+# to be obvious how to customize the connection passed in to operate a task. (The object passed into a @task is
+# a Context, based on the Invoke library's Context, not a Connection. Maybe it is possible, I just can't tell.)
+
+# So, modify this to be what we need, then just execute this script with `python fabfile.py` instead of using `fab`.
+deploy()
