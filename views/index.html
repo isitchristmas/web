@@ -1192,8 +1192,9 @@
         "\\btree\\b": ":christmas_tree:",
       };
 
-      for (var symbol in symbols)
-        data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
+      // RIP CSS background-image in the dev console :(
+      // for (var symbol in symbols)
+      //   data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
 
 
       // notify if someone else says my name and I've opted in
