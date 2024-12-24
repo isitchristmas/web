@@ -98,3 +98,4 @@ def deploy_cold():
 
 # So, modify this to be what we need, then just execute this script with `python fabfile.py` instead of using `fab`.
 deploy()
+# start()
