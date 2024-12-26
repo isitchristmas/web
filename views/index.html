@@ -309,6 +309,9 @@
     me.alreadyArrived = false;
     me.notify = false;
 
+    // discouraged emojis-as-flags
+    var no_emojis = ["trollface"];
+
     if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
       me.notify = (window.localStorage.getItem("me.notify") == "true");
@@ -689,6 +692,14 @@
       div.className = "flag " + klass;
 
       var flag = document.createElement('img');
+      // this can be "abused" by using .. to go up a directory and then access the emojis directory.
+      // I tacitly support this for those who discover it, though some are disabled.
+      if (country.includes("emojis")) {
+        emoji = country.split("/").pop();
+        if (no_emojis.includes(emoji))
+          country = "US";
+      }
+ 
       flag.src = "/countries/" + country + ".png";
 
       // create a legend in the top-right when you mouse over other people's flags
