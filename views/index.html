@@ -695,7 +695,9 @@
       if (klass == "other") {
         div.onmouseover = function() {
           clearTimeout(legendTimeout);
-          legend.innerHTML = Christmas.countries[country].names.join("<br/>");
+          // this could potentially be null if someone manually overrode their country with an emoji, which I support
+          if (Christmas.countries[country])
+            legend.innerHTML = Christmas.countries[country].names.join("<br/>");
           legend.style.opacity = 1;
           legendTimeout = setTimeout(function() {
             legend.style.opacity = 0;
@@ -1101,7 +1103,7 @@
         if (Notification.permission == "granted")
           log.system("%cNotifications have been %cenabled%c.", styles.system, styles.system_bold, styles.system);
         else
-          log.system("%cNotifications have been %cenabled%c, but you first must %cclick your flag above%c, to prompt your browser to ask permission.", styles.system, styles.system_bold, styles.system, styles.system_bold, styles.system);
+          log.system("%cNotifications have been %crequested%c, but you first must %cclick your mouse flag in the main website area above%c, which will prompt your browser to ask permission.", styles.system, styles.system_bold, styles.system, styles.system_bold, styles.system);
       } else
         log.system("%cNotifications have been %cdisabled.", styles.system, styles.system_bold);
     };
