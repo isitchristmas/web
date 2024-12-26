@@ -309,8 +309,8 @@
     me.alreadyArrived = false;
     me.notify = false;
 
-    // discouraged emojis-as-flags
-    var no_emojis = ["trollface"];
+    // discouraged emojis-as-flags, still allowed in chat (though no browser supports it currently...)
+    var no_emojis = ["trollface", "hankey", "eggplant", "peach", "poop", "toilet"];
 
     if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
@@ -697,7 +697,7 @@
       if (country.includes("emojis")) {
         emoji = country.split("/").pop();
         if (no_emojis.includes(emoji))
-          country = "US";
+          country = "US"; 
       }
  
       flag.src = "/countries/" + country + ".png";
