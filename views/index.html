@@ -1223,6 +1223,9 @@
       //   data.message = data.message.replace(new RegExp(symbol, "gi"), symbols[symbol]);
 
 
+      // base message stylings
+      var base = [];      
+
       // notify if someone else says my name and I've opted in
       if (!disable_notify && me.notify && !(data.id == me.id) && data.message.replace(new RegExp(me.name, "gi"), '') != data.message)
         notify(data.name, data.message);
@@ -1241,16 +1244,25 @@
         message += "%c[" + data.country + "]";
       else
         message += "%c   ";
+      base.push(styles.flag(data.country));
 
       if (slashMe) {
         message += "%c * " + data.name;
         nameStyle = styles.chat_message;
       } else {
-        if (data.promoted)
-          message += " ☆";
-        message += "%c " + data.name + ":";
         nameStyle = (data.id == me.id ? styles.chat_my_name : styles.chat_name);
+
+        // override style and pre-pend styled icon for owner name
+        if (data.promoted) {
+          nameStyle = styles.chat_promoted; 
+          message += " ☆";
+        }
+        message += "%c " + data.name + ":";
       }
+      base.push(nameStyle);
+
+      // all chat message content gets regular styling
+      base.push(styles.chat_message);
 
 
       var emojis = [];
@@ -1265,12 +1277,7 @@
 
       message += "%c " + data.message;
 
-      log.chat.apply(log, [
-        message,
-        styles.flag(data.country),
-        nameStyle,
-        styles.chat_message
-      ].concat(emojis));
+      log.chat.apply(log, [message].concat(base).concat(emojis));
     };
 
 
@@ -1480,6 +1487,7 @@
         plain: "#bbbbbb",
         life: "#ff3333",
         chat_name: "#00cc00",
+        promoted: "#0077aa",
         help: "#e35093",
         flag_border: "#363636",
         answer: "white"
@@ -1499,6 +1507,7 @@
       chat_country: "color: " + colors.system_background,
       chat_name: "color: " + colors.chat_name,
       chat_my_name: "color: " + colors.chat_name + "; font-weight: bold",
+      chat_promoted: "color: " + colors.promoted + "; font-weight: bold",
       chat_message: "color: " + colors.plain,
       spam: "color: " + colors.system_friendly,
       please: "color: " + colors.system_friendly + "; font-weight: bold",
