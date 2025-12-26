@@ -312,6 +312,7 @@
     if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
       me.notify = (window.localStorage.getItem("me.notify") == "true");
+      me.promote = window.localStorage.getItem("me.promote");
       if (canNotify && me.notify && !(Notification.permission == "granted"))
         notifications.permission();
     }
@@ -454,6 +455,10 @@
       // welcome user, unless it's a reconnect
       if (!me.alreadyArrived)
         welcomeUser();
+
+      // if we tried to promote before, re-try to promote on reload
+      if (me.promote)
+        promote(me.promote);
 
       // if we have a saved name, re-validate that name with the server
       if (me.savedName)
@@ -1089,9 +1094,20 @@
 
     var rename = function(name) {
       if (!name) return;
-      emit('rename', {name: name})
+      emit('rename', {name: name});
       return '';
     };
+
+    var promote = function(given) {
+      if (!given) return;
+
+      // save to local storage for auto-promotion on page reload
+      if (window.localStorage)
+        window.localStorage.setItem("me.promote", given);
+
+      emit('promote', {given: given});
+      return '';
+    }
 
     var notifications = function(to) {
       if (!canNotify) {
