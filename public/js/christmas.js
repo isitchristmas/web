@@ -1217,11 +1217,11 @@ File tickets at: https://github.com/isitchristmas/web/issues
     },
     "MM": {
       "name": "Myanmar",
-      "width": 36,
+      "width": 30,
       "height": 20,
       "names": [
         "မြန်မာ",
-        "Burma"
+        "Myanmar"
       ]
     },
     "MN": {
