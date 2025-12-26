@@ -1246,6 +1246,8 @@
         message += "%c * " + data.name;
         nameStyle = styles.chat_message;
       } else {
+        if (data.promoted)
+          message += " ☆";
         message += "%c " + data.name + ":";
         nameStyle = (data.id == me.id ? styles.chat_my_name : styles.chat_name);
       }
