@@ -1255,9 +1255,9 @@
         // override style and pre-pend styled icon for owner name
         if (data.promoted) {
           nameStyle = styles.chat_promoted; 
-          message += " ☆";
-        }
-        message += "%c " + data.name + ":";
+          message += "%c ☆ " + data.name + ":";
+        } else
+          message += "%c " + data.name + ":";
       }
       base.push(nameStyle);
 
