@@ -307,7 +307,7 @@
     me.notify = false;
 
     // discouraged emojis-as-flags, still allowed in chat (though no browser supports it currently...)
-    var no_emojis = ["trollface", "hankey", "eggplant", "peach", "poop", "toilet"];
+    var no_emojis = ["eggplant", "peach", "poop", "toilet"];
 
     if (window.localStorage) {
       me.savedName = window.localStorage.getItem("me.name");
@@ -1014,10 +1014,10 @@
     var showEmoji = function() {
       log.system("%cYou can put :'s around some words to create emoji.", styles.system)
       log.system(" ");
-      log.system("%cFor example, %csay(%c\"I am :worried: you will :facepunch: me\"%c)", styles.system, styles.info, styles.info_bold, styles.info);
-      log.system("%cwill say: %cI am %c  %c you will %c  %c me", styles.system, styles.info_bold, styles.emoji("worried"), styles.info_bold, styles.emoji("facepunch"), styles.info_bold);
+      log.system("%cFor example, %csay(%c\"I am :worried: you will :punch: me\"%c)", styles.system, styles.info, styles.info_bold, styles.info);
+      log.system("%cwill say: %cI am %c  %c you will %c  %c me", styles.system, styles.info_bold, styles.emoji("worried"), styles.info_bold, styles.emoji("punch"), styles.info_bold);
       log.system(" ");
-      log.system("%cfull emoji reference (and my data source): https://www.webfx.com/tools/emoji-cheat-sheet/", styles.system)
+      log.system("%cmain emoji reference (and data source): https://github.com/omnidan/node-emoji", styles.system)
       // return " ";
     };
 
