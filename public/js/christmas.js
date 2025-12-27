@@ -83,6 +83,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "ZA": "JA", // South Africa
       "ES": "SÍ", // Spain
       "UK": "YES", // United Kingdom
+      "GB": "YES", // United Kingdom (unclear whether UK or GB is right)
       "CA": "YES/OUI", // Canada (English/French)
       "PL": "TAK", // Poland
       "AX": "JA", // Åland Islands
@@ -179,6 +180,7 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "ZA": "NEE", // South Africa
       "ES": "NO", // Spain
       "UK": "NO", // United Kingdom
+      "GB": "NO", // United Kingdom (unclear whether UK or GB is right)
       "CA": "NO/NON", // Canada (English/French)
       "PL": "NIE", // Poland
       "AX": "NEJ", // Åland Islands
@@ -2285,6 +2287,14 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "height": 20,
       "names": [
         "Tuvalu"
+      ]
+    },
+    "UK": {
+      "name": "United Kingdom",
+      "width": 40,
+      "height": 20,
+      "names": [
+        "United Kingdom"
       ]
     },
     "UM": {
