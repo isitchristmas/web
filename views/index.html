@@ -698,7 +698,9 @@
       // I tacitly support this for those who discover it, though some are disabled.
       if (country.includes("emojis")) {
         emoji = country.split("/").pop();
-        if (no_emojis.includes(emoji))
+        // lazily prevent people using other non-emojis as flags by backing out of the emojis directory
+        jailbreak = emoji.lastIndexOf("..")  > emoji.lastIndexOf("emojis");
+        if (no_emojis.includes(emoji) || jailbreak)
           country = "US"; 
       }
  
