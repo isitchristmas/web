@@ -157,11 +157,12 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "PY": "HÊE", // Paraguay
       "VN": "ĐÚNG", // Vietnam
       "MM": "ဟုတ္တယ္။", // Myanmar (Burmese)
-      "TZ": "NDIO", //Tanzania (Swahili)
-      "KE": "NDIO", //Kenya (Swahili)
-      "ZM": "EYA", //Zambia (Bemba)
+      "TZ": "NDIO", // Tanzania (Swahili)
+      "KE": "NDIO", // Kenya (Swahili)
+      "ZM": "EYA", // Zambia (Bemba)
       "MN": "Тийм", // Mongolian
-      "MU": "WI" // Mauritius (French Creole?)
+      "MU": "WI", // Mauritius (French Creole?)
+      "CX": "YES/YA/是" // Christmas Island (English / Malay / Mandarin)
     }
 
     return codes[countryCode] || "YES";
@@ -256,7 +257,8 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "KE": "NDIO", //Kenya (Swahili)
       "ZM": "AWEH", //Zambia (Bemba)
       "MN": "Үгүй", // Mongolian
-      "MU": "NON" // Mauritius (French Creole?)
+      "MU": "NON", // Mauritius (French Creole?)
+      "CX": "NO/TIDAK/不是" // Christmas Island (English / Malay / Mandarin)
     }
 
     return codes[countryCode] || "NO";
@@ -580,6 +582,16 @@ File tickets at: https://github.com/isitchristmas/web/issues
       "height": 20,
       "names": [
         "Cuba"
+      ]
+    },
+    "CX": {
+      "name": "Christmas Island",
+      "width": 40,
+      "height": 20,
+      "names": [
+        "Christmas Island",
+        "Wilayah Pulau Krismas",
+        "聖誕島領地"
       ]
     },
     "CY": {
